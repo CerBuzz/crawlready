@@ -148,8 +148,8 @@ export default function Home() {
             <a href="#how-it-works" className="hover:text-foreground transition-colors">
               How It Works
             </a>
-            <a href="#services" className="hover:text-foreground transition-colors">
-              Services
+            <a href="/servicios" className="hover:text-foreground transition-colors">
+              Servicios
             </a>
           </nav>
         </div>
@@ -260,10 +260,10 @@ export default function Home() {
                   agency costs.
                 </p>
                 <a
-                  href="mailto:hello@crawlready.io?subject=AI%20Readiness%20Optimization&body=Hi%2C%20I%20just%20scanned%20my%20site%20and%20got%20a%20grade%20of%20"
+                  href="/servicios"
                   className="inline-block mt-4 px-6 py-3 rounded-lg bg-accent text-black font-semibold hover:bg-accent/90 transition-colors"
                 >
-                  Get a Free Consultation
+                  Ver cómo solucionarlo
                 </a>
               </div>
             )}
