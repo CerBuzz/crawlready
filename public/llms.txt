@@ -1,0 +1,58 @@
+# CrawlReady
+
+> AI Readiness Agency — We help businesses become visible and operable for AI agents.
+
+## What we do
+
+CrawlReady analyzes what happens when AI agents (ChatGPT, Gemini, Perplexity, Claude) try to find, understand, and take action on your website. We identify what works, what fails, and give you concrete solutions.
+
+## Services
+
+### Free AI Visibility Report
+- A real AI agent tests your website
+- Visual step-by-step report of what the agent sees and does
+- What works and what fails
+- Competitor comparison
+- High-level recommendations
+- Delivery: 24-48 hours
+
+### Implementation Kit — EUR 97 (one-time)
+- Everything in the free report
+- Custom JSON-LD structured data for your business
+- JavaScript-free accessible forms
+- Optimized meta tags and Open Graph
+- Step-by-step instructions for your developer
+- 30-day email support
+- Delivery: 3-5 business days
+
+### Full Implementation — EUR 397 (one-time)
+- Everything in the implementation kit
+- We install it on your site (WordPress, WooCommerce, PrestaShop, and more)
+- Post-implementation verification
+- AI agent re-test to confirm it works
+- 60-day email support
+- Delivery: 5-10 business days
+
+### Monthly Monitoring — EUR 97/month (add-on)
+- Monthly scan with an AI agent
+- Report with changes and alerts
+- Continuous improvement recommendations
+
+## Why it matters
+
+- 93% of AI sessions end without visiting a website
+- AI agents don't execute JavaScript, don't see images, and can't click buttons
+- If your forms, catalogs, or booking systems load with JavaScript, AI agents see a blank page
+- Most websites (even major brands) score D or F in AI readiness
+
+## How to contact us
+
+- Email: hello@crawlready.dev
+- Website: https://crawlready.dev
+
+## Pages
+
+- Home (Spanish): https://crawlready.dev/es
+- Home (English): https://crawlready.dev/en
+- Services (Spanish): https://crawlready.dev/es/servicios
+- Services (English): https://crawlready.dev/en/servicios

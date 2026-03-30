@@ -5,6 +5,12 @@ export interface CheckResult {
   status: "pass" | "partial" | "fail";
   details: string;
   recommendation?: string;
+  /** Translation key for details — used by frontend i18n */
+  detailKey?: string;
+  /** Translation key for recommendation — used by frontend i18n */
+  recommendationKey?: string;
+  /** Dynamic parameters for interpolation (e.g. {count}, {bots}, {ms}) */
+  params?: Record<string, string | number>;
 }
 
 export interface ScanResult {

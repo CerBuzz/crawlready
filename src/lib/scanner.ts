@@ -26,7 +26,7 @@ async function fetchWithTimeout(
       signal: controller.signal,
       headers: {
         "User-Agent":
-          "CrawlReady-Scanner/1.0 (https://crawlready.io; AI Readiness Audit)",
+          "CrawlReady-Scanner/1.0 (https://crawlready.dev; AI Readiness Audit)",
       },
       redirect: "follow",
     });
@@ -61,9 +61,11 @@ async function checkLlmsTxt(baseUrl: string): Promise<CheckResult> {
         details: hasContent
           ? "llms.txt found with meaningful content."
           : "llms.txt exists but has very little content.",
+        detailKey: hasContent ? "llmsTxt.pass" : "llmsTxt.partial",
         recommendation: hasContent
           ? undefined
           : "Add detailed descriptions of your site sections, APIs, and key content to llms.txt.",
+        recommendationKey: hasContent ? undefined : "llmsTxt.recPartial",
       };
     }
     return {
@@ -72,8 +74,10 @@ async function checkLlmsTxt(baseUrl: string): Promise<CheckResult> {
       maxScore: MAX,
       status: "fail",
       details: "No llms.txt file found.",
+      detailKey: "llmsTxt.fail",
       recommendation:
         "Create a /llms.txt file that describes your site structure, key pages, and content for AI agents. See llmstxt.org for the specification.",
+      recommendationKey: "llmsTxt.recFail",
     };
   } catch {
     return {
@@ -82,7 +86,9 @@ async function checkLlmsTxt(baseUrl: string): Promise<CheckResult> {
       maxScore: MAX,
       status: "fail",
       details: "Could not check llms.txt (request failed).",
+      detailKey: "llmsTxt.error",
       recommendation: "Create a /llms.txt file following the specification at llmstxt.org.",
+      recommendationKey: "llmsTxt.recError",
     };
   }
 }
@@ -98,8 +104,10 @@ async function checkRobotsTxt(baseUrl: string): Promise<CheckResult> {
         maxScore: MAX,
         status: "partial",
         details: "No robots.txt found. AI crawlers can access your site by default, but there's no explicit configuration.",
+        detailKey: "robots.noFile",
         recommendation:
           "Create a robots.txt that explicitly allows AI crawlers (GPTBot, ClaudeBot, PerplexityBot).",
+        recommendationKey: "robots.recNoFile",
       };
     }
 
@@ -134,8 +142,11 @@ async function checkRobotsTxt(baseUrl: string): Promise<CheckResult> {
         maxScore: MAX,
         status: "fail",
         details: `Blocking ${blocked.length} AI crawlers: ${blocked.join(", ")}.`,
+        detailKey: "robots.manyBlocked",
+        params: { count: blocked.length, bots: blocked.join(", ") },
         recommendation:
           "Consider allowing AI crawlers to index your content. Blocking them means your site won't appear in AI-generated answers.",
+        recommendationKey: "robots.recManyBlocked",
       };
     }
 
@@ -147,8 +158,10 @@ async function checkRobotsTxt(baseUrl: string): Promise<CheckResult> {
         status: "fail",
         details:
           "robots.txt has a blanket disallow for all bots with no AI-specific exceptions.",
+        detailKey: "robots.blanketBlock",
         recommendation:
           "Add explicit Allow rules for AI crawlers like GPTBot and ClaudeBot.",
+        recommendationKey: "robots.recBlanketBlock",
       };
     }
 
@@ -159,7 +172,10 @@ async function checkRobotsTxt(baseUrl: string): Promise<CheckResult> {
         maxScore: MAX,
         status: "partial",
         details: `Some AI crawlers blocked: ${blocked.join(", ")}. Others can access your site.`,
+        detailKey: "robots.someBlocked",
+        params: { bots: blocked.join(", ") },
         recommendation: `Consider allowing ${blocked.join(", ")} to maximize AI visibility.`,
+        recommendationKey: "robots.recSomeBlocked",
       };
     }
 
@@ -169,6 +185,7 @@ async function checkRobotsTxt(baseUrl: string): Promise<CheckResult> {
       maxScore: MAX,
       status: "pass",
       details: "robots.txt allows AI crawlers to access your site.",
+      detailKey: "robots.pass",
     };
   } catch {
     return {
@@ -177,7 +194,9 @@ async function checkRobotsTxt(baseUrl: string): Promise<CheckResult> {
       maxScore: MAX,
       status: "partial",
       details: "Could not fetch robots.txt.",
+      detailKey: "robots.error",
       recommendation: "Ensure your robots.txt is accessible and allows AI crawlers.",
+      recommendationKey: "robots.recError",
     };
   }
 }
@@ -229,8 +248,10 @@ async function checkStructuredData(
       maxScore: MAX,
       status: "fail",
       details: "No structured data (JSON-LD, Microdata, or RDFa) found.",
+      detailKey: "structured.fail",
       recommendation:
         "Add JSON-LD structured data for your Organization, WebSite, and key content types. This is critical for AI agents to understand your business.",
+      recommendationKey: "structured.recFail",
     };
   }
 
@@ -240,10 +261,13 @@ async function checkStructuredData(
     maxScore: MAX,
     status: score >= 15 ? "pass" : "partial",
     details: findings.join(". ") + ".",
+    detailKey: "structured.found",
+    params: { findings: findings.join(". ") },
     recommendation:
       score < MAX
         ? "Add more schema types (Organization, FAQPage, Product, BreadcrumbList) to improve AI comprehension."
         : undefined,
+    recommendationKey: score < MAX ? "structured.recPartial" : undefined,
   };
 }
 
@@ -307,10 +331,13 @@ async function checkMetaTags(html: string): Promise<CheckResult> {
       findings.length > 0
         ? findings.join(". ") + "."
         : "Very few meta tags found.",
+    detailKey: findings.length > 0 ? "meta.found" : "meta.few",
+    params: findings.length > 0 ? { findings: findings.join(". ") } : undefined,
     recommendation:
       missing.length > 0
         ? `Add: ${missing.join(", ")}. These help AI agents understand and cite your content.`
         : undefined,
+    recommendationKey: missing.length > 0 ? "meta.recMissing" : undefined,
   };
 }
 
@@ -335,6 +362,8 @@ async function checkSitemap(baseUrl: string): Promise<CheckResult> {
             details: sitemapCount > 0
               ? `Sitemap index found with ${sitemapCount} sitemap(s).`
               : `Sitemap found with ${urlCount} URL(s).`,
+            detailKey: sitemapCount > 0 ? "sitemap.index" : "sitemap.found",
+            params: sitemapCount > 0 ? { count: sitemapCount } : { count: urlCount },
           };
         }
 
@@ -344,7 +373,9 @@ async function checkSitemap(baseUrl: string): Promise<CheckResult> {
           maxScore: MAX,
           status: "partial",
           details: "Sitemap file exists but appears empty or malformed.",
+          detailKey: "sitemap.empty",
           recommendation: "Ensure your sitemap.xml contains valid <url> entries.",
+          recommendationKey: "sitemap.recEmpty",
         };
       }
     } catch {
@@ -358,8 +389,10 @@ async function checkSitemap(baseUrl: string): Promise<CheckResult> {
     maxScore: MAX,
     status: "fail",
     details: "No sitemap.xml found.",
+    detailKey: "sitemap.fail",
     recommendation:
       "Create a sitemap.xml listing all important pages. This helps AI crawlers discover your content efficiently.",
+    recommendationKey: "sitemap.recFail",
   };
 }
 
@@ -376,8 +409,10 @@ async function checkHttpsAndSpeed(
       maxScore: MAX,
       status: "fail",
       details: "Site is not served over HTTPS.",
+      detailKey: "https.fail",
       recommendation:
         "Migrate to HTTPS immediately. AI agents and search engines penalize insecure sites.",
+      recommendationKey: "https.recFail",
     };
   }
 
@@ -387,6 +422,7 @@ async function checkHttpsAndSpeed(
     maxScore: MAX,
     status: "pass",
     details: "Site is served over HTTPS.",
+    detailKey: "https.pass",
   };
 }
 
@@ -403,26 +439,33 @@ async function checkResponseTime(
     let status: "pass" | "partial" | "fail";
     let details: string;
 
+    let detailKey: string;
+
     if (elapsed < 400) {
       score = MAX;
       status = "pass";
       details = `Excellent response time: ${elapsed}ms.`;
+      detailKey = "response.excellent";
     } else if (elapsed < 1000) {
       score = 12;
       status = "pass";
       details = `Good response time: ${elapsed}ms.`;
+      detailKey = "response.good";
     } else if (elapsed < 2000) {
       score = 8;
       status = "partial";
       details = `Moderate response time: ${elapsed}ms. AI agents prefer sub-400ms.`;
+      detailKey = "response.moderate";
     } else if (elapsed < 4000) {
       score = 4;
       status = "partial";
       details = `Slow response time: ${elapsed}ms. This hurts AI crawlability.`;
+      detailKey = "response.slow";
     } else {
       score = 1;
       status = "fail";
       details = `Very slow response time: ${elapsed}ms. AI agents may timeout.`;
+      detailKey = "response.verySlow";
     }
 
     return {
@@ -431,10 +474,13 @@ async function checkResponseTime(
       maxScore: MAX,
       status,
       details,
+      detailKey,
+      params: { ms: elapsed },
       recommendation:
         elapsed >= 1000
           ? "Optimize server response time to under 400ms. Use caching, CDN, and minimize server-side processing."
           : undefined,
+      recommendationKey: elapsed >= 1000 ? "response.recSlow" : undefined,
     };
   } catch {
     return {
@@ -443,7 +489,9 @@ async function checkResponseTime(
       maxScore: MAX,
       status: "fail",
       details: "Could not measure response time (request failed or timed out).",
+      detailKey: "response.error",
       recommendation: "Ensure your site is accessible and responds within 8 seconds.",
+      recommendationKey: "response.recError",
     };
   }
 }

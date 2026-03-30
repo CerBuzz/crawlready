@@ -13,15 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CrawlReady — Is Your Website Ready for AI Agents?",
-  description:
-    "Free AI Readiness Scanner. Check if your website is optimized for AI crawlers, LLM citations, and agentic commerce. Get your score in 30 seconds.",
-  openGraph: {
-    title: "CrawlReady — Is Your Website Ready for AI Agents?",
-    description:
-      "Free AI Readiness Scanner. Check if your website is optimized for AI crawlers, LLM citations, and agentic commerce.",
-    type: "website",
-  },
+  metadataBase: new URL("https://crawlready.dev"),
 };
 
 export default function RootLayout({
@@ -31,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="es"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
