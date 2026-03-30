@@ -1,12 +1,12 @@
 import { notFound } from "next/navigation";
 import { getDictionary, hasLocale, locales } from "@/lib/i18n";
-import ServiciosClient from "../_components/ServiciosClient";
+import MonitorClient from "../_components/MonitorClient";
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
-export default async function ServiciosPage({
+export default async function MonitorPage({
   params,
 }: {
   params: Promise<{ lang: string }>;
@@ -14,5 +14,5 @@ export default async function ServiciosPage({
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
   const dict = await getDictionary(lang);
-  return <ServiciosClient dict={dict} lang={lang} />;
+  return <MonitorClient dict={dict} lang={lang} />;
 }

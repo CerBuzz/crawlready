@@ -254,6 +254,144 @@ const es = {
       "mailto:hello@crawlready.dev?subject=Quiero%20el%20informe%20gratuito&body=Hola%2C%20me%20gustar%C3%ADa%20recibir%20un%20informe%20de%20visibilidad%20IA%20para%20mi%20web%3A%20%5Bpon%20tu%20URL%20aqu%C3%AD%5D",
     finalCtaNote: "O escríbenos directamente: hello@crawlready.dev",
   },
+  monitorPage: {
+    heroBadge: "Auditoría mensual multi-modelo",
+    heroH1pre: "Cada modelo de IA ve tu web ",
+    heroAccent1: "diferente",
+    heroH1mid: ". Nosotros los probamos ",
+    heroAccent2: "todos",
+    heroSubtitle:
+      "ChatGPT, Claude, Gemini y Perplexity no buscan igual ni recomiendan lo mismo. Cada mes testamos tu web con todos ellos, la comparamos con tus competidores y te enviamos un informe con lo que ha cambiado.",
+    whyTitle: "¿Por qué importa usar varios modelos?",
+    whySubtitle: "Cada agente de IA tiene un perfil de usuario distinto. Si solo optimizas para uno, eres invisible para los demás.",
+    models: [
+      {
+        name: "ChatGPT",
+        share: "60%",
+        shareLabel: "del mercado consumer",
+        profile: "El más usado por consumidores. Domina búsquedas B2C: restaurantes, tiendas, servicios personales. 400M+ usuarios semanales.",
+        color: "emerald",
+      },
+      {
+        name: "Claude",
+        share: "60%",
+        shareLabel: "de Fortune 500",
+        profile: "Dominante en entorno enterprise. 29% del mercado B2B, integrado en Slack, Teams y Zoom. Si tu cliente es una empresa, probablemente usa Claude.",
+        color: "violet",
+      },
+      {
+        name: "Perplexity",
+        share: "370%",
+        shareLabel: "crecimiento anual",
+        profile: "El buscador nativo de IA. Cita fuentes y enlaza directamente. Crecimiento explosivo en búsquedas de investigación y comparación de opciones.",
+        color: "blue",
+      },
+      {
+        name: "Google Gemini",
+        share: "21%",
+        shareLabel: "y creciendo rápido",
+        profile: "De 5.7% a 21.5% en 12 meses. Integrado en Google Search, Android y Workspace. La apuesta de Google por la búsqueda IA.",
+        color: "amber",
+      },
+    ],
+    howTitle: "Qué recibes cada mes",
+    howSubtitle: "Un informe completo que cubre descubrimiento, legibilidad, operabilidad y comparativa competitiva.",
+    deliverables: [
+      {
+        icon: "search",
+        title: "Búsqueda ciega en cada modelo",
+        desc: "Le pedimos a ChatGPT, Claude, Perplexity y Gemini que busquen tu servicio sin nombrarte. ¿Te encuentran? ¿En qué posición? ¿Te recomiendan?",
+      },
+      {
+        icon: "eye",
+        title: "Test de legibilidad",
+        desc: "¿Cada modelo entiende qué haces, cuánto cobras y qué dicen tus clientes? Puntuamos cada dimensión por modelo.",
+      },
+      {
+        icon: "zap",
+        title: "Test de operabilidad",
+        desc: "¿Puede cada modelo usar tus formularios, enviar emails o interactuar con tus canales de contacto? Documentamos qué funciona y qué no.",
+      },
+      {
+        icon: "users",
+        title: "Comparativa con competidores",
+        desc: "Probamos lo mismo con 2-3 competidores directos tuyos. Ves exactamente dónde estás por delante y dónde te superan.",
+      },
+      {
+        icon: "trending",
+        title: "Evolución mes a mes",
+        desc: "Comparamos con el mes anterior: ¿has mejorado? ¿Ha cambiado algo en los modelos? ¿Tu competidor ha hecho cambios?",
+      },
+      {
+        icon: "alert",
+        title: "Alertas de cambios",
+        desc: "Si un modelo deja de encontrarte, si tu formulario deja de funcionar, o si un competidor te adelanta — te avisamos inmediatamente, no al mes siguiente.",
+      },
+    ],
+    pricingTitle: "Un precio, todo incluido",
+    pricingPrice: "€97",
+    pricingPeriod: "/mes",
+    pricingDesc: "Sin permanencia. Cancela cuando quieras.",
+    pricingFeatures: [
+      "Test mensual con 4 modelos de IA (ChatGPT, Claude, Perplexity, Gemini)",
+      "Búsqueda ciega + legibilidad + operabilidad",
+      "Comparativa con 2-3 competidores de tu sector",
+      "Informe visual con evolución mes a mes",
+      "Alertas inmediatas si algo cambia",
+      "Recomendaciones de mejora priorizadas",
+      "Soporte por email — respondemos en el mismo día",
+    ],
+    pricingCta: "Empezar monitorización",
+    pricingCtaHref:
+      "mailto:hello@crawlready.dev?subject=Monitorización%20mensual&body=Hola%2C%20me%20interesa%20la%20monitorización%20mensual%20para%20mi%20web%3A%20%5Bpon%20tu%20URL%20aquí%5D%0A%0AMis%20competidores%20principales%20son%3A%20%5B1.%20...%2C%202.%20...%2C%203.%20...%5D",
+    sampleTitle: "Ejemplo de lo que recibes",
+    sampleMonths: [
+      {
+        month: "Enero",
+        chatgpt: { found: true, position: 5, readable: "B", operable: "C" },
+        claude: { found: false, position: null, readable: "C", operable: "D" },
+        perplexity: { found: true, position: 3, readable: "B", operable: "C" },
+        gemini: { found: true, position: 8, readable: "C", operable: "D" },
+      },
+      {
+        month: "Febrero",
+        chatgpt: { found: true, position: 3, readable: "A", operable: "B" },
+        claude: { found: true, position: 6, readable: "B", operable: "C" },
+        perplexity: { found: true, position: 2, readable: "A", operable: "B" },
+        gemini: { found: true, position: 5, readable: "B", operable: "C" },
+      },
+    ],
+    faqTitle: "Preguntas frecuentes",
+    faq: [
+      {
+        q: "¿Por qué cada modelo da resultados distintos?",
+        a: "Cada modelo de IA tiene su propio índice, sus fuentes de datos y sus criterios de recomendación. ChatGPT prioriza popularidad y contenido reciente, Claude valora más los datos estructurados, Perplexity cita fuentes directamente y Gemini se integra con el índice de Google. Optimizar solo para uno puede dejarte invisible en los demás.",
+      },
+      {
+        q: "¿Quiénes son los competidores que analizáis?",
+        a: "Tú nos dices quiénes son tus 2-3 competidores principales. Si no estás seguro, te ayudamos a identificarlos basándonos en quién aparece cuando buscamos tu servicio en los distintos modelos.",
+      },
+      {
+        q: "¿Cada cuánto recibo el informe?",
+        a: "Una vez al mes, siempre en la primera semana. Si detectamos algo urgente entre informes (un competidor que te adelanta, un cambio en tu web que rompe algo), te avisamos por email inmediatamente.",
+      },
+      {
+        q: "¿Hay permanencia?",
+        a: "No. Cancela cuando quieras. Sin penalizaciones, sin preguntas.",
+      },
+      {
+        q: "¿Puedo empezar con un solo informe para probar?",
+        a: "Sí. El informe de visibilidad IA gratuito ya incluye un test con un modelo. La monitorización mensual amplía esto a 4 modelos + competidores + evolución temporal.",
+      },
+    ],
+    finalCtaTitle: "Empieza a monitorizar tu visibilidad IA",
+    finalCtaBody:
+      "Escríbenos con tu URL y tus competidores principales. Recibirás el primer informe multi-modelo en menos de una semana.",
+    finalCtaButton: "Solicitar monitorización",
+    finalCtaHref:
+      "mailto:hello@crawlready.dev?subject=Monitorización%20mensual&body=Hola%2C%20me%20interesa%20la%20monitorización%20mensual%20para%20mi%20web%3A%20%5Bpon%20tu%20URL%20aquí%5D%0A%0AMis%20competidores%20principales%20son%3A%20%5B1.%20...%2C%202.%20...%2C%203.%20...%5D",
+    finalCtaNote: "O escríbenos directamente: hello@crawlready.dev",
+  },
 };
 
 export default es;

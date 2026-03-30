@@ -5,6 +5,8 @@ import JsonLd from "./_components/JsonLd";
 
 const baseUrl = "https://crawlready.dev";
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }

@@ -16,14 +16,19 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://crawlready.dev"),
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ lang?: string }>;
 }>) {
+  const { lang } = await params;
+  const htmlLang = lang === "en" ? "en" : "es";
+
   return (
     <html
-      lang="es"
+      lang={htmlLang}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>

@@ -60,9 +60,12 @@ Always maintain your CEO perspective — delegate execution, retain strategic ov
 - `/src/lib/scanner.ts` — Core scanning engine (7 checks)
 - `/src/lib/types.ts` — TypeScript types for scan results
 - `/src/app/api/scan/route.ts` — API endpoint
-- `/src/app/page.tsx` — Landing page + scanner UI + results + pricing
+- `/src/app/[lang]/page.tsx` — Landing page (loads HomeClient)
+- `/src/app/[lang]/_components/HomeClient.tsx` — Scanner UI + results + pricing
+- `/src/app/[lang]/servicios/` — Services page with detailed pricing
+- `/src/lib/i18n/` — Translations (es.ts, en.ts)
 - `/src/app/globals.css` — Design system (dark theme, cyan accent)
-- `/outreach/` — LinkedIn templates, sample reports, Antonio's task list
+- `/outreach/` — Sample reports (Idealista, MULTIMAP)
 
 ## Market Data (2026-03-27 scan results)
 

@@ -256,6 +256,144 @@ const en: Dictionary = {
       "mailto:hello@crawlready.dev?subject=Free%20AI%20Visibility%20Report&body=Hi%2C%20I'd%20like%20an%20AI%20visibility%20report%20for%20my%20site%3A%20%5Byour%20URL%20here%5D",
     finalCtaNote: "Or write directly: hello@crawlready.dev",
   },
+  monitorPage: {
+    heroBadge: "Monthly multi-model audit",
+    heroH1pre: "Every AI model sees your site ",
+    heroAccent1: "differently",
+    heroH1mid: ". We test them ",
+    heroAccent2: "all",
+    heroSubtitle:
+      "ChatGPT, Claude, Gemini and Perplexity don't search the same way or recommend the same things. Every month we test your site with all of them, compare you against your competitors, and send you a report with what's changed.",
+    whyTitle: "Why does using multiple models matter?",
+    whySubtitle: "Each AI agent has a different user profile. If you only optimize for one, you're invisible to the rest.",
+    models: [
+      {
+        name: "ChatGPT",
+        share: "60%",
+        shareLabel: "of consumer market",
+        profile: "Most used by consumers. Dominates B2C searches: restaurants, shops, personal services. 400M+ weekly users.",
+        color: "emerald",
+      },
+      {
+        name: "Claude",
+        share: "60%",
+        shareLabel: "of Fortune 500",
+        profile: "Dominant in enterprise. 29% B2B market share, integrated in Slack, Teams and Zoom. If your client is a company, they probably use Claude.",
+        color: "violet",
+      },
+      {
+        name: "Perplexity",
+        share: "370%",
+        shareLabel: "annual growth",
+        profile: "The AI-native search engine. Cites sources and links directly. Explosive growth in research and comparison searches.",
+        color: "blue",
+      },
+      {
+        name: "Google Gemini",
+        share: "21%",
+        shareLabel: "and growing fast",
+        profile: "From 5.7% to 21.5% in 12 months. Integrated in Google Search, Android and Workspace. Google's bet on AI search.",
+        color: "amber",
+      },
+    ],
+    howTitle: "What you get every month",
+    howSubtitle: "A complete report covering discovery, readability, actionability and competitive comparison.",
+    deliverables: [
+      {
+        icon: "search",
+        title: "Blind search on each model",
+        desc: "We ask ChatGPT, Claude, Perplexity and Gemini to search for your service without naming you. Do they find you? In what position? Do they recommend you?",
+      },
+      {
+        icon: "eye",
+        title: "Readability test",
+        desc: "Does each model understand what you do, what you charge and what your clients say? We score each dimension per model.",
+      },
+      {
+        icon: "zap",
+        title: "Actionability test",
+        desc: "Can each model use your forms, send emails or interact with your contact channels? We document what works and what doesn't.",
+      },
+      {
+        icon: "users",
+        title: "Competitor comparison",
+        desc: "We test the same thing with 2-3 of your direct competitors. You see exactly where you're ahead and where they beat you.",
+      },
+      {
+        icon: "trending",
+        title: "Month-over-month evolution",
+        desc: "We compare with the previous month: have you improved? Have the models changed anything? Has your competitor made changes?",
+      },
+      {
+        icon: "alert",
+        title: "Change alerts",
+        desc: "If a model stops finding you, if your form breaks, or if a competitor overtakes you — we alert you immediately, not next month.",
+      },
+    ],
+    pricingTitle: "One price, everything included",
+    pricingPrice: "€97",
+    pricingPeriod: "/month",
+    pricingDesc: "No lock-in. Cancel anytime.",
+    pricingFeatures: [
+      "Monthly test with 4 AI models (ChatGPT, Claude, Perplexity, Gemini)",
+      "Blind search + readability + actionability",
+      "Comparison with 2-3 competitors in your sector",
+      "Visual report with month-over-month evolution",
+      "Immediate alerts if something changes",
+      "Prioritized improvement recommendations",
+      "Email support — we respond same day",
+    ],
+    pricingCta: "Start monitoring",
+    pricingCtaHref:
+      "mailto:hello@crawlready.dev?subject=Monthly%20monitoring&body=Hi%2C%20I'm%20interested%20in%20monthly%20monitoring%20for%20my%20site%3A%20%5Byour%20URL%20here%5D%0A%0AMy%20main%20competitors%20are%3A%20%5B1.%20...%2C%202.%20...%2C%203.%20...%5D",
+    sampleTitle: "Example of what you receive",
+    sampleMonths: [
+      {
+        month: "January",
+        chatgpt: { found: true, position: 5, readable: "B", operable: "C" },
+        claude: { found: false, position: null, readable: "C", operable: "D" },
+        perplexity: { found: true, position: 3, readable: "B", operable: "C" },
+        gemini: { found: true, position: 8, readable: "C", operable: "D" },
+      },
+      {
+        month: "February",
+        chatgpt: { found: true, position: 3, readable: "A", operable: "B" },
+        claude: { found: true, position: 6, readable: "B", operable: "C" },
+        perplexity: { found: true, position: 2, readable: "A", operable: "B" },
+        gemini: { found: true, position: 5, readable: "B", operable: "C" },
+      },
+    ],
+    faqTitle: "Frequently asked questions",
+    faq: [
+      {
+        q: "Why does each model give different results?",
+        a: "Each AI model has its own index, data sources and recommendation criteria. ChatGPT prioritizes popularity and recent content, Claude values structured data more, Perplexity cites sources directly and Gemini integrates with Google's index. Optimizing for just one can leave you invisible on the others.",
+      },
+      {
+        q: "Who are the competitors you analyze?",
+        a: "You tell us who your 2-3 main competitors are. If you're not sure, we help identify them based on who appears when we search for your service across the different models.",
+      },
+      {
+        q: "How often do I receive the report?",
+        a: "Once a month, always in the first week. If we detect something urgent between reports (a competitor overtaking you, a change on your site that breaks something), we alert you by email immediately.",
+      },
+      {
+        q: "Is there a lock-in period?",
+        a: "No. Cancel anytime. No penalties, no questions asked.",
+      },
+      {
+        q: "Can I start with just one report to try?",
+        a: "Yes. The free AI visibility report already includes a test with one model. Monthly monitoring expands this to 4 models + competitors + temporal evolution.",
+      },
+    ],
+    finalCtaTitle: "Start monitoring your AI visibility",
+    finalCtaBody:
+      "Write to us with your URL and main competitors. You'll receive the first multi-model report in less than a week.",
+    finalCtaButton: "Request monitoring",
+    finalCtaHref:
+      "mailto:hello@crawlready.dev?subject=Monthly%20monitoring&body=Hi%2C%20I'm%20interested%20in%20monthly%20monitoring%20for%20my%20site%3A%20%5Byour%20URL%20here%5D%0A%0AMy%20main%20competitors%20are%3A%20%5B1.%20...%2C%202.%20...%2C%203.%20...%5D",
+    finalCtaNote: "Or write directly: hello@crawlready.dev",
+  },
 };
 
 export default en;
