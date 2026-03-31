@@ -2,7 +2,7 @@ import type { Dictionary } from "./es";
 
 const en: Dictionary = {
   meta: {
-    title: "CrawlReady — Is Your Website Ready for AI Agents?",
+    title: "CrawlReady",
     description:
       "Free AI Readiness Scanner. Check if AI agents can read and operate on your website. Get your score in 30 seconds.",
     ogTitle: "CrawlReady — Is Your Website Ready for AI Agents?",

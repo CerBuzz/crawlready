@@ -1,6 +1,6 @@
 const es = {
   meta: {
-    title: "CrawlReady — ¿Tu web funciona para agentes de IA?",
+    title: "CrawlReady",
     description:
       "Comprueba en 30 segundos si los agentes de IA pueden leer y operar tu web. Scanner gratuito. Informe con soluciones concretas.",
     ogTitle: "CrawlReady — ¿Tu web funciona para agentes de IA?",
