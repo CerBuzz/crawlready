@@ -3,9 +3,9 @@
   "companyName": "Eso Es Agency",
   "scanResult": {
     "url": "https://esoesagency.com",
-    "totalScore": 78,
+    "totalScore": 85,
     "maxPossibleScore": 100,
-    "grade": "B",
+    "grade": "A",
     "checks": [
       {
         "name": "llms.txt",
@@ -68,30 +68,28 @@
       },
       {
         "name": "Response Time",
-        "score": 8,
+        "score": 15,
         "maxScore": 15,
-        "status": "partial",
-        "details": "Moderate response time: 1295ms. AI agents prefer sub-400ms.",
-        "detailKey": "response.moderate",
+        "status": "pass",
+        "details": "Excellent response time: 133ms.",
+        "detailKey": "response.excellent",
         "params": {
-          "ms": 1295
-        },
-        "recommendation": "Optimize server response time to under 400ms. Use caching, CDN, and minimize server-side processing.",
-        "recommendationKey": "response.recSlow"
+          "ms": 133
+        }
       }
     ],
-    "scannedAt": "2026-03-31T15:14:06.054Z"
+    "scannedAt": "2026-03-31T17:37:56.172Z"
   },
   "agentTest": {
     "url": "https://esoesagency.com",
-    "task": "find this business and request a quote",
+    "task": "Find this agency, understand their services, and request a quote",
     "steps": [
       {
         "step": "discovery",
-        "action": "Fetching https://esoesagency.com (72ms)",
+        "action": "Fetching https://esoesagency.com (101ms)",
         "status": "pass",
         "details": "Homepage loaded. \"Madrid Itinerary Made for You | Unique Custom Plans For Only €69\". 2000 chars of readable content.",
-        "durationMs": 74,
+        "durationMs": 102,
         "substeps": [
           {
             "label": "Page title",
@@ -115,7 +113,7 @@
         "action": "Following 4 relevant links",
         "status": "pass",
         "details": "Navigated to 4 relevant pages out of 9 total links.",
-        "durationMs": 134,
+        "durationMs": 119,
         "substeps": [
           {
             "label": "Links found",
@@ -125,22 +123,22 @@
           {
             "label": "/pricing/",
             "status": "pass",
-            "detail": "\"See Pricing\" (55ms)"
+            "detail": "\"See Pricing\" (57ms)"
           },
           {
             "label": "/contact/",
             "status": "pass",
-            "detail": "\"start planning\" (60ms)"
+            "detail": "\"start planning\" (58ms)"
           },
           {
             "label": "/about/",
             "status": "pass",
-            "detail": "\"About Us\" (100ms)"
+            "detail": "\"About Us\" (78ms)"
           },
           {
             "label": "/",
             "status": "pass",
-            "detail": "(130ms)"
+            "detail": "(117ms)"
           }
         ]
       },
@@ -149,7 +147,7 @@
         "action": "Scanning for contact methods across all pages",
         "status": "pass",
         "details": "Found 12 contact channel(s): 1 email, 1 phone, WhatsApp, 8 form(s), Crisp.",
-        "durationMs": 6,
+        "durationMs": 5,
         "substeps": [
           {
             "label": "Email addresses",
@@ -232,7 +230,7 @@
         "action": "Analyzing 5 JSON-LD block(s)",
         "status": "fail",
         "details": "Found 5 JSON-LD block(s) with types: FAQPage. 0/4 key fields present.",
-        "durationMs": 0,
+        "durationMs": 1,
         "substeps": [
           {
             "label": "JSON-LD blocks",
@@ -265,13 +263,13 @@
         "step": "verdict",
         "action": "Synthesizing results",
         "status": "partial",
-        "details": "An AI agent can PARTIALLY complete the task \"find this business and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
+        "details": "An AI agent can PARTIALLY complete the task \"Find this agency, understand their services, and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
         "durationMs": 0
       }
     ],
     "verdict": "partial",
-    "verdictSummary": "An AI agent can PARTIALLY complete the task \"find this business and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
-    "totalDurationMs": 217,
-    "testedAt": "2026-03-31T15:14:06.274Z"
+    "verdictSummary": "An AI agent can PARTIALLY complete the task \"Find this agency, understand their services, and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
+    "totalDurationMs": 229,
+    "testedAt": "2026-03-31T17:37:56.403Z"
   }
 }
