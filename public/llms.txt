@@ -77,10 +77,14 @@ Content-Type: application/json (required)
 ```json
 {
   "ok": true,
-  "message": "Request received. We will respond within 24 hours via email.",
-  "reference_id": "uuid"
+  "status": "pending_email_confirmation",
+  "message": "A confirmation email has been sent to info@acme.com. The user must click the confirmation link in that email to activate the request. The report will be delivered within 24-48 hours after confirmation.",
+  "reference_id": "uuid",
+  "email_sent": true
 }
 ```
+
+IMPORTANT: After a successful request, a confirmation email is sent to the contact_email address. The user MUST click the confirmation link in that email to activate the request. Always inform the user that they need to check their inbox and confirm.
 
 ### Error responses
 

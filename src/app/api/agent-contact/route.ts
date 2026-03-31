@@ -1,4 +1,5 @@
 import { put, list } from "@vercel/blob";
+import { sendConfirmationEmail } from "@/lib/email";
 import crypto from "crypto";
 
 // ---------------------------------------------------------------------------
@@ -143,6 +144,8 @@ export async function POST(req: Request) {
   }
 
   // 8. Store in Vercel Blob (separate prefix from human leads)
+  const token = crypto.randomUUID();
+  const lang = sanitize(body.lang, 2) || "es";
   const lead = {
     company_name: companyName,
     contact_email: contactEmail,
@@ -153,7 +156,9 @@ export async function POST(req: Request) {
     ip,
     user_agent: sanitize(req.headers.get("user-agent"), 500),
     created_at: new Date().toISOString(),
-    status: "new",
+    status: "pending",
+    token,
+    confirmedAt: null,
     id: crypto.randomUUID(),
   };
 
@@ -163,12 +168,23 @@ export async function POST(req: Request) {
     access: "public",
   });
 
-  console.log("[AGENT_CONTACT]", JSON.stringify({ email: contactEmail, company: companyName }));
+  // 9. Send confirmation email
+  let emailSent = false;
+  try {
+    await sendConfirmationEmail(contactEmail, token, lang);
+    emailSent = true;
+  } catch (err) {
+    console.error("[AGENT_CONTACT_EMAIL_ERROR]", err);
+  }
+
+  console.log("[AGENT_CONTACT]", JSON.stringify({ email: contactEmail, company: companyName, emailSent }));
 
   return Response.json({
     ok: true,
-    message: "Request received. We will respond within 24 hours via email.",
+    status: "pending_email_confirmation",
+    message: `A confirmation email has been sent to ${contactEmail}. The user must click the confirmation link in that email to activate the request. The report will be delivered within 24-48 hours after confirmation.`,
     reference_id: lead.id,
+    email_sent: emailSent,
   });
 }
 
