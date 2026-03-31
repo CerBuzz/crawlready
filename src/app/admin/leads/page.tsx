@@ -6,7 +6,9 @@ interface Lead {
   url: string;
   email: string;
   lang: string;
-  timestamp: string;
+  status: string;
+  createdAt: string;
+  confirmedAt: string | null;
   source: string;
 }
 
@@ -82,26 +84,38 @@ export default function AdminLeads() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-zinc-800 text-left text-zinc-400">
+                      <th className="py-3 pr-4">Estado</th>
                       <th className="py-3 pr-4">Fecha</th>
                       <th className="py-3 pr-4">Email</th>
                       <th className="py-3 pr-4">URL</th>
-                      <th className="py-3 pr-4">Idioma</th>
-                      <th className="py-3">Origen</th>
+                      <th className="py-3">Confirmado</th>
                     </tr>
                   </thead>
                   <tbody>
                     {leads.map((lead, i) => (
                       <tr key={i} className="border-b border-zinc-900 hover:bg-zinc-900/50">
+                        <td className="py-3 pr-4">
+                          <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
+                            lead.status === "confirmed"
+                              ? "bg-emerald-500/20 text-emerald-400"
+                              : "bg-amber-500/20 text-amber-400"
+                          }`}>
+                            {lead.status}
+                          </span>
+                        </td>
                         <td className="py-3 pr-4 text-zinc-400 whitespace-nowrap">
-                          {new Date(lead.timestamp).toLocaleString("es-ES")}
+                          {new Date(lead.createdAt).toLocaleString("es-ES")}
                         </td>
                         <td className="py-3 pr-4 font-medium">{lead.email}</td>
                         <td className="py-3 pr-4">
                           <a href={`https://${lead.url}`} target="_blank" rel="noopener noreferrer"
                             className="text-cyan-400 hover:underline">{lead.url}</a>
                         </td>
-                        <td className="py-3 pr-4 uppercase">{lead.lang}</td>
-                        <td className="py-3 text-zinc-500">{lead.source}</td>
+                        <td className="py-3 text-zinc-500 whitespace-nowrap">
+                          {lead.confirmedAt
+                            ? new Date(lead.confirmedAt).toLocaleString("es-ES")
+                            : "—"}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

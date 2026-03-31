@@ -14,7 +14,7 @@ function t(template: string, params?: Record<string, string | number>): string {
 function HeroForm({ dict, lang }: { dict: Dictionary; lang: string }) {
   const [url, setUrl] = useState("");
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "duplicate" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
@@ -30,18 +30,15 @@ function HeroForm({ dict, lang }: { dict: Dictionary; lang: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: url.trim(), email: email.trim(), lang }),
       });
+      if (res.status === 409) {
+        setStatus("duplicate");
+        return;
+      }
       if (!res.ok) throw new Error("fail");
       setStatus("sent");
     } catch {
-      // Fallback: open mailto
-      const subject = encodeURIComponent(
-        lang === "es" ? "Test gratuito para mi web" : "Free test for my site"
-      );
-      const body = encodeURIComponent(
-        `URL: ${url.trim()}\nEmail: ${email.trim()}`
-      );
-      window.open(`mailto:hello@crawlready.dev?subject=${subject}&body=${body}`, "_self");
-      setStatus("sent");
+      setErrorMsg(dict.heroForm.errorGeneric);
+      setStatus("error");
     }
   }
 
@@ -52,6 +49,15 @@ function HeroForm({ dict, lang }: { dict: Dictionary; lang: string }) {
         <p className="text-sm text-zinc-400 mt-2">
           {t(dict.heroForm.successBody, { email })}
         </p>
+      </div>
+    );
+  }
+
+  if (status === "duplicate") {
+    return (
+      <div className="mt-8 p-6 rounded-xl bg-warning/10 border border-warning/20 text-center max-w-lg mx-auto">
+        <p className="text-lg font-semibold text-warning">{dict.heroForm.duplicateTitle}</p>
+        <p className="text-sm text-zinc-400 mt-2">{dict.heroForm.duplicateBody}</p>
       </div>
     );
   }
