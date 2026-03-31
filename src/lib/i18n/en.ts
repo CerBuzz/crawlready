@@ -10,25 +10,93 @@ const en: Dictionary = {
       "93% of AI sessions end without visiting a website. Check your AI visibility score for free.",
   },
   nav: {
-    scanner: "Scanner",
     howItWorks: "How It Works",
+    pricing: "Pricing",
     services: "Services",
     langSwitch: "ES",
     langSwitchHref: "/es",
   },
   hero: {
-    badge: "AI Search is replacing Google. Is your site ready?",
-    headline1: "AI agents don't just search.",
-    headlineAccent: "They take action on your website.",
+    badge: "93% of AI sessions end without visiting a website",
+    headline1: "An AI agent tried to buy from you.",
+    headlineAccent: "It couldn't.",
     subheadline:
-      "ChatGPT, Gemini and Perplexity already book appointments, request quotes and make purchases on behalf of your customers. If AI agents can't operate on your site, your business is invisible to the next generation of buyers.",
+      "ChatGPT, Gemini and Perplexity already manage appointments, quotes and purchases on behalf of your customers. If an AI agent can't operate on your site, you're losing sales without knowing it.",
   },
-  scanner: {
-    placeholder: "Enter your website URL (e.g. example.com)",
-    buttonScan: "Scan",
-    buttonScanning: "Scanning...",
+  heroForm: {
+    urlPlaceholder: "Your website URL (e.g. example.com)",
+    emailPlaceholder: "Your contact email",
+    button: "Request your free test",
+    sending: "Sending...",
+    successTitle: "Request sent!",
+    successBody: "You'll receive your report within 24-48 hours at {email}.",
     errorNetwork: "Network error. Please try again.",
-    errorGeneric: "Something went wrong.",
+    errorGeneric: "Something went wrong. Write to us at hello@crawlready.dev.",
+  },
+  howItWorks: {
+    sectionTitle: "How it works",
+    sectionSubtitle: "A simple three-step process. No jargon, no commitments.",
+    steps: [
+      {
+        num: "1",
+        title: "We test your site",
+        desc: "An AI agent attempts a real task: booking an appointment, requesting a quote, purchasing a product. We document every step.",
+      },
+      {
+        num: "2",
+        title: "We show you what fails",
+        desc: "You receive a visual report: where the agent succeeded, where it got stuck, and exactly what it sees when visiting your site.",
+      },
+      {
+        num: "3",
+        title: "We fix it",
+        desc: "We implement the solutions on your site: structured data, accessible forms, meta tags. You don't touch a thing.",
+      },
+    ],
+  },
+  pricing: {
+    sectionTitle: "Pricing",
+    sectionSubtitle: "No small print. No calls. No lock-in.",
+    free: {
+      badge: "Start here",
+      name: "AI Visibility Report",
+      price: "Free",
+      desc: "We test what happens when an AI agent tries to use your site and send you the results.",
+      features: [
+        "Real test with an AI agent",
+        "Step-by-step visual report",
+        "Comparison with your direct competitor",
+        "Concrete recommendations",
+      ],
+      cta: "Request free report",
+    },
+    paid: {
+      badge: "Done for you",
+      name: "Full Implementation",
+      price: "€397",
+      priceNote: "one-time",
+      desc: "Give us access and we do it for you. AI agent re-test included.",
+      features: [
+        "Everything in the free report",
+        "We install everything on your site",
+        "JSON-LD, accessible forms, meta tags",
+        "Compatible with WordPress, Shopify, PrestaShop and more",
+        "AI agent re-test post-implementation",
+        "Email support for 60 days",
+      ],
+      cta: "Request implementation",
+    },
+  },
+  dogfooding: {
+    title: "Better service. Lower price. What's the catch?",
+    body: "There's no catch. We use the same technology we optimize for you: AI agents in all our processes. That's how we provide 24/7 support, deliver in days, and charge €397 instead of €4,000.",
+    highlight: "",
+  },
+  finalCta: {
+    title: "Find out what an AI agent sees on your site",
+    body: "Send us your URL and your competitor's. You'll have the report in 48 hours. No commitment, no small print.",
+    button: "Request free test",
+    note: "Or write directly: hello@crawlready.dev",
   },
   results: {
     reportTitle: "AI Readiness Report",
@@ -41,35 +109,6 @@ const en: Dictionary = {
     ctaBody:
       "We test what happens when an AI agent tries to operate on your website and give you concrete solutions. AI-native process: fast delivery at a fraction of traditional agency costs.",
     ctaButton: "See how to fix it",
-  },
-  checks: {
-    sectionTitle: "What We Check",
-    items: [
-      {
-        title: "llms.txt",
-        desc: "The new standard for telling AI agents what your site is about. Like robots.txt, but for LLMs.",
-      },
-      {
-        title: "AI Crawler Access",
-        desc: "Is your robots.txt blocking GPTBot, ClaudeBot, or PerplexityBot from reading your content?",
-      },
-      {
-        title: "Structured Data",
-        desc: "JSON-LD and schema markup that helps AI agents understand your business, products, and content.",
-      },
-      {
-        title: "Meta Tags & OG",
-        desc: "Title, description, and Open Graph tags that AI uses to summarize and cite your pages.",
-      },
-      {
-        title: "Sitemap",
-        desc: "An XML sitemap helps AI crawlers discover all your important pages efficiently.",
-      },
-      {
-        title: "Speed & Security",
-        desc: "HTTPS and fast response times are baseline requirements for AI agent compatibility.",
-      },
-    ],
   },
   scannerResults: {
     // llms.txt

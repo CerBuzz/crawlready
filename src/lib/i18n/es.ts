@@ -8,25 +8,93 @@ const es = {
       "93% de las sesiones de IA terminan sin visitar ninguna web. Comprueba tu puntuación de visibilidad IA gratis.",
   },
   nav: {
-    scanner: "Scanner",
     howItWorks: "Cómo funciona",
+    pricing: "Precios",
     services: "Servicios",
     langSwitch: "EN",
     langSwitchHref: "/en",
   },
   hero: {
-    badge: "La búsqueda IA está sustituyendo a Google. ¿Tu web está preparada?",
-    headline1: "Los agentes de IA no solo buscan.",
-    headlineAccent: "También actúan en tu web.",
+    badge: "El 93% de sesiones IA terminan sin visitar ninguna web",
+    headline1: "Un agente IA intentó comprarte.",
+    headlineAccent: "No pudo.",
     subheadline:
-      "ChatGPT, Gemini y Perplexity gestionan citas, presupuestos y compras en nombre de tus clientes. Si tu web no está preparada para que un agente opere en ella, tu negocio es invisible para la nueva generación de compradores.",
+      "ChatGPT, Gemini y Perplexity ya gestionan citas, presupuestos y compras en nombre de tus clientes. Si un agente de IA no puede operar en tu web, estás perdiendo ventas sin saberlo.",
   },
-  scanner: {
-    placeholder: "Introduce la URL de tu web (ej. ejemplo.com)",
-    buttonScan: "Analizar",
-    buttonScanning: "Analizando...",
+  heroForm: {
+    urlPlaceholder: "URL de tu web (ej. ejemplo.com)",
+    emailPlaceholder: "Tu email de contacto",
+    button: "Pide tu test gratuito",
+    sending: "Enviando...",
+    successTitle: "¡Solicitud enviada!",
+    successBody: "Recibirás tu informe en 24-48 horas en {email}.",
     errorNetwork: "Error de red. Por favor, inténtalo de nuevo.",
-    errorGeneric: "Algo ha ido mal.",
+    errorGeneric: "Algo ha ido mal. Escríbenos a hello@crawlready.dev.",
+  },
+  howItWorks: {
+    sectionTitle: "Cómo funciona",
+    sectionSubtitle: "Un proceso simple en tres pasos. Sin jerga, sin compromiso.",
+    steps: [
+      {
+        num: "1",
+        title: "Probamos tu web",
+        desc: "Un agente de IA intenta completar una gestión real: pedir cita, solicitar presupuesto, comprar un producto. Documentamos cada paso.",
+      },
+      {
+        num: "2",
+        title: "Te mostramos qué falla",
+        desc: "Recibes un informe visual: dónde el agente tuvo éxito, dónde se atascó, y qué ve exactamente cuando visita tu web.",
+      },
+      {
+        num: "3",
+        title: "Lo arreglamos",
+        desc: "Implementamos las soluciones en tu web: datos estructurados, formularios accesibles, meta tags. Tú no tocas nada.",
+      },
+    ],
+  },
+  pricing: {
+    sectionTitle: "Precios",
+    sectionSubtitle: "Sin letra pequeña. Sin llamadas. Sin permanencia.",
+    free: {
+      badge: "Empieza aquí",
+      name: "Informe de visibilidad IA",
+      price: "Gratis",
+      desc: "Probamos qué pasa cuando un agente de IA intenta usar tu web y te mandamos el resultado.",
+      features: [
+        "Test real con agente de IA",
+        "Informe visual paso a paso",
+        "Comparativa con tu competidor directo",
+        "Recomendaciones concretas",
+      ],
+      cta: "Pedir informe gratis",
+    },
+    paid: {
+      badge: "Llave en mano",
+      name: "Implementación completa",
+      price: "€397",
+      priceNote: "pago único",
+      desc: "Nos das acceso y lo hacemos nosotros. Verificación con agente de IA incluida.",
+      features: [
+        "Todo lo del informe gratuito",
+        "Instalamos todo en tu web",
+        "JSON-LD, formularios accesibles, meta tags",
+        "Compatible con WordPress, Shopify, PrestaShop y más",
+        "Re-test con agente de IA post-implementación",
+        "Soporte por email durante 60 días",
+      ],
+      cta: "Solicitar implementación",
+    },
+  },
+  dogfooding: {
+    title: "Mejor servicio. Menos precio. ¿El truco?",
+    body: "No hay truco. Usamos la misma tecnología que optimizamos para ti: agentes de IA en todos nuestros procesos. Así podemos dar soporte 24/7, entregar en días, y cobrar €397 en vez de €4.000.",
+    highlight: "",
+  },
+  finalCta: {
+    title: "Descubre qué ve un agente IA en tu web",
+    body: "Escríbenos con tu URL y la de tu competidor. En 48 horas tienes el informe. Sin compromiso, sin letra pequeña.",
+    button: "Pedir test gratuito",
+    note: "O escríbenos directamente: hello@crawlready.dev",
   },
   results: {
     reportTitle: "Informe de visibilidad IA",
@@ -39,35 +107,6 @@ const es = {
     ctaBody:
       "Analizamos qué pasa cuando un agente de IA intenta operar en tu web y te damos soluciones concretas. Proceso nativo de IA: entrega rápida a una fracción del coste de una agencia tradicional.",
     ctaButton: "Ver cómo solucionarlo",
-  },
-  checks: {
-    sectionTitle: "Qué analizamos",
-    items: [
-      {
-        title: "llms.txt",
-        desc: "El nuevo estándar para decirle a los agentes de IA de qué trata tu web. Como robots.txt, pero para LLMs.",
-      },
-      {
-        title: "Acceso de crawlers IA",
-        desc: "¿Tu robots.txt bloquea a GPTBot, ClaudeBot o PerplexityBot para que no lean tu contenido?",
-      },
-      {
-        title: "Datos estructurados",
-        desc: "JSON-LD y marcado schema que ayuda a los agentes de IA a entender tu negocio, productos y contenido.",
-      },
-      {
-        title: "Meta tags y OG",
-        desc: "Título, descripción y etiquetas Open Graph que la IA usa para resumir y citar tus páginas.",
-      },
-      {
-        title: "Sitemap",
-        desc: "Un sitemap XML ayuda a los crawlers de IA a descubrir eficientemente todas tus páginas importantes.",
-      },
-      {
-        title: "Velocidad y seguridad",
-        desc: "HTTPS y tiempos de respuesta rápidos son requisitos básicos para la compatibilidad con agentes de IA.",
-      },
-    ],
   },
   scannerResults: {
     // llms.txt

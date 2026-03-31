@@ -16,7 +16,7 @@ export default function ServiciosClient({ dict, lang }: { dict: Dictionary; lang
             <span className="font-semibold text-lg">CrawlReady</span>
           </a>
           <nav className="hidden sm:flex items-center gap-6 text-sm text-zinc-400">
-            <a href={`/${lang}#scanner`} className="hover:text-foreground transition-colors">{dict.nav.scanner}</a>
+            <a href={`/${lang}#how-it-works`} className="hover:text-foreground transition-colors">{dict.nav.howItWorks}</a>
             <a href={`/${lang}/servicios`} className="text-foreground font-medium">{dict.nav.services}</a>
             <a href={dict.nav.langSwitchHref}
               className="px-2 py-1 rounded border border-surface-light hover:border-accent hover:text-accent transition-colors font-medium">
