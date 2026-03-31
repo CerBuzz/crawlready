@@ -1,15 +1,17 @@
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.porkbun.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.CORREO,
-    pass: process.env.PASSWORD,
-  },
-  tls: { rejectUnauthorized: false },
-});
+function createTransporter() {
+  return nodemailer.createTransport({
+    host: "smtp.porkbun.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.CORREO,
+      pass: process.env.PASSWORD,
+    },
+    tls: { rejectUnauthorized: false },
+  });
+}
 
 export async function sendConfirmationEmail(
   to: string,
@@ -62,6 +64,7 @@ export async function sendConfirmationEmail(
   </div>
 </div>`;
 
+  const transporter = createTransporter();
   await transporter.sendMail({
     from: '"CrawlReady" <hello@crawlready.dev>',
     to,
