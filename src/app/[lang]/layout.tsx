@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getDictionary, hasLocale, locales } from "@/lib/i18n";
 import JsonLd from "./_components/JsonLd";
+import AgentSection from "./_components/AgentSection";
 
 const baseUrl = "https://crawlready.dev";
-
-export const dynamicParams = false;
 
 export async function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -53,6 +52,7 @@ export default async function LangLayout({
   return (
     <>
       <JsonLd lang={lang} />
+      <AgentSection lang={lang} />
       {children}
     </>
   );

@@ -11,9 +11,13 @@ export default function JsonLd({ lang }: JsonLdProps) {
     url: baseUrl,
     email: "hello@crawlready.dev",
     description: isEs
-      ? "Agencia de Visibilidad IA. Ayudamos a que tu web sea visible y operable para agentes de IA."
-      : "AI Readiness Agency. We help your website become visible and operable for AI agents.",
+      ? "Probamos si los agentes de IA pueden operar en tu web. Si no pueden, lo arreglamos."
+      : "We test whether AI agents can operate on your website. If they can't, we fix it.",
     foundingDate: "2026",
+    founder: [
+      { "@type": "Person", name: "Antonio Cernadas" },
+    ],
+    areaServed: "ES",
     sameAs: [],
   };
 
@@ -31,36 +35,22 @@ export default function JsonLd({ lang }: JsonLdProps) {
       "@type": "Service",
       name: isEs ? "Informe de visibilidad IA" : "AI Visibility Report",
       description: isEs
-        ? "Probamos qué pasa cuando un agente de IA intenta usar tu web y te mandamos el resultado."
-        : "We test what happens when an AI agent tries to use your site and send you the results.",
+        ? "Un agente de IA intenta operar en tu web. Te mostramos qué funciona y qué falla. Incluye comparativa con tu competidor."
+        : "An AI agent tries to operate on your site. We show you what works and what fails. Includes competitor comparison.",
       provider: { "@id": `${baseUrl}/#organization` },
       offers: {
         "@type": "Offer",
         price: "0",
         priceCurrency: "EUR",
-        description: isEs ? "Gratis" : "Free",
-      },
-    },
-    {
-      "@type": "Service",
-      name: isEs ? "Kit de implementación" : "Implementation Kit",
-      description: isEs
-        ? "Todo el código listo para que tu equipo lo implemente. JSON-LD, formularios accesibles, meta tags optimizados."
-        : "All the code ready for your team to implement. Custom JSON-LD, accessible forms, optimized meta tags.",
-      provider: { "@id": `${baseUrl}/#organization` },
-      offers: {
-        "@type": "Offer",
-        price: "97",
-        priceCurrency: "EUR",
-        description: isEs ? "Pago único" : "One-time payment",
+        description: isEs ? "Gratis — sin compromiso" : "Free — no commitment",
       },
     },
     {
       "@type": "Service",
       name: isEs ? "Implementación completa" : "Full Implementation",
       description: isEs
-        ? "Nos das acceso y lo hacemos nosotros. Compatible con WordPress, WooCommerce, PrestaShop."
-        : "Give us access and we do it for you. Compatible with WordPress, WooCommerce, PrestaShop.",
+        ? "Instalamos todo en tu web: datos estructurados, formularios accesibles, meta tags. Re-test con agente IA incluido."
+        : "We install everything on your site: structured data, accessible forms, meta tags. AI agent re-test included.",
       provider: { "@id": `${baseUrl}/#organization` },
       offers: {
         "@type": "Offer",
@@ -80,47 +70,31 @@ export default function JsonLd({ lang }: JsonLdProps) {
             name: '¿Qué es exactamente un "agente de IA"?',
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Es un asistente como ChatGPT, Google Gemini o Siri cuando actúa en nombre del usuario: busca un servicio, compara opciones, intenta pedir cita o comprar.",
+              text: "Es un asistente como ChatGPT, Google Gemini o Perplexity cuando actúa en nombre del usuario: busca un servicio, compara opciones, intenta pedir cita o comprar.",
             },
           },
           {
             "@type": "Question",
-            name: "¿Por qué mi web no funciona para agentes de IA si funciona para personas?",
+            name: "¿Cómo funciona el test?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "La mayoría de agentes de IA no ven tu web como tú la ves. No ejecutan JavaScript, no ven imágenes, no pueden hacer click en botones. Ven solo el código HTML inicial.",
+              text: "Un agente de IA intenta completar una tarea real en tu web (pedir cita, solicitar presupuesto, comprar). Documentamos cada paso y te enviamos un informe visual con lo que funciona y lo que falla.",
             },
           },
           {
             "@type": "Question",
-            name: "¿Cómo sé si esto me afecta?",
+            name: "¿Cuánto cuesta?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Te mandamos un informe gratuito donde probamos qué pasa cuando un agente de IA intenta usar tu web. Sin compromiso.",
+              text: "El informe es gratuito. Si quieres que arreglemos los problemas encontrados, la implementación completa cuesta €397 (pago único).",
             },
           },
           {
             "@type": "Question",
-            name: "¿Qué incluye el kit de implementación?",
+            name: "¿Cómo contacto?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Código listo para copiar y pegar: JSON-LD personalizado para tu negocio, formularios accesibles, meta tags optimizados, y una guía paso a paso para tu equipo técnico.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "¿Qué pasa si no tengo equipo técnico?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "Para eso está la implementación completa. Nos das acceso a tu web y lo hacemos nosotros.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "¿Cuánto tarda?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "El informe se entrega en 24-48 horas. El kit en 3-5 días laborables. La implementación completa en 5-10 días laborables.",
+              text: "Envía un email a hello@crawlready.dev con la URL de tu web. Recibirás el informe en 24-48 horas. Sin compromiso.",
             },
           },
         ]
@@ -130,47 +104,31 @@ export default function JsonLd({ lang }: JsonLdProps) {
             name: 'What exactly is an "AI agent"?',
             acceptedAnswer: {
               "@type": "Answer",
-              text: "It's an assistant like ChatGPT, Google Gemini, or Siri when it acts on behalf of a user: searching for a service, comparing options, trying to book an appointment or make a purchase.",
+              text: "It's an assistant like ChatGPT, Google Gemini, or Perplexity when it acts on behalf of a user: searching for a service, comparing options, trying to book or buy.",
             },
           },
           {
             "@type": "Question",
-            name: "Why doesn't my site work for AI agents if it works for people?",
+            name: "How does the test work?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Most AI agents don't see your site the way you do. They don't run JavaScript, they can't see images, they can't click buttons. They only see the initial HTML code.",
+              text: "An AI agent attempts a real task on your site (book appointment, request quote, purchase). We document every step and send you a visual report of what works and what fails.",
             },
           },
           {
             "@type": "Question",
-            name: "How do I know if this affects me?",
+            name: "How much does it cost?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "We'll send you a free report where we test what happens when an AI agent tries to use your site. No commitment.",
+              text: "The report is free. If you want us to fix the issues found, full implementation costs €397 (one-time).",
             },
           },
           {
             "@type": "Question",
-            name: "What does the implementation kit include?",
+            name: "How do I get in touch?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Copy-paste ready code: custom JSON-LD for your business, accessible forms, optimized meta tags, and a step-by-step guide for your technical team.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "What if I don't have a technical team?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "That's what the full implementation is for. Give us access to your site and we do it.",
-            },
-          },
-          {
-            "@type": "Question",
-            name: "How long does it take?",
-            acceptedAnswer: {
-              "@type": "Answer",
-              text: "The report is delivered in 24-48 hours. The kit in 3-5 business days. Full implementation in 5-10 business days.",
+              text: "Send an email to hello@crawlready.dev with your website URL. You'll receive the report within 24-48 hours. No commitment.",
             },
           },
         ],
