@@ -21,3 +21,39 @@ export interface ScanResult {
   checks: CheckResult[];
   scannedAt: string;
 }
+
+export interface ReportData {
+  slug: string;
+  companyName: string;
+  scanResult: ScanResult;
+  agentTest?: AgentTestResult;
+}
+
+// --- Agentic Test Types ---
+
+export type AgentStepStatus = "pass" | "partial" | "fail";
+
+export interface AgentStepResult {
+  step: string;
+  action: string;
+  status: AgentStepStatus;
+  details: string;
+  durationMs: number;
+  substeps?: AgentSubstep[];
+}
+
+export interface AgentSubstep {
+  label: string;
+  status: AgentStepStatus;
+  detail?: string;
+}
+
+export interface AgentTestResult {
+  url: string;
+  task: string;
+  steps: AgentStepResult[];
+  verdict: AgentStepStatus;
+  verdictSummary: string;
+  totalDurationMs: number;
+  testedAt: string;
+}

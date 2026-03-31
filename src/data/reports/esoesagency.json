@@ -1,0 +1,277 @@
+{
+  "slug": "esoesagency",
+  "companyName": "Eso Es Agency",
+  "scanResult": {
+    "url": "https://esoesagency.com",
+    "totalScore": 78,
+    "maxPossibleScore": 100,
+    "grade": "B",
+    "checks": [
+      {
+        "name": "llms.txt",
+        "score": 0,
+        "maxScore": 15,
+        "status": "fail",
+        "details": "No llms.txt file found.",
+        "detailKey": "llmsTxt.fail",
+        "recommendation": "Create a /llms.txt file that describes your site structure, key pages, and content for AI agents. See llmstxt.org for the specification.",
+        "recommendationKey": "llmsTxt.recFail"
+      },
+      {
+        "name": "robots.txt (AI Crawlers)",
+        "score": 15,
+        "maxScore": 15,
+        "status": "pass",
+        "details": "robots.txt allows AI crawlers to access your site.",
+        "detailKey": "robots.pass"
+      },
+      {
+        "name": "Structured Data",
+        "score": 20,
+        "maxScore": 20,
+        "status": "pass",
+        "details": "2 JSON-LD block(s) found. Schema types: Organization, LocalBusiness, FAQPage. RDFa markup detected.",
+        "detailKey": "structured.found",
+        "params": {
+          "findings": "2 JSON-LD block(s) found. Schema types: Organization, LocalBusiness, FAQPage. RDFa markup detected"
+        }
+      },
+      {
+        "name": "Meta Tags & Open Graph",
+        "score": 15,
+        "maxScore": 15,
+        "status": "pass",
+        "details": "Title tag present. Meta description present. Full Open Graph tags. Canonical URL set.",
+        "detailKey": "meta.found",
+        "params": {
+          "findings": "Title tag present. Meta description present. Full Open Graph tags. Canonical URL set"
+        }
+      },
+      {
+        "name": "Sitemap",
+        "score": 10,
+        "maxScore": 10,
+        "status": "pass",
+        "details": "Sitemap index found with 2 sitemap(s).",
+        "detailKey": "sitemap.index",
+        "params": {
+          "count": 2
+        }
+      },
+      {
+        "name": "HTTPS",
+        "score": 10,
+        "maxScore": 10,
+        "status": "pass",
+        "details": "Site is served over HTTPS.",
+        "detailKey": "https.pass"
+      },
+      {
+        "name": "Response Time",
+        "score": 8,
+        "maxScore": 15,
+        "status": "partial",
+        "details": "Moderate response time: 1295ms. AI agents prefer sub-400ms.",
+        "detailKey": "response.moderate",
+        "params": {
+          "ms": 1295
+        },
+        "recommendation": "Optimize server response time to under 400ms. Use caching, CDN, and minimize server-side processing.",
+        "recommendationKey": "response.recSlow"
+      }
+    ],
+    "scannedAt": "2026-03-31T15:14:06.054Z"
+  },
+  "agentTest": {
+    "url": "https://esoesagency.com",
+    "task": "find this business and request a quote",
+    "steps": [
+      {
+        "step": "discovery",
+        "action": "Fetching https://esoesagency.com (72ms)",
+        "status": "pass",
+        "details": "Homepage loaded. \"Madrid Itinerary Made for You | Unique Custom Plans For Only €69\". 2000 chars of readable content.",
+        "durationMs": 74,
+        "substeps": [
+          {
+            "label": "Page title",
+            "status": "pass",
+            "detail": "Madrid Itinerary Made for You | Unique Custom Plans For Only €69"
+          },
+          {
+            "label": "Headings",
+            "status": "pass",
+            "detail": "10 found: \"Personalised  Travel Plans In Madrid\""
+          },
+          {
+            "label": "Readable content",
+            "status": "pass",
+            "detail": "2000 chars of extractable text"
+          }
+        ]
+      },
+      {
+        "step": "navigation",
+        "action": "Following 4 relevant links",
+        "status": "pass",
+        "details": "Navigated to 4 relevant pages out of 9 total links.",
+        "durationMs": 134,
+        "substeps": [
+          {
+            "label": "Links found",
+            "status": "pass",
+            "detail": "9 internal links"
+          },
+          {
+            "label": "/pricing/",
+            "status": "pass",
+            "detail": "\"See Pricing\" (55ms)"
+          },
+          {
+            "label": "/contact/",
+            "status": "pass",
+            "detail": "\"start planning\" (60ms)"
+          },
+          {
+            "label": "/about/",
+            "status": "pass",
+            "detail": "\"About Us\" (100ms)"
+          },
+          {
+            "label": "/",
+            "status": "pass",
+            "detail": "(130ms)"
+          }
+        ]
+      },
+      {
+        "step": "contact",
+        "action": "Scanning for contact methods across all pages",
+        "status": "pass",
+        "details": "Found 12 contact channel(s): 1 email, 1 phone, WhatsApp, 8 form(s), Crisp.",
+        "durationMs": 6,
+        "substeps": [
+          {
+            "label": "Email addresses",
+            "status": "pass",
+            "detail": "info@esoesagency.com"
+          },
+          {
+            "label": "Phone numbers",
+            "status": "pass",
+            "detail": "+34671884811"
+          },
+          {
+            "label": "WhatsApp",
+            "status": "pass",
+            "detail": "WhatsApp link detected"
+          },
+          {
+            "label": "Contact forms",
+            "status": "pass",
+            "detail": "8 form(s) found"
+          },
+          {
+            "label": "Chat widgets",
+            "status": "pass",
+            "detail": "Crisp"
+          }
+        ]
+      },
+      {
+        "step": "form_operability",
+        "action": "Checking 8 form(s) for AI agent operability",
+        "status": "partial",
+        "details": "Found 8 form(s) but none are fully operable — AI agents cannot submit requests.",
+        "durationMs": 0,
+        "substeps": [
+          {
+            "label": "Form 1 (6 fields)",
+            "status": "partial",
+            "detail": "No action attribute (may be JS-only)"
+          },
+          {
+            "label": "Form 2 (6 fields)",
+            "status": "partial",
+            "detail": "CAPTCHA blocks automated submission"
+          },
+          {
+            "label": "Form 3 (6 fields)",
+            "status": "partial",
+            "detail": "No action attribute (may be JS-only)"
+          },
+          {
+            "label": "Form 4 (9 fields)",
+            "status": "partial",
+            "detail": "CAPTCHA blocks automated submission"
+          },
+          {
+            "label": "Form 5 (6 fields)",
+            "status": "partial",
+            "detail": "No action attribute (may be JS-only)"
+          },
+          {
+            "label": "Form 6 (6 fields)",
+            "status": "partial",
+            "detail": "No action attribute (may be JS-only)"
+          },
+          {
+            "label": "Form 7 (6 fields)",
+            "status": "partial",
+            "detail": "No action attribute (may be JS-only)"
+          },
+          {
+            "label": "Form 8 (6 fields)",
+            "status": "partial",
+            "detail": "CAPTCHA blocks automated submission"
+          }
+        ]
+      },
+      {
+        "step": "structured_data",
+        "action": "Analyzing 5 JSON-LD block(s)",
+        "status": "fail",
+        "details": "Found 5 JSON-LD block(s) with types: FAQPage. 0/4 key fields present.",
+        "durationMs": 0,
+        "substeps": [
+          {
+            "label": "JSON-LD blocks",
+            "status": "pass",
+            "detail": "5 found: FAQPage"
+          },
+          {
+            "label": "Business name",
+            "status": "fail",
+            "detail": "Missing"
+          },
+          {
+            "label": "Services/offers",
+            "status": "fail",
+            "detail": "Missing"
+          },
+          {
+            "label": "Pricing info",
+            "status": "fail",
+            "detail": "Missing"
+          },
+          {
+            "label": "Contact info",
+            "status": "fail",
+            "detail": "Missing"
+          }
+        ]
+      },
+      {
+        "step": "verdict",
+        "action": "Synthesizing results",
+        "status": "partial",
+        "details": "An AI agent can PARTIALLY complete the task \"find this business and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
+        "durationMs": 0
+      }
+    ],
+    "verdict": "partial",
+    "verdictSummary": "An AI agent can PARTIALLY complete the task \"find this business and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
+    "totalDurationMs": 217,
+    "testedAt": "2026-03-31T15:14:06.274Z"
+  }
+}

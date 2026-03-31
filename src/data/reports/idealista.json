@@ -1,0 +1,79 @@
+{
+  "slug": "idealista",
+  "companyName": "Idealista",
+  "scanResult": {
+    "url": "https://www.idealista.com",
+    "totalScore": 36,
+    "maxPossibleScore": 100,
+    "grade": "D",
+    "checks": [
+      {
+        "name": "llms.txt",
+        "score": 0,
+        "maxScore": 15,
+        "status": "fail",
+        "details": "No llms.txt file found.",
+        "detailKey": "llmsTxt.fail",
+        "recommendationKey": "llmsTxt.recFail"
+      },
+      {
+        "name": "AI Crawlers (robots.txt)",
+        "score": 3,
+        "maxScore": 15,
+        "status": "fail",
+        "details": "Blocking 5 AI crawlers: GPTBot, ChatGPT-User, ClaudeBot, anthropic-ai, Google-Extended.",
+        "detailKey": "robots.manyBlocked",
+        "recommendationKey": "robots.recManyBlocked",
+        "params": { "count": 5, "bots": "GPTBot, ChatGPT-User, ClaudeBot, anthropic-ai, Google-Extended" }
+      },
+      {
+        "name": "Structured Data",
+        "score": 5,
+        "maxScore": 20,
+        "status": "partial",
+        "details": "Found 1 JSON-LD block with types: WebSite.",
+        "detailKey": "structured.found",
+        "recommendationKey": "structured.recPartial",
+        "params": { "findings": "Found 1 JSON-LD block with types: WebSite" }
+      },
+      {
+        "name": "Meta Tags & Open Graph",
+        "score": 10,
+        "maxScore": 15,
+        "status": "partial",
+        "details": "Found title, description. Missing: og:image, canonical URL.",
+        "detailKey": "meta.found",
+        "recommendationKey": "meta.recMissing",
+        "params": { "findings": "Found title, description. Missing: og:image, canonical URL" }
+      },
+      {
+        "name": "Sitemap",
+        "score": 8,
+        "maxScore": 10,
+        "status": "pass",
+        "details": "Sitemap index found with 12 sitemap(s).",
+        "detailKey": "sitemap.index",
+        "params": { "count": 12 }
+      },
+      {
+        "name": "HTTPS",
+        "score": 10,
+        "maxScore": 10,
+        "status": "pass",
+        "details": "Site is served over HTTPS.",
+        "detailKey": "https.pass"
+      },
+      {
+        "name": "Response Time",
+        "score": 0,
+        "maxScore": 15,
+        "status": "fail",
+        "details": "Very slow response time: 4200ms. AI agents may timeout.",
+        "detailKey": "response.verySlow",
+        "recommendationKey": "response.recSlow",
+        "params": { "ms": 4200 }
+      }
+    ],
+    "scannedAt": "2026-03-27T10:30:00Z"
+  }
+}
