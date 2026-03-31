@@ -43,4 +43,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.vercel
+# claude code local config
+.claude/
+
+# generated reports & transcripts (local artifacts)
+council-*.html
+council-*.md
+agent-test-demo.html
