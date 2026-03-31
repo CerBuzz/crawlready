@@ -4,7 +4,94 @@ How we assess a website's AI visibility. This document is the source of truth fo
 
 ---
 
-## Overview
+## Operational Protocol
+
+### Flow: From confirmation to delivery
+
+```
+Client confirms via email
+  → Phase 0: Intake (Claude, ~5 min)
+  → Phase 1: Reconnaissance (Claude, ~15 min)
+  → Phase 2: Agentic Test — Target (Claude, ~30-45 min)
+  → Phase 3: Agentic Test — Competitor (Claude, ~20 min)
+  → Phase 4: Report generation (Claude, ~20 min)
+  → Phase 5: Delivery via email (Antonio)
+Total: ~1.5 hours per analysis
+```
+
+### Phase 0: Intake
+
+When the client confirms they want the analysis, we collect or determine:
+
+- **URL** of their website
+- **Sector / what they sell** (from their site)
+- **Primary competitor** (we choose — the client does NOT need to provide this)
+- **Natural task** for the AI agent (we define this based on their business — e.g., "enroll in a course", "request a quote", "book an appointment")
+
+### Phase 1: Reconnaissance
+
+Before running the agentic test:
+
+1. **Tech stack**: WordPress, Shopify, custom, etc. (determines if we can implement fixes)
+2. **Automated scan**: Run our 7-dimension scanner (llms.txt, robots.txt, structured data, meta tags, sitemap, HTTPS, response time)
+3. **Contact point mapping**: Identify all forms, booking systems, checkout flows, chat, email, phone — everything an AI agent could try to use
+4. **Competitor identification**: If not already set, choose the most obvious direct competitor
+
+### Phase 2: Agentic Test — Target
+
+Claude analyzes the website directly as an AI agent attempting to operate. Three sub-tests (detailed in the Evaluation section below):
+
+- **Test A: Discovery** — Can an AI agent find this business?
+- **Test B: Comprehension** — Can an AI agent understand what they offer?
+- **Test C: Action** — Can an AI agent complete the defined task?
+
+### Phase 3: Agentic Test — Competitor
+
+Same three sub-tests on the competitor's website. This comparison is **mandatory** — it is what makes the report powerful. "Your competitor passed 2 out of 3 tests. You passed 0."
+
+### Phase 4: Report Generation
+
+Generate the HTML report (see Report Structure below). Save in the client's outreach folder.
+
+### Phase 5: Delivery
+
+Email only (MVP). Antonio sends the report with a short message highlighting the key finding. No attachments in the first email if it's cold outreach — link to the report or tease the finding first.
+
+---
+
+### File Structure
+
+All analysis data is organized by client and date inside `/outreach/`:
+
+```
+outreach/
+  {client-slug}/
+    {YYYY-MM-DD}/
+      intake.json            ← initial data
+      recon.json             ← tech stack, scan results, contact points
+      test-target.json       ← agentic test results for target
+      test-competitor.json   ← agentic test results for competitor
+      report.html            ← final deliverable
+      evidence/              ← screenshots, transcripts
+    {YYYY-MM-DD}/            ← subsequent analysis (only new/changed data)
+```
+
+Published reports (shareable via URL) go in `/public/reports/{client-slug}-{date}.html`.
+
+### Economy Rule
+
+Before running a new analysis on a client with existing data:
+
+1. Check if there's a recent analysis (< 30 days old)
+2. If yes, only run the NEW parts (different competitor, different task, updated sections)
+3. Reference previous `recon.json` if tech stack hasn't changed
+4. Note in the report: "Technical reconnaissance from {previous date}, agentic test updated {current date}"
+
+---
+
+## Evaluation
+
+### Overview
 
 Every evaluation starts with a **blind search** and then examines two pillars:
 
@@ -15,6 +102,8 @@ Every evaluation starts with a **blind search** and then examines two pillars:
 | **Pillar 2: AI Actionability** (5 pts) | Can an AI agent take action through the channels the business already offers? |
 
 Together they produce a single score (0-10) and a grade (A-F).
+
+**Important**: All tests are performed by Claude directly analyzing the website. We do not simulate or claim to use ChatGPT, Perplexity, or other AI agents. Claude IS the AI agent performing the test.
 
 ---
 
@@ -152,8 +241,9 @@ Every report follows this format:
 - Table with each dimension scored
 - Factual observations, not judgments
 
-### 5. Comparison (optional)
-- Only include if we have **verified data** from real tests on competitors
+### 5. Comparison (mandatory)
+- Side-by-side table: target vs competitor on all dimensions
+- Based on **verified data** from real tests (Phase 3)
 - Never fabricate or assume competitor results
 
 ### 6. Recommendations
@@ -162,8 +252,15 @@ Every report follows this format:
 - Ordered by impact
 - Never prescribe channels they don't already use
 
-### 7. CTA
-- Adapted to the client profile (agency → partnership pitch, ecommerce → direct service, etc.)
+### 7. Next Steps CTA
+- Implementation offer: "¿Quieres que lo implementemos? €X"
+- Expansion offer: "¿Te gustaría analizar otro competidor u otra tarea del agente?"
+- Adapted to client profile (agency → partnership pitch, ecommerce → direct service, etc.)
+
+### 8. Delivery Channel (MVP)
+- Email only. No WhatsApp, no LinkedIn, no phone.
+- Short message highlighting the single most impactful finding
+- Report attached as HTML or linked if published at public URL
 
 ---
 
@@ -191,4 +288,4 @@ Before sending any report:
 
 ---
 
-*This methodology is maintained by the CrawlReady team. Last revision: 2026-03-30.*
+*This methodology is maintained by the CrawlReady team. Last revision: 2026-03-31.*

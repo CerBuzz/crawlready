@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { ReportData, CheckResult } from "@/lib/types";
+import type { ReportData, CheckResult, AgentTestResult } from "@/lib/types";
 import type { Dictionary } from "@/lib/i18n/es";
 import { trackEvent } from "@/lib/tracker";
 
@@ -127,16 +127,31 @@ function CheckCard({
 
 /* ── Agentic Test Section ───────────────────────────────── */
 
+const STEP_NAMES_ES: Record<string, string> = {
+  discovery: "Descubrimiento",
+  navigation: "Navegación",
+  contact: "Contacto",
+  form_operability: "Formularios",
+  structured_data: "Datos estructurados",
+};
+const STEP_NAMES_EN: Record<string, string> = {
+  discovery: "Discovery",
+  navigation: "Navigation",
+  contact: "Contact",
+  form_operability: "Forms",
+  structured_data: "Structured Data",
+};
+
 function AgenticTestSection({
   slug,
   companyName,
   isEs,
-  hasAgentTest,
+  agentTest,
 }: {
   slug: string;
   companyName: string;
   isEs: boolean;
-  hasAgentTest: boolean;
+  agentTest?: AgentTestResult;
 }) {
   const [clicked, setClicked] = useState(false);
 
@@ -145,8 +160,13 @@ function AgenticTestSection({
     setClicked(true);
   }
 
-  // If we have real agent test data, show the terminal + link to animation
-  if (hasAgentTest) {
+  if (agentTest) {
+    const stepNames = isEs ? STEP_NAMES_ES : STEP_NAMES_EN;
+    const testSteps = agentTest.steps.filter((s) => s.step !== "verdict");
+    const passed = testSteps.filter((s) => s.status === "pass").length;
+    const partial = testSteps.filter((s) => s.status === "partial").length;
+    const failed = testSteps.filter((s) => s.status === "fail").length;
+
     return (
       <section className="px-6 pb-12">
         <div className="max-w-3xl mx-auto">
@@ -167,15 +187,47 @@ function AgenticTestSection({
               </h2>
               <p className="text-sm text-zinc-400 mt-2">
                 {isEs
-                  ? "Hemos simulado el proceso completo. Mira paso a paso lo que ocurre."
-                  : "We simulated the full process. Watch step by step what happens."}
+                  ? "Hemos simulado el proceso completo con peticiones HTTP reales."
+                  : "We simulated the full process with real HTTP requests."}
               </p>
+            </div>
+
+            {/* Mini summary counters */}
+            <div className="grid grid-cols-3 gap-4 text-center mb-6 pt-4 pb-4 border-t border-b border-surface-light">
+              <div>
+                <p className="text-2xl font-bold text-success">{passed}</p>
+                <p className="text-xs text-zinc-500 mt-1">{isEs ? "Aprobados" : "Passed"}</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-warning">{partial}</p>
+                <p className="text-xs text-zinc-500 mt-1">{isEs ? "Parciales" : "Partial"}</p>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-danger">{failed}</p>
+                <p className="text-xs text-zinc-500 mt-1">{isEs ? "Fallidos" : "Failed"}</p>
+              </div>
+            </div>
+
+            {/* Step-by-step mini results */}
+            <div className="space-y-2 mb-8">
+              {testSteps.map((step) => (
+                <div key={step.step} className="flex items-center gap-3 text-sm">
+                  <StatusIcon status={step.status} />
+                  <span className="text-zinc-300 font-medium">
+                    {stepNames[step.step] || step.step}
+                  </span>
+                  <span className="text-zinc-500 text-xs flex-1 truncate">
+                    {step.details.slice(0, 80)}
+                  </span>
+                </div>
+              ))}
             </div>
 
             <div className="text-center">
               <a
                 href={`/reports/${slug}-agent-test.html`}
                 target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => trackEvent("cta_click", slug, { cta: "watch_agent_test" })}
                 className="inline-block px-8 py-3 rounded-lg bg-accent text-black font-semibold hover:bg-accent/90 transition-colors text-lg"
               >
@@ -455,7 +507,7 @@ export default function ReportClient({
         slug={slug}
         companyName={companyName}
         isEs={isEs}
-        hasAgentTest={!!report.agentTest}
+        agentTest={report.agentTest}
       />
 
       {/* Final CTA — "Hablamos" */}
