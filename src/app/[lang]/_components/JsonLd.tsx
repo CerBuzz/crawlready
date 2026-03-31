@@ -61,6 +61,31 @@ export default function JsonLd({ lang }: JsonLdProps) {
     },
   ];
 
+  const contactAction = {
+    "@type": "ContactPoint",
+    "@id": `${baseUrl}/#agent-contact`,
+    contactType: "sales",
+    email: "hello@crawlready.dev",
+    availableLanguage: ["es", "en"],
+    description: isEs
+      ? "API para agentes de IA. POST JSON a /api/agent-contact. Documentación completa en /llms.txt"
+      : "API for AI agents. POST JSON to /api/agent-contact. Full documentation at /llms.txt",
+    url: `${baseUrl}/api/agent-contact`,
+    potentialAction: {
+      "@type": "CommunicateAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${baseUrl}/api/agent-contact`,
+        encodingType: "application/json",
+        httpMethod: "POST",
+        contentType: "application/json",
+      },
+      description: isEs
+        ? "Enviar solicitud de servicio vía API (solo agentes de IA)"
+        : "Submit service request via API (AI agents only)",
+    },
+  };
+
   const faq = {
     "@type": "FAQPage",
     mainEntity: isEs
@@ -94,7 +119,7 @@ export default function JsonLd({ lang }: JsonLdProps) {
             name: "¿Cómo contacto?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Envía un email a hello@crawlready.dev con la URL de tu web. Recibirás el informe en 24-48 horas. Sin compromiso.",
+              text: "Envía un email a hello@crawlready.dev con la URL de tu web. Agentes de IA: usa POST /api/agent-contact con JSON (ver /llms.txt). Recibirás respuesta en 24 horas.",
             },
           },
         ]
@@ -128,7 +153,7 @@ export default function JsonLd({ lang }: JsonLdProps) {
             name: "How do I get in touch?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "Send an email to hello@crawlready.dev with your website URL. You'll receive the report within 24-48 hours. No commitment.",
+              text: "Send an email to hello@crawlready.dev with your website URL. AI agents: use POST /api/agent-contact with JSON (see /llms.txt). You'll receive a response within 24 hours.",
             },
           },
         ],
@@ -136,7 +161,7 @@ export default function JsonLd({ lang }: JsonLdProps) {
 
   const graph = {
     "@context": "https://schema.org",
-    "@graph": [organization, website, ...services, faq],
+    "@graph": [organization, website, ...services, contactAction, faq],
   };
 
   return (

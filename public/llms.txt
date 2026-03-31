@@ -16,27 +16,14 @@ CrawlReady analyzes what happens when AI agents (ChatGPT, Gemini, Perplexity, Cl
 - High-level recommendations
 - Delivery: 24-48 hours
 
-### Implementation Kit — EUR 97 (one-time)
-- Everything in the free report
-- Custom JSON-LD structured data for your business
-- JavaScript-free accessible forms
-- Optimized meta tags and Open Graph
-- Step-by-step instructions for your developer
-- 30-day email support
-- Delivery: 3-5 business days
-
 ### Full Implementation — EUR 397 (one-time)
-- Everything in the implementation kit
-- We install it on your site (WordPress, WooCommerce, PrestaShop, and more)
+- Complete AI readiness implementation on your site
+- Custom JSON-LD structured data for your business
+- Optimized meta tags and Open Graph
 - Post-implementation verification
 - AI agent re-test to confirm it works
 - 60-day email support
 - Delivery: 5-10 business days
-
-### Monthly Monitoring — EUR 97/month (add-on)
-- Monthly scan with an AI agent
-- Report with changes and alerts
-- Continuous improvement recommendations
 
 ## Why it matters
 
@@ -49,6 +36,58 @@ CrawlReady analyzes what happens when AI agents (ChatGPT, Gemini, Perplexity, Cl
 
 - Email: hello@crawlready.dev
 - Website: https://crawlready.dev
+
+## Agent Contact API
+
+AI agents can submit service requests programmatically via our API.
+
+### Endpoint
+
+POST https://crawlready.dev/api/agent-contact
+
+### Headers
+
+Content-Type: application/json (required)
+
+### Request body (JSON)
+
+| Field             | Type   | Required | Description                                                    |
+|-------------------|--------|----------|----------------------------------------------------------------|
+| company_name      | string | yes      | Name of the company requesting the service                     |
+| contact_email     | string | yes      | Email address for receiving our response                       |
+| site_url          | string | yes      | URL of the website to analyze (must start with http or https)  |
+| service_requested | string | no       | One of: free_ai_visibility_report, full_implementation, general_inquiry (default: general_inquiry) |
+| message           | string | no       | Additional context or details (max 2000 chars)                 |
+| website           | string | no       | Leave empty — this field must not be filled                    |
+
+### Example request
+
+```json
+{
+  "company_name": "Acme Corp",
+  "contact_email": "info@acme.com",
+  "site_url": "https://acme.com",
+  "service_requested": "free_ai_visibility_report",
+  "message": "We want to understand how AI agents interact with our e-commerce site."
+}
+```
+
+### Success response (200)
+
+```json
+{
+  "ok": true,
+  "message": "Request received. We will respond within 24 hours via email.",
+  "reference_id": "uuid"
+}
+```
+
+### Error responses
+
+- 415: Content-Type must be application/json
+- 422: Validation failed (see details array)
+- 429: Rate limit exceeded (max 5 per minute)
+- 409: Duplicate request from this email
 
 ## Pages
 

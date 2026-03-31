@@ -83,9 +83,13 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "unauthorized" }, { status: 401 });
   }
 
-  const { blobs } = await list({ prefix: "leads/" });
+  const [humanLeads, agentLeads] = await Promise.all([
+    list({ prefix: "leads/" }),
+    list({ prefix: "agent-leads/" }),
+  ]);
+  const allBlobs = [...humanLeads.blobs, ...agentLeads.blobs];
   const leads = await Promise.all(
-    blobs.map(async (blob) => {
+    allBlobs.map(async (blob) => {
       const res = await fetch(blob.url);
       const data = await res.json();
       return { ...data, blobUrl: blob.url, pathname: blob.pathname };
