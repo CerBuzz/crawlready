@@ -27,17 +27,22 @@ See **@COMPANY.md** for full details on: services, pricing, culture (100% digita
 
 ## Business Context
 
-**What we are**: An AI Visibility Agency. Full details, pricing, and positioning in @COMPANY.md.
+**What we sell**: Proof that businesses are losing revenue because AI agents can't operate on their websites. Frame: **lost revenue recovery**, not technical audit. Full details in @COMPANY.md.
 
-**Two diagnostic tools**:
-1. **AI Readiness Scanner** (automated) — Technical scan of 7 dimensions (llms.txt, robots.txt, structured data, meta tags, sitemap, HTTPS, response time). Free at crawlready.dev. Good as lead magnet and quick health check.
-2. **Agentic Test** (manual, high-value) — Give a real AI agent a real task ("find this business and request a quote"), document what works and what breaks. Visual HTML report. **This is our core differentiator.**
+**Two tools**:
+1. **Agentic Test** (manual, high-value) — **Our core product.** Give a real AI agent a real task ("find this business and request a quote"), document what works and what breaks. Visual HTML report with competitor comparison.
+2. **AI Readiness Scanner** (automated) — Technical scan of 7 dimensions. Free at crawlready.dev. Functions as **lead qualifier**, not as a product.
+
+**Pricing (simplified)**:
+- **Free**: Agentic Test + competitor comparison + recommendations
+- **€397**: Full implementation (turnkey + re-test + 60-day email support)
 
 **Current state**:
-- MVP live: https://crawlready.vercel.app (scanner only)
-- Domain: crawlready.dev (Porkbun, DNS configured)
-- Outreach templates in /outreach/, sample reports (MULTIMAP, Idealista)
-- No clients yet. Priority #1: get the first paying client.
+- Live: https://crawlready.dev (landing redesigned 2026-03-31)
+- Leads stored in Vercel Blob, admin dashboard at /admin/leads
+- Email: hello@crawlready.dev (full mailbox on Porkbun, trial until 2026-04-11)
+- crawlready@gmail.com SUSPENDED — Google APIs disabled
+- No clients yet. Priority #1: outreach to 5 Spanish mid-size companies with free Agentic Tests.
 
 ## Tech Stack
 
@@ -59,12 +64,18 @@ Always maintain your CEO perspective — delegate execution, retain strategic ov
 
 - `/src/lib/scanner.ts` — Core scanning engine (7 checks)
 - `/src/lib/types.ts` — TypeScript types for scan results
-- `/src/app/api/scan/route.ts` — API endpoint
+- `/src/lib/tracker.ts` — Lead tracking utilities
+- `/src/app/api/scan/route.ts` — Scanner API endpoint
+- `/src/app/api/track/` — Lead tracking API endpoint
 - `/src/app/[lang]/page.tsx` — Landing page (loads HomeClient)
 - `/src/app/[lang]/_components/HomeClient.tsx` — Scanner UI + results + pricing
-- `/src/app/[lang]/servicios/` — Services page with detailed pricing
+- `/src/app/[lang]/_components/ReportClient.tsx` — Report display component
+- `/src/app/[lang]/report/` — Report page
+- `/src/app/[lang]/servicios/` — Services page (link removed from nav)
+- `/src/app/admin/` or `/admin/leads` — Admin dashboard for leads (password: ADMIN_PASSWORD env var)
 - `/src/lib/i18n/` — Translations (es.ts, en.ts)
 - `/src/app/globals.css` — Design system (dark theme, cyan accent)
+- `/src/data/` — Data files
 - `/outreach/` — Sample reports (Idealista, MULTIMAP)
 
 ## Market Data (2026-03-27 scan results)

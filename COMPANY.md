@@ -27,9 +27,9 @@ All our time goes to delivering value, not sitting in calls. This is how we offe
 
 ## What We Are
 
-An **AI Visibility Agency**. We help businesses become visible and operable by AI agents (ChatGPT, Perplexity, Google AI Mode, Claude).
+We prove that businesses are **losing revenue** because AI agents can't operate on their websites — and we fix it.
 
-The problem: AI search is replacing traditional search. 93% of AI sessions end without visiting a website. If AI agents can't find you, read you, or interact with you — your business is invisible to the fastest-growing traffic channel.
+The problem: AI agents are increasingly how customers find and interact with businesses. When an AI agent tries to buy from you, request a quote, or book an appointment — and it can't — that's a lost sale. We show you the proof and fix the problem.
 
 ---
 
@@ -73,9 +73,7 @@ Then we document step-by-step what happens:
 | Tier | Price | What You Get |
 |---|---|---|
 | **AI Visibility Report** | Free | Agentic test + visual report + competitor comparison + recommendations |
-| **Implementation Kit** | €97 one-time | Custom code (JSON-LD, accessible forms, meta tags) + step-by-step instructions + 30-day email support |
 | **Full Implementation** | €397 one-time | We install everything on your site + post-implementation verification + AI agent re-test + 60-day email support |
-| **Monthly Monitoring** | €97/month (add-on) | Monthly AI agent scan + change alerts + continuous improvement recommendations |
 
 ---
 
@@ -104,7 +102,7 @@ Our ideal client:
 - Already comfortable buying digital services online (without needing a call)
 - Has a website and cares about their digital presence
 - Understands (or intuits) that AI search is changing how customers find businesses
-- Can invest €97-397 without extensive approval processes
+- Can invest €397 without extensive approval processes
 
 **Primary targets**:
 - Digital marketing / SEO agencies (can resell our service to their clients)
@@ -121,13 +119,13 @@ Our ideal client:
 
 ## Sales Arguments
 
-1. **The invisible business**: "If AI can't find you, you're invisible to the fastest-growing search channel"
-2. **The broken funnel**: "An AI agent tried to hire you and couldn't — here's the proof" (the report)
+1. **Lost revenue proof**: "An AI agent tried to buy from you and couldn't — here's the proof" (the report)
+2. **The broken funnel**: "Your competitor's site worked. Yours didn't. The AI agent went to them."
 3. **We eat our own dog food**: "We run our own business with AI agents. Our 24/7 support quality proves the model works"
 4. **The arithmetic analogy**: "Nobody hires a person to do sums in a company anymore. AI agents for customer interaction is the same obvious evolution"
-5. **Window of opportunity**: "AI search traffic converts at 14.2% vs Google's 2.8%. Every month you don't optimize, your competitors capture that traffic"
-6. **Cost comparison**: "Traditional AEO agencies charge €1,500-15,000/month. We deliver the same quality for €97-397 because our team IS AI"
+5. **Window of opportunity**: "AI agent traffic is growing exponentially. Every month you don't optimize, your competitors capture those sales"
+6. **Cost comparison**: "Traditional agencies charge €1,500-15,000/month. We deliver the same quality for €397 because our team IS AI"
 
 ---
 
-*This document is maintained by the CrawlReady team and updated as the company evolves. Last revision: 2026-03-29.*
+*This document is maintained by the CrawlReady team and updated as the company evolves. Last revision: 2026-03-31.*
