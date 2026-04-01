@@ -1,0 +1,236 @@
+{
+  "slug": "15vatios",
+  "companyName": "15Vatios",
+  "scanResult": {
+    "url": "https://15vatios.com",
+    "totalScore": 49,
+    "maxPossibleScore": 100,
+    "grade": "D",
+    "checks": [
+      {
+        "name": "llms.txt",
+        "score": 0,
+        "maxScore": 15,
+        "status": "fail",
+        "details": "No llms.txt file found.",
+        "detailKey": "llmsTxt.fail",
+        "recommendation": "Create a /llms.txt file that describes your site structure, key pages, and content for AI agents. See llmstxt.org for the specification.",
+        "recommendationKey": "llmsTxt.recFail"
+      },
+      {
+        "name": "robots.txt (AI Crawlers)",
+        "score": 15,
+        "maxScore": 15,
+        "status": "pass",
+        "details": "robots.txt allows AI crawlers to access your site.",
+        "detailKey": "robots.pass"
+      },
+      {
+        "name": "Structured Data",
+        "score": 0,
+        "maxScore": 20,
+        "status": "fail",
+        "details": "No structured data (JSON-LD, Microdata, or RDFa) found.",
+        "detailKey": "structured.fail",
+        "recommendation": "Add JSON-LD structured data for your Organization, WebSite, and key content types. This is critical for AI agents to understand your business.",
+        "recommendationKey": "structured.recFail"
+      },
+      {
+        "name": "Meta Tags & Open Graph",
+        "score": 6,
+        "maxScore": 15,
+        "status": "partial",
+        "details": "Meta description present. Canonical URL set.",
+        "detailKey": "meta.found",
+        "params": {
+          "findings": "Meta description present. Canonical URL set"
+        },
+        "recommendation": "Add: descriptive title tag, Open Graph tags. These help AI agents understand and cite your content.",
+        "recommendationKey": "meta.recMissing"
+      },
+      {
+        "name": "Sitemap",
+        "score": 10,
+        "maxScore": 10,
+        "status": "pass",
+        "details": "Sitemap index found with 2 sitemap(s).",
+        "detailKey": "sitemap.index",
+        "params": {
+          "count": 2
+        }
+      },
+      {
+        "name": "HTTPS",
+        "score": 10,
+        "maxScore": 10,
+        "status": "pass",
+        "details": "Site is served over HTTPS.",
+        "detailKey": "https.pass"
+      },
+      {
+        "name": "Response Time",
+        "score": 8,
+        "maxScore": 15,
+        "status": "partial",
+        "details": "Moderate response time: 1022ms. AI agents prefer sub-400ms.",
+        "detailKey": "response.moderate",
+        "params": {
+          "ms": 1022
+        },
+        "recommendation": "Optimize server response time to under 400ms. Use caching, CDN, and minimize server-side processing.",
+        "recommendationKey": "response.recSlow"
+      }
+    ],
+    "scannedAt": "2026-04-01T16:47:31.615Z"
+  },
+  "agentTest": {
+    "url": "https://15vatios.com",
+    "task": "Find this digital agency, understand their services, and request a quote for a corporate video production",
+    "steps": [
+      {
+        "step": "discovery",
+        "action": "Fetching https://15vatios.com (1220ms)",
+        "status": "pass",
+        "details": "Homepage loaded. \"15Vatios\". 2000 chars of readable content.",
+        "detailKey": "discovery.pass",
+        "durationMs": 1221,
+        "substeps": [
+          {
+            "label": "Page title",
+            "labelKey": "substep.pageTitle",
+            "status": "pass",
+            "detail": "15Vatios",
+            "detailKey": "substep.titleFound",
+            "params": { "title": "15Vatios" }
+          },
+          {
+            "label": "Headings",
+            "labelKey": "substep.headings",
+            "status": "pass",
+            "detail": "10 found: \"Home\"",
+            "detailKey": "substep.headingsFound",
+            "params": { "count": 10, "first": "Home" }
+          },
+          {
+            "label": "Readable content",
+            "labelKey": "substep.readableContent",
+            "status": "pass",
+            "detail": "2000 chars of extractable text",
+            "detailKey": "substep.contentPass",
+            "params": { "chars": 2000 }
+          }
+        ]
+      },
+      {
+        "step": "navigation",
+        "action": "Following 2 relevant links",
+        "status": "partial",
+        "details": "Navigated to 1 relevant pages out of 2 total links.",
+        "detailKey": "navigation.partial",
+        "recommendationKey": "rec.navigation.partial",
+        "params": { "loaded": 1, "total": 2 },
+        "durationMs": 961,
+        "substeps": [
+          {
+            "label": "Links found",
+            "labelKey": "substep.linksFound",
+            "status": "pass",
+            "detail": "2 internal links",
+            "detailKey": "substep.linksCount",
+            "params": { "count": 2 }
+          },
+          {
+            "label": "/",
+            "status": "pass",
+            "detail": "(960ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": { "text": "/", "ms": 960 }
+          }
+        ]
+      },
+      {
+        "step": "contact",
+        "action": "Scanning for direct contact methods across all pages",
+        "status": "pass",
+        "details": "Found 2 direct contact channel(s): 1 email, WhatsApp.",
+        "detailKey": "contact.pass",
+        "params": { "count": 2, "channels": "1 email, WhatsApp" },
+        "durationMs": 3,
+        "substeps": [
+          {
+            "label": "Email addresses",
+            "labelKey": "substep.emailAddresses",
+            "status": "pass",
+            "detail": "hola@15vatios.com"
+          },
+          {
+            "label": "Phone numbers",
+            "labelKey": "substep.phoneNumbers",
+            "status": "partial",
+            "detail": "None found",
+            "detailKey": "substep.phoneNone"
+          },
+          {
+            "label": "WhatsApp",
+            "labelKey": "substep.whatsapp",
+            "status": "pass",
+            "detail": "WhatsApp link detected",
+            "detailKey": "substep.whatsappFound"
+          },
+          {
+            "label": "Contact forms",
+            "labelKey": "substep.contactForms",
+            "status": "fail",
+            "detail": "No forms found in HTML",
+            "detailKey": "substep.formsNone",
+            "params": { "count": 0 }
+          },
+          {
+            "label": "Chat widgets",
+            "labelKey": "substep.chatWidgets",
+            "status": "pass",
+            "detail": "Crisp"
+          }
+        ]
+      },
+      {
+        "step": "agent_ready_forms",
+        "action": "Looking for forms an AI agent could use",
+        "status": "fail",
+        "details": "No HTML forms found. An AI agent has no way to submit a request to this business.",
+        "detailKey": "formOp.fail",
+        "recommendationKey": "rec.formOp.fail",
+        "durationMs": 0
+      },
+      {
+        "step": "structured_data",
+        "action": "Looking for structured data (JSON-LD) to understand the business",
+        "status": "fail",
+        "details": "No JSON-LD structured data found. AI agents cannot programmatically understand services, pricing, or business details.",
+        "detailKey": "structuredData.fail",
+        "recommendationKey": "rec.structuredData.fail",
+        "durationMs": 0,
+        "substeps": [
+          {
+            "label": "JSON-LD blocks",
+            "labelKey": "substep.jsonLdBlocks",
+            "status": "fail",
+            "detail": "None found",
+            "detailKey": "substep.jsonLdNone"
+          }
+        ]
+      },
+      {
+        "step": "verdict",
+        "action": "Synthesizing results",
+        "status": "partial",
+        "details": "The AI agent COULD NOT fully complete the task \"Find this digital agency, understand their services, and request a quote for a corporate video production\". Some channels exist but have barriers that prevent AI agents from completing the action. Failures: agent_ready_forms, structured_data.",
+        "durationMs": 0
+      }
+    ],
+    "verdict": "partial",
+    "verdictSummary": "The AI agent COULD NOT fully complete the task \"Find this digital agency, understand their services, and request a quote for a corporate video production\". Some channels exist but have barriers that prevent AI agents from completing the action. Failures: agent_ready_forms, structured_data.",
+    "totalDurationMs": 2186,
+    "testedAt": "2026-04-01T16:47:45.601Z"
+  }
+}

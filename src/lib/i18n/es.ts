@@ -174,7 +174,8 @@ const es = {
     "step.discovery": "Descubrimiento",
     "step.navigation": "Navegación",
     "step.contact": "Contacto",
-    "step.form_operability": "Formularios",
+    "step.agent_ready_forms": "Formularios adaptados para agentes",
+    "step.form_operability": "Formularios adaptados para agentes",
     "step.structured_data": "Datos estructurados",
     // Substep labels
     "substep.pageTitle": "Título de página",
@@ -200,12 +201,12 @@ const es = {
     "navigation.partial": "Solo pudo acceder a {loaded} página(s) relevante(s) de {total} enlaces.",
     "navigation.fail": "Encontró {total} enlaces pero ninguno coincide con patrones de servicios/contacto/precios.",
     // Contact details
-    "contact.pass": "Encontró {count} canal(es) de contacto: {channels}.",
-    "contact.partial": "Encontró canales de contacto limitados: {channels}.",
-    "contact.fail": "No se encontraron métodos de contacto. Un agente IA no puede contactar con este negocio.",
-    // Form operability details
-    "formOp.pass": "{operable} de {total} formulario(s) son operables por un agente IA.",
-    "formOp.partial": "{total} formulario(s) detectado(s), ninguno totalmente operable — los agentes IA no pueden enviar solicitudes.",
+    "contact.pass": "Encontró {count} canal(es) de contacto directo: {channels}.",
+    "contact.partial": "Canales de contacto directo limitados: {channels}.",
+    "contact.fail": "No se encontraron métodos de contacto directo (email, teléfono, WhatsApp) en el HTML. Un agente IA no tiene forma de contactar con este negocio.",
+    // Agent-ready forms details
+    "formOp.pass": "{operable} de {total} formulario(s) están adaptados para agentes IA.",
+    "formOp.partial": "{total} formulario(s) detectado(s), pero ninguno está adaptado para agentes IA — el agente no puede enviar ninguna solicitud.",
     "formOp.fail": "No se encontraron formularios HTML. Un agente IA no tiene forma de enviar una solicitud.",
     // Structured data details
     "structuredData.pass": "{count} bloque(s) JSON-LD con tipos: {types}. {richness}/4 campos clave presentes.",
@@ -231,7 +232,8 @@ const es = {
     "substep.jsonLdFound": "{count} encontrado(s): {types}",
     "substep.fieldFound": "Encontrado",
     "substep.fieldMissing": "Ausente",
-    "substep.formOperable": "Operable — campos: {fields}",
+    "substep.formAgentReady": "Adaptado para agentes — campos: {fields}",
+    "substep.formOperable": "Adaptado para agentes — campos: {fields}",
     "substep.formNoSubmit": "Sin botón de envío",
     "substep.formCaptcha": "CAPTCHA bloquea el envío automático",
     "substep.formNoAction": "Sin atributo action (puede ser solo JS)",

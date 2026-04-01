@@ -7,6 +7,8 @@ interface Lead {
   email: string;
   lang: string;
   status: string;
+  token: string;
+  emailSent?: boolean;
   createdAt: string;
   confirmedAt: string | null;
   source: string;
@@ -18,6 +20,30 @@ export default function AdminLeads() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [loaded, setLoaded] = useState(false);
+  const [resending, setResending] = useState<string | null>(null);
+
+  async function resendEmail(token: string) {
+    setResending(token);
+    try {
+      const res = await fetch("/api/resend", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password, token }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        alert(`Error: ${data.error}`);
+        return;
+      }
+      setLeads((prev) =>
+        prev.map((l) => (l.token === token ? { ...l, emailSent: true } : l))
+      );
+    } catch {
+      alert("Error de red al reenviar");
+    } finally {
+      setResending(null);
+    }
+  }
 
   async function fetchLeads(e: React.FormEvent) {
     e.preventDefault();
@@ -88,7 +114,8 @@ export default function AdminLeads() {
                       <th className="py-3 pr-4">Fecha</th>
                       <th className="py-3 pr-4">Email</th>
                       <th className="py-3 pr-4">URL</th>
-                      <th className="py-3">Confirmado</th>
+                      <th className="py-3 pr-4">Confirmado</th>
+                      <th className="py-3">Email</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -111,10 +138,41 @@ export default function AdminLeads() {
                           <a href={`https://${lead.url}`} target="_blank" rel="noopener noreferrer"
                             className="text-cyan-400 hover:underline">{lead.url}</a>
                         </td>
-                        <td className="py-3 text-zinc-500 whitespace-nowrap">
+                        <td className="py-3 pr-4 text-zinc-500 whitespace-nowrap">
                           {lead.confirmedAt
                             ? new Date(lead.confirmedAt).toLocaleString("es-ES")
                             : "—"}
+                        </td>
+                        <td className="py-3 whitespace-nowrap">
+                          {lead.emailSent === true ? (
+                            <span className="inline-block px-2 py-0.5 rounded text-xs font-medium bg-emerald-500/20 text-emerald-400">
+                              Enviado
+                            </span>
+                          ) : lead.emailSent === false ? (
+                            <span className="inline-flex items-center gap-2">
+                              <span className="inline-block px-2 py-0.5 rounded text-xs font-medium bg-red-500/20 text-red-400">
+                                Falló
+                              </span>
+                              <button
+                                onClick={() => resendEmail(lead.token)}
+                                disabled={resending === lead.token}
+                                className="px-2 py-0.5 rounded text-xs font-medium bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30 disabled:opacity-50"
+                              >
+                                {resending === lead.token ? "Enviando..." : "Reenviar"}
+                              </button>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-2">
+                              <span className="text-xs text-zinc-600">N/A</span>
+                              <button
+                                onClick={() => resendEmail(lead.token)}
+                                disabled={resending === lead.token}
+                                className="px-2 py-0.5 rounded text-xs font-medium bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30 disabled:opacity-50"
+                              >
+                                {resending === lead.token ? "Enviando..." : "Reenviar"}
+                              </button>
+                            </span>
+                          )}
                         </td>
                       </tr>
                     ))}

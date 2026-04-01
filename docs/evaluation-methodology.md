@@ -230,9 +230,9 @@ Evaluated via the named search queries (Step 2 for target, Step 3 for competitor
 |---|---|---|---|---|
 | A1 | **Primary action channel** | At least one channel is fully operable by AI | At least one channel is readable (agent can tell user what to do) | No channel is readable or operable |
 | A2 | **Contact information** | Email and/or phone visible in HTML, structured and contextual | Present but hard to find or ambiguous | Not accessible |
-| A3 | **Form accessibility** | Form works without JavaScript; fields are semantic HTML | Form exists in HTML but requires JS for submission | Form is JS-rendered or absent |
+| A3 | **Agent-ready forms** | Form works without JavaScript; fields are semantic HTML, submit button present, action attribute defined | Form exists in HTML but is missing submit button, action, or requires JS | Form is JS-rendered or absent |
 
-> **Forms — solution hierarchy**: Most AI agents today (ChatGPT, Perplexity, Claude) access websites via HTTP fetch, not a browser. They cannot click buttons or submit forms. When a form is not operable: (1) **Immediate fix**: add a `<button type="submit">` — this enables browser-based agents (Operator, etc.); (2) **Recommended fix**: expose an API endpoint and document it in `llms.txt` — this is what the majority of AI agents can actually use today and in the future.
+> **Agent-ready forms**: A form is "adapted for AI agents" when an agent can programmatically identify the fields, understand what data to provide, and submit the form. Most AI agents today (ChatGPT, Perplexity, Claude) access websites via HTTP fetch, not a browser — they cannot click buttons or execute JavaScript. A form that lacks a submit button or action attribute is NOT agent-ready, even if it looks fine to a human user. When a form is not agent-ready: (1) **Immediate fix**: add a `<button type="submit">` and an `action` attribute — this enables browser-based agents (Operator, etc.); (2) **Recommended fix**: expose an API endpoint and document it in `llms.txt` — this is what the majority of AI agents can actually use today and in the future.
 | A4 | **Action context** | AI can pre-fill or describe what info to provide | Partial context (generic "contact us") | No guidance on what the action requires |
 | A5 | **Completion path** | AI can describe a complete path from discovery to action | Path exists but has gaps | No viable path from discovery to action |
 
@@ -262,6 +262,15 @@ Total = Readability score (0-5) + Actionability score (0-5) = 0-10
 | 5-6 | C | Partial — significant gaps |
 | 3-4 | D | Poor — major barriers for AI agents |
 | 0-2 | F | Failing — essentially invisible to AI |
+
+### Verdict — action completion
+
+The verdict explicitly states whether the AI agent could or could not complete the assigned task. This is the most important finding in the report.
+
+- **If the agent could NOT complete the action** (most common): the verdict states this clearly and explains the impact — "a potential customer using AI cannot interact with this business." This is reported as a critical finding, not a soft "partial."
+- **If the agent could complete the action** (rare — requires at least one direct contact channel or an agent-ready form): the verdict confirms which channels worked.
+
+The score (0-10) measures overall AI readiness. The verdict measures whether the agent could actually do the job. A site can score 6/10 (readable, structured data) and still get a verdict of "COULD NOT complete the task" if there's no usable action channel.
 
 ---
 

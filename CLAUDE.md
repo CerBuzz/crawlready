@@ -28,9 +28,11 @@ See **@COMPANY.md** for the full handbook: services, pricing, culture, target cl
 ## Current State
 
 - **Live**: https://crawlready.dev
-- **Leads**: Stored in Vercel Blob, admin dashboard at `/admin/leads`
-- **Email**: hello@crawlready.dev (Porkbun full mailbox, trial until 2026-04-11)
-- **Gmail**: crawlready@gmail.com SUSPENDED — Google APIs disabled
+- **Leads**: Stored in Vercel Blob, admin dashboard at `/admin/leads` (tracks `emailSent` status)
+- **Email sending**: Resend API (hello@crawlready.dev). Migrated from Nodemailer+SMTP 2026-04-01
+- **Email receiving**: Porkbun mailbox (hello@crawlready.dev, trial until 2026-04-11)
+- **Telegram alerts**: Real-time notifications to Antonio via @crawlready_bot (new lead, email failure, lead confirmed)
+- **Gmail**: crawlready@gmail.com ACTIVE (restored 2026-04-01) — Google APIs enabled
 - **Clients**: None yet. Priority #1: outreach to Spanish mid-size companies with free Agentic Tests
 - **Outreach**: See `outreach/campaigns.md` for active campaign research
 
@@ -39,10 +41,13 @@ See **@COMPANY.md** for the full handbook: services, pricing, culture, target cl
 - `/src/lib/scanner.ts` — Core scanning engine (7 checks)
 - `/src/lib/agentTest.ts` — Agentic test engine
 - `/src/lib/types.ts` — Shared TypeScript types
-- `/src/lib/email.ts` — Email utilities (Nodemailer)
+- `/src/lib/email.ts` — Email utilities (Resend API)
+- `/src/lib/telegram.ts` — Telegram alert notifications
 - `/src/lib/tracker.ts` — Lead tracking
 - `/src/app/api/scan/route.ts` — Scanner API endpoint
 - `/src/app/api/agent-test/route.ts` — Agentic test API endpoint
+- `/src/app/api/health/route.ts` — Resend health check
+- `/src/app/api/resend/route.ts` — Resend failed confirmation emails
 - `/src/app/[lang]/page.tsx` — Landing page (loads HomeClient)
 - `/src/app/[lang]/_components/HomeClient.tsx` — Scanner UI + results + pricing
 - `/src/app/[lang]/_components/ReportClient.tsx` — Report display component

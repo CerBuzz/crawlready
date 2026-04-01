@@ -15,7 +15,8 @@ const STEP_LABELS: Record<string, string> = {
   discovery: "Discovery",
   navigation: "Navigation",
   contact: "Contact Discovery",
-  form_operability: "Form Operability",
+  agent_ready_forms: "Agent-Ready Forms",
+  form_operability: "Agent-Ready Forms", // legacy compat
   structured_data: "Structured Data",
   verdict: "Verdict",
 };

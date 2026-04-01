@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { put, list } from "@vercel/blob";
 import { sendConfirmationEmail } from "@/lib/email";
+import { sendTelegramAlert } from "@/lib/telegram";
 import crypto from "crypto";
 
 export async function POST(req: Request) {
@@ -43,12 +44,23 @@ export async function POST(req: Request) {
 
     // Create lead with confirmation token
     const token = crypto.randomUUID();
+
+    // Attempt email first, then save lead with result
+    let emailSent = false;
+    try {
+      await sendConfirmationEmail(email, token, lang);
+      emailSent = true;
+    } catch (err) {
+      console.error("[EMAIL_ERROR]", err);
+    }
+
     const lead = {
       url,
       email,
       lang,
       status: "pending",
       token,
+      emailSent,
       createdAt: new Date().toISOString(),
       confirmedAt: null,
       source: "hero_form",
@@ -60,13 +72,14 @@ export async function POST(req: Request) {
       access: "public",
     });
 
-    // Send confirmation email
-    try {
-      await sendConfirmationEmail(email, token, lang);
-    } catch (err) {
-      console.error("[EMAIL_ERROR]", err);
-      // Lead is saved even if email fails — we can resend manually
-    }
+    // Telegram alerts (fire-and-forget)
+    const lines = [
+      `🆕 <b>Nuevo lead</b>`,
+      `📧 ${email}`,
+      `🔗 ${url}`,
+      `✉️ Email: ${emailSent ? "✅ Enviado" : "❌ FALLÓ"}`,
+    ];
+    sendTelegramAlert(lines.join("\n")).catch(() => {});
 
     return NextResponse.json({ ok: true }, { status: 200 });
   } catch {

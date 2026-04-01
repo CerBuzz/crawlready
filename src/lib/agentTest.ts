@@ -410,34 +410,34 @@ function stepContactDiscovery(pages: Map<string, string>): AgentStepResult {
     });
   }
 
-  const totalChannels = emails.length + phones.length + wa.length + allForms.length + uniqueWidgets.length;
-  const status: AgentStepStatus = totalChannels >= 3 ? "pass" : totalChannels >= 1 ? "partial" : "fail";
+  // Only count direct contact methods (email, phone, WhatsApp) as usable channels.
+  // Forms are evaluated separately in stepAgentReadyForms — don't double-count here.
+  const directChannels = emails.length + phones.length + wa.length;
+  const status: AgentStepStatus = directChannels >= 2 ? "pass" : directChannels >= 1 ? "partial" : "fail";
   const channels = [
     emails.length > 0 ? `${emails.length} email` : "",
     phones.length > 0 ? `${phones.length} phone` : "",
     wa.length > 0 ? "WhatsApp" : "",
-    allForms.length > 0 ? `${allForms.length} form(s)` : "",
-    uniqueWidgets.length > 0 ? uniqueWidgets.join(", ") : "",
   ].filter(Boolean).join(", ");
 
   const contactDetailKey = status === "fail" ? "contact.fail" : status === "pass" ? "contact.pass" : "contact.partial";
 
   return {
     step: "contact",
-    action: "Scanning for contact methods across all pages",
+    action: "Scanning for direct contact methods across all pages",
     status,
-    details: totalChannels > 0
-      ? `Found ${totalChannels} contact channel(s): ${channels}.`
-      : "No contact methods found. An AI agent cannot reach this business.",
+    details: directChannels > 0
+      ? `Found ${directChannels} direct contact channel(s): ${channels}.`
+      : "No direct contact methods (email, phone, WhatsApp) found in HTML. An AI agent has no way to reach this business.",
     detailKey: contactDetailKey,
     recommendationKey: status !== "pass" ? `rec.contact.${status}` : undefined,
-    params: { count: totalChannels, channels },
+    params: { count: directChannels, channels },
     durationMs: Date.now() - start,
     substeps,
   };
 }
 
-function stepFormOperability(pages: Map<string, string>): AgentStepResult {
+function stepAgentReadyForms(pages: Map<string, string>): AgentStepResult {
   const start = Date.now();
   const allForms: FormInfo[] = [];
   for (const html of pages.values()) {
@@ -446,10 +446,10 @@ function stepFormOperability(pages: Map<string, string>): AgentStepResult {
 
   if (allForms.length === 0) {
     return {
-      step: "form_operability",
-      action: "Checking if forms can be submitted by an AI agent",
+      step: "agent_ready_forms",
+      action: "Looking for forms an AI agent could use",
       status: "fail",
-      details: "No HTML forms found. An AI agent has no way to submit a request programmatically.",
+      details: "No HTML forms found. An AI agent has no way to submit a request to this business.",
       detailKey: "formOp.fail",
       recommendationKey: "rec.formOp.fail",
       durationMs: Date.now() - start,
@@ -457,7 +457,7 @@ function stepFormOperability(pages: Map<string, string>): AgentStepResult {
   }
 
   const substeps: AgentSubstep[] = [];
-  let operableCount = 0;
+  let agentReadyCount = 0;
 
   for (let i = 0; i < allForms.length; i++) {
     const form = allForms[i];
@@ -469,11 +469,11 @@ function stepFormOperability(pages: Map<string, string>): AgentStepResult {
     if (!form.hasSubmit) issues.push("No submit button found");
 
     const formStatus: AgentStepStatus = issues.length === 0 ? "pass" : issues.length === 1 ? "partial" : "fail";
-    if (formStatus === "pass") operableCount++;
+    if (formStatus === "pass") agentReadyCount++;
 
     // Build translated detail key for most relevant issue
     let formDetailKey: string | undefined;
-    if (issues.length === 0) formDetailKey = "substep.formOperable";
+    if (issues.length === 0) formDetailKey = "substep.formAgentReady";
     else if (form.hasCaptcha) formDetailKey = "substep.formCaptcha";
     else if (!form.hasSubmit) formDetailKey = "substep.formNoSubmit";
     else if (!form.action && !form.isMailto) formDetailKey = "substep.formNoAction";
@@ -482,25 +482,25 @@ function stepFormOperability(pages: Map<string, string>): AgentStepResult {
     substeps.push({
       label: `Form ${i + 1} (${form.fields.length} fields)`,
       status: formStatus,
-      detail: issues.length > 0 ? issues.join("; ") : `Operable — fields: ${form.fields.join(", ")}`,
+      detail: issues.length > 0 ? issues.join("; ") : `Agent-ready — fields: ${form.fields.join(", ")}`,
       detailKey: formDetailKey,
       params: { fields: form.fields.join(", ") },
     });
   }
 
-  const status: AgentStepStatus = operableCount > 0 ? "pass" : substeps.some((s) => s.status === "partial") ? "partial" : "fail";
-  const formDetailKey = operableCount > 0 ? "formOp.pass" : "formOp.partial";
+  const status: AgentStepStatus = agentReadyCount > 0 ? "pass" : substeps.some((s) => s.status === "partial") ? "partial" : "fail";
+  const formDetailKey = agentReadyCount > 0 ? "formOp.pass" : "formOp.partial";
 
   return {
-    step: "form_operability",
-    action: `Checking ${allForms.length} form(s) for AI agent operability`,
+    step: "agent_ready_forms",
+    action: `Checking ${allForms.length} form(s) — are they adapted for AI agents?`,
     status,
-    details: operableCount > 0
-      ? `${operableCount} of ${allForms.length} form(s) are operable by an AI agent.`
-      : `Found ${allForms.length} form(s) but none are fully operable — AI agents cannot submit requests.`,
+    details: agentReadyCount > 0
+      ? `${agentReadyCount} of ${allForms.length} form(s) are adapted for AI agents.`
+      : `Found ${allForms.length} form(s) but none are adapted for AI agents — the agent cannot submit any request.`,
     detailKey: formDetailKey,
     recommendationKey: status !== "pass" ? `rec.formOp.${status}` : undefined,
-    params: { operable: operableCount, total: allForms.length },
+    params: { operable: agentReadyCount, total: allForms.length },
     durationMs: Date.now() - start,
     substeps,
   };
@@ -584,7 +584,7 @@ function stepVerdict(steps: AgentStepResult[], task: string): AgentStepResult {
     discovery: 1,
     navigation: 1,
     contact: 2,
-    form_operability: 3,
+    agent_ready_forms: 3,
     structured_data: 1,
   };
 
@@ -599,18 +599,29 @@ function stepVerdict(steps: AgentStepResult[], task: string): AgentStepResult {
   }
 
   const pct = totalWeight > 0 ? weightedScore / totalWeight : 0;
-  const status: AgentStepStatus = pct >= 0.7 ? "pass" : pct >= 0.4 ? "partial" : "fail";
 
-  const summaries: Record<AgentStepStatus, string> = {
-    pass: `An AI agent CAN complete the task "${task}" on this site. The business is operationally visible to AI.`,
-    partial: `An AI agent can PARTIALLY complete the task "${task}". Some channels are accessible but there are gaps that reduce AI operability.`,
-    fail: `An AI agent CANNOT complete the task "${task}" on this site. Critical barriers prevent AI agents from interacting with this business.`,
-  };
+  // Check if the agent could actually complete the action:
+  // Requires at least one direct contact channel OR an agent-ready form
+  const contactStep = steps.find((s) => s.step === "contact");
+  const formStep = steps.find((s) => s.step === "agent_ready_forms");
+  const hasDirectContact = contactStep?.status === "pass" || contactStep?.status === "partial";
+  const hasAgentReadyForm = formStep?.status === "pass";
+  const canCompleteAction = hasDirectContact || hasAgentReadyForm;
+
+  // If the agent can't complete the action, it's never "pass" regardless of score
+  const status: AgentStepStatus = canCompleteAction && pct >= 0.7 ? "pass" : pct >= 0.4 && canCompleteAction ? "partial" : canCompleteAction ? "partial" : "fail";
 
   const failedSteps = steps.filter((s) => s.status === "fail");
-  const details = failedSteps.length > 0
-    ? `${summaries[status]} Failures: ${failedSteps.map((s) => s.step).join(", ")}.`
-    : summaries[status];
+  const failureList = failedSteps.length > 0 ? ` Failures: ${failedSteps.map((s) => s.step).join(", ")}.` : "";
+
+  let details: string;
+  if (canCompleteAction && status === "pass") {
+    details = `The AI agent found viable channels to complete the task "${task}".${failureList}`;
+  } else if (!canCompleteAction) {
+    details = `The AI agent COULD NOT complete the task "${task}". No usable contact channel or form was found — a potential customer using AI cannot interact with this business.${failureList}`;
+  } else {
+    details = `The AI agent COULD NOT fully complete the task "${task}". Some channels exist but have barriers that prevent AI agents from completing the action.${failureList}`;
+  }
 
   return {
     step: "verdict",
@@ -671,8 +682,8 @@ export async function* runAgentTest(
   steps.push(contactResult);
   yield contactResult;
 
-  // Step 4: Form Operability
-  const formResult = stepFormOperability(pages);
+  // Step 4: Agent-Ready Forms
+  const formResult = stepAgentReadyForms(pages);
   steps.push(formResult);
   yield formResult;
 

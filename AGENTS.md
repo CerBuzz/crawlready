@@ -14,7 +14,7 @@ This is NOT the Next.js you know. This version has breaking changes — APIs, co
 - **API routes**: Use `Response.json()` (Web API), not `NextResponse.json()` unless you need Next.js-specific features
 - **Styling**: Tailwind CSS 4 via PostCSS. Design system in `globals.css` (dark theme, cyan accent `#00e5ff`)
 - **Storage**: Vercel Blob for persistent data. No database
-- **Email**: Nodemailer with SMTP (Porkbun). Config in `/src/lib/email.ts`
+- **Email**: Resend API. Config in `/src/lib/email.ts`
 
 ## Project Structure
 

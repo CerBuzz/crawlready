@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { list, put, del } from "@vercel/blob";
 import { notifyNewLead } from "@/lib/email";
+import { sendTelegramAlert } from "@/lib/telegram";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -45,6 +46,10 @@ export async function GET(req: Request) {
       notifyNewLead(updated).catch((err) =>
         console.error("[NOTIFY ERROR]", err)
       );
+
+      sendTelegramAlert(
+        `✅ <b>Lead confirmado</b>\n📧 ${lead.email}\n🔗 ${lead.url}`
+      ).catch(() => {});
 
       return NextResponse.redirect(
         new URL(`/${lead.lang || "es"}/confirmed`, req.url)

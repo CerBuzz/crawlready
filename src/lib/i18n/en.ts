@@ -176,7 +176,8 @@ const en: Dictionary = {
     "step.discovery": "Discovery",
     "step.navigation": "Navigation",
     "step.contact": "Contact",
-    "step.form_operability": "Forms",
+    "step.agent_ready_forms": "Agent-Ready Forms",
+    "step.form_operability": "Agent-Ready Forms",
     "step.structured_data": "Structured Data",
     // Substep labels
     "substep.pageTitle": "Page title",
@@ -202,12 +203,12 @@ const en: Dictionary = {
     "navigation.partial": "Could only access {loaded} relevant page(s) out of {total} links.",
     "navigation.fail": "Found {total} links but none match service/contact/pricing patterns.",
     // Contact details
-    "contact.pass": "Found {count} contact channel(s): {channels}.",
-    "contact.partial": "Found limited contact channels: {channels}.",
-    "contact.fail": "No contact methods found. An AI agent cannot reach this business.",
-    // Form operability details
-    "formOp.pass": "{operable} of {total} form(s) are operable by an AI agent.",
-    "formOp.partial": "{total} form(s) detected, none fully operable — AI agents cannot submit requests.",
+    "contact.pass": "Found {count} direct contact channel(s): {channels}.",
+    "contact.partial": "Limited direct contact channels: {channels}.",
+    "contact.fail": "No direct contact methods (email, phone, WhatsApp) found in HTML. An AI agent has no way to reach this business.",
+    // Agent-ready forms details
+    "formOp.pass": "{operable} of {total} form(s) are adapted for AI agents.",
+    "formOp.partial": "{total} form(s) detected, but none are adapted for AI agents — the agent cannot submit any request.",
     "formOp.fail": "No HTML forms found. An AI agent has no way to submit a request.",
     // Structured data details
     "structuredData.pass": "{count} JSON-LD block(s) with types: {types}. {richness}/4 key fields present.",
@@ -233,7 +234,8 @@ const en: Dictionary = {
     "substep.jsonLdFound": "{count} found: {types}",
     "substep.fieldFound": "Found",
     "substep.fieldMissing": "Missing",
-    "substep.formOperable": "Operable — fields: {fields}",
+    "substep.formAgentReady": "Agent-ready — fields: {fields}",
+    "substep.formOperable": "Agent-ready — fields: {fields}",
     "substep.formNoSubmit": "No submit button found",
     "substep.formCaptcha": "CAPTCHA blocks automated submission",
     "substep.formNoAction": "No action attribute (may be JS-only)",

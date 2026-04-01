@@ -90,11 +90,11 @@
     "steps": [
       {
         "step": "discovery",
-        "action": "Fetching https://www.cfprumasa.com (993ms)",
+        "action": "Fetching https://www.cfprumasa.com (5701ms)",
         "status": "pass",
         "details": "Homepage loaded. \"CFP RUMASA (ANDRÉS DE RIBERA S.C.A.)Centro de F.P. Rumasa\". 2000 chars of readable content.",
         "detailKey": "discovery.pass",
-        "durationMs": 994,
+        "durationMs": 5702,
         "substeps": [
           {
             "label": "Page title",
@@ -139,7 +139,7 @@
           "loaded": 4,
           "total": 34
         },
-        "durationMs": 4466,
+        "durationMs": 4594,
         "substeps": [
           {
             "label": "Links found",
@@ -154,54 +154,55 @@
           {
             "label": "/fp-basica-servicios-administrativos-2/",
             "status": "pass",
-            "detail": "\"GRADO BÁSICO SERVICIOS ADMINISTRATIVOS\" (4293ms)",
+            "detail": "\"GRADO BÁSICO SERVICIOS ADMINISTRATIVOS\" (4260ms)",
             "detailKey": "substep.pageLoaded",
             "params": {
               "text": "GRADO BÁSICO SERVICIOS ADMINISTRATIVOS",
-              "ms": 4293
+              "ms": 4260
             }
           },
           {
             "label": "/trabaja-con-nosotros/",
             "status": "pass",
-            "detail": "\"TRABAJA CON NOSOTROS\" (4268ms)",
+            "detail": "\"TRABAJA CON NOSOTROS\" (4506ms)",
             "detailKey": "substep.pageLoaded",
             "params": {
               "text": "TRABAJA CON NOSOTROS",
-              "ms": 4268
+              "ms": 4506
             }
           },
           {
             "label": "/",
             "status": "pass",
-            "detail": "(4464ms)",
+            "detail": "(4476ms)",
             "detailKey": "substep.pageLoaded",
             "params": {
               "text": "/",
-              "ms": 4464
+              "ms": 4476
             }
           },
           {
             "label": "/nuestra-historia/",
             "status": "pass",
-            "detail": "\"NUESTRA HISTORIA\" (4406ms)",
+            "detail": "\"NUESTRA HISTORIA\" (4589ms)",
             "detailKey": "substep.pageLoaded",
             "params": {
               "text": "NUESTRA HISTORIA",
-              "ms": 4406
+              "ms": 4589
             }
           }
         ]
       },
       {
         "step": "contact",
-        "action": "Scanning for contact methods across all pages",
-        "status": "pass",
-        "details": "Found 5 contact channel(s): 5 form(s).",
-        "detailKey": "contact.pass",
+        "action": "Scanning for direct contact methods across all pages",
+        "status": "fail",
+        "details": "No direct contact methods (email, phone, WhatsApp) found in HTML. An AI agent has no way to reach this business.",
+        "detailKey": "contact.fail",
+        "recommendationKey": "rec.contact.fail",
         "params": {
-          "count": 5,
-          "channels": "5 form(s)"
+          "count": 0,
+          "channels": ""
         },
         "durationMs": 4,
         "substeps": [
@@ -239,10 +240,10 @@
         ]
       },
       {
-        "step": "form_operability",
-        "action": "Checking 5 form(s) for AI agent operability",
+        "step": "agent_ready_forms",
+        "action": "Checking 5 form(s) — are they adapted for AI agents?",
         "status": "partial",
-        "details": "Found 5 form(s) but none are fully operable — AI agents cannot submit requests.",
+        "details": "Found 5 form(s) but none are adapted for AI agents — the agent cannot submit any request.",
         "detailKey": "formOp.partial",
         "recommendationKey": "rec.formOp.partial",
         "params": {
@@ -310,7 +311,7 @@
           "types": "unknown types",
           "richness": 0
         },
-        "durationMs": 0,
+        "durationMs": 1,
         "substeps": [
           {
             "label": "JSON-LD blocks",
@@ -356,14 +357,14 @@
       {
         "step": "verdict",
         "action": "Synthesizing results",
-        "status": "partial",
-        "details": "An AI agent can PARTIALLY complete the task \"Find this business, understand their services, and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
+        "status": "fail",
+        "details": "The AI agent COULD NOT complete the task \"Find this business, understand their services, and request a quote\". No usable contact channel or form was found — a potential customer using AI cannot interact with this business. Failures: contact, structured_data.",
         "durationMs": 0
       }
     ],
-    "verdict": "partial",
-    "verdictSummary": "An AI agent can PARTIALLY complete the task \"Find this business, understand their services, and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
-    "totalDurationMs": 5466,
-    "testedAt": "2026-04-01T13:30:27.257Z"
+    "verdict": "fail",
+    "verdictSummary": "The AI agent COULD NOT complete the task \"Find this business, understand their services, and request a quote\". No usable contact channel or form was found — a potential customer using AI cannot interact with this business. Failures: contact, structured_data.",
+    "totalDurationMs": 10301,
+    "testedAt": "2026-04-01T14:27:34.416Z"
   }
 }

@@ -1,17 +1,11 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
-function createTransporter() {
-  return nodemailer.createTransport({
-    host: "smtp.porkbun.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.PORKBUN_EMAIL,
-      pass: process.env.PORKBUN_EMAIL_PASSWORD,
-    },
-    tls: { rejectUnauthorized: false },
-  });
+let _resend: Resend | null = null;
+function getResend() {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend;
 }
+const FROM = "CrawlReady <hello@crawlready.dev>";
 
 export async function sendConfirmationEmail(
   to: string,
@@ -64,13 +58,16 @@ export async function sendConfirmationEmail(
   </div>
 </div>`;
 
-  const transporter = createTransporter();
-  await transporter.sendMail({
-    from: '"CrawlReady" <hello@crawlready.dev>',
-    to,
+  const { error } = await getResend().emails.send({
+    from: FROM,
+    to: [to],
     subject,
     html,
   });
+
+  if (error) {
+    throw new Error(`Resend error: ${error.message}`);
+  }
 }
 
 /** Notify the team when a lead confirms their email. */
@@ -80,10 +77,9 @@ export async function notifyNewLead(lead: {
   lang?: string;
   confirmedAt?: string;
 }) {
-  const transporter = createTransporter();
-  await transporter.sendMail({
-    from: '"CrawlReady Bot" <hello@crawlready.dev>',
-    to: "hello@crawlready.dev",
+  const { error } = await getResend().emails.send({
+    from: FROM,
+    to: ["hello@crawlready.dev"],
     subject: `Nuevo lead confirmado: ${lead.url}`,
     html: `
 <div style="font-family:monospace;font-size:14px;line-height:1.8;color:#1f2937">
@@ -94,7 +90,30 @@ export async function notifyNewLead(lead: {
     <tr><td style="padding:4px 12px 4px 0;color:#6b7280">Idioma:</td><td>${lead.lang || "es"}</td></tr>
     <tr><td style="padding:4px 12px 4px 0;color:#6b7280">Confirmado:</td><td>${lead.confirmedAt || "ahora"}</td></tr>
   </table>
-  <p style="margin-top:16px">Siguiente paso: <code>pnpm outreach ${lead.url} ${lead.email}</code></p>
 </div>`,
   });
+
+  if (error) {
+    throw new Error(`Resend error: ${error.message}`);
+  }
+}
+
+/** Send an outreach email (used by scripts/outreach.ts) */
+export async function sendOutreachEmail(opts: {
+  to: string;
+  cc?: string;
+  subject: string;
+  html: string;
+}) {
+  const { error } = await getResend().emails.send({
+    from: '"Antonio @ CrawlReady" <hello@crawlready.dev>',
+    to: [opts.to],
+    ...(opts.cc ? { cc: [opts.cc] } : {}),
+    subject: opts.subject,
+    html: opts.html,
+  });
+
+  if (error) {
+    throw new Error(`Resend error: ${error.message}`);
+  }
 }

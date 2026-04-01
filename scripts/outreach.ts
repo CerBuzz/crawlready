@@ -19,10 +19,10 @@
  */
 import * as fs from "fs";
 import * as path from "path";
-import nodemailer from "nodemailer";
 import { scanUrl } from "../src/lib/scanner";
 import { runAgentTestFull } from "../src/lib/agentTest";
 import { generateTerminalHtml } from "../src/lib/agentTerminalHtml";
+import { sendOutreachEmail } from "../src/lib/email";
 import type { ScanResult, AgentTestResult } from "../src/lib/types";
 
 // --- Load .env.local ---
@@ -113,27 +113,15 @@ async function sendEmailForLead(slug: string) {
   console.log(`\nSending email for ${companyName} (${url})`);
   console.log(`  To: ${lead.email}${lead.cc ? ` CC: ${lead.cc}` : ""}`);
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.porkbun.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.PORKBUN_EMAIL,
-      pass: process.env.PORKBUN_EMAIL_PASSWORD,
-    },
-    tls: { rejectUnauthorized: false },
-  });
-
   const subject = buildSubjectLine(reportData.agentTest, new URL(url).hostname);
-  const info = await transporter.sendMail({
-    from: '"Antonio @ CrawlReady" <hello@crawlready.dev>',
+  await sendOutreachEmail({
     to: lead.email,
-    ...(lead.cc ? { cc: lead.cc } : {}),
+    cc: lead.cc,
     subject,
     html: buildEmailHtml(reportData.scanResult, reportData.agentTest, companyName, slug, url),
   });
 
-  console.log(`  ✓ Email sent! (${info.messageId})`);
+  console.log(`  ✓ Email sent!`);
 
   // Update queue
   lead.status = "done";
@@ -283,27 +271,14 @@ async function runPipeline(rawUrl: string, email?: string, cc?: string) {
   // Step 6: Send email
   if (email && !noPush && !noEmail) {
     console.log("\n[6/6] Sending cold email...");
-    const transporter = nodemailer.createTransport({
-      host: "smtp.porkbun.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.PORKBUN_EMAIL,
-        pass: process.env.PORKBUN_EMAIL_PASSWORD,
-      },
-      tls: { rejectUnauthorized: false },
-    });
-
     const subject = buildSubjectLine(agentTest, new URL(url).hostname);
-
-    const info = await transporter.sendMail({
-      from: '"Antonio @ CrawlReady" <hello@crawlready.dev>',
+    await sendOutreachEmail({
       to: email,
-      ...(cc ? { cc } : {}),
+      cc,
       subject,
       html: buildEmailHtml(scanResult, agentTest, companyName, slug, url),
     });
-    console.log(`  ✓ Email sent to ${email}${cc ? ` (cc: ${cc})` : ""} (${info.messageId})`);
+    console.log(`  ✓ Email sent to ${email}${cc ? ` (cc: ${cc})` : ""}`);
   } else if (noEmail) {
     console.log("\n[6/6] Skipped (--no-email). To send later: pnpm outreach --send-email " + slug);
   } else if (!email) {

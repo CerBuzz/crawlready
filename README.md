@@ -19,7 +19,7 @@ Requires Node >= 22.
 - Next.js 16 + React 19 + TypeScript
 - Tailwind CSS 4
 - Vercel (hosting + Blob storage)
-- Nodemailer (transactional email)
+- Resend (transactional email)
 - pnpm
 
 ## Project Structure
