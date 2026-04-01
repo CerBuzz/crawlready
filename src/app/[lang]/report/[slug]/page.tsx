@@ -5,7 +5,7 @@ import ReportClient from "../../_components/ReportClient";
 import fs from "fs";
 import path from "path";
 
-export const dynamic = "force-dynamic";
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const dir = path.join(process.cwd(), "src/data/reports");
