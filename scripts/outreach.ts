@@ -4,15 +4,18 @@
  * Full pipeline: scan → agentic test → generate report → publish → send email
  *
  * Usage:
- *   pnpm outreach <url> [email] [cc]       # full pipeline
- *   pnpm outreach <url> --scan-only        # scan + test only, no email
- *   pnpm outreach <url> [email] --no-push  # generate everything but don't push/email
- *   pnpm outreach --queue                  # process all pending leads from queue.json
+ *   pnpm outreach <url> [email] [cc]        # full pipeline (scan → publish → email)
+ *   pnpm outreach <url> --scan-only         # scan + test only, save locally
+ *   pnpm outreach <url> [email] --no-email  # scan + publish, skip email
+ *   pnpm outreach <url> [email] --no-push   # scan + generate, skip publish + email
+ *   pnpm outreach --queue                   # process all pending leads
+ *   pnpm outreach --queue --no-email        # process + publish, skip emails (review first)
+ *   pnpm outreach --send-email <slug>       # send email for already-published lead
  *
- * Examples:
- *   pnpm outreach esoesagency.com yulia@example.com
- *   pnpm outreach cfprumasa.com carvalja@gmail.com cernadas.business@gmail.com
- *   pnpm outreach --queue
+ * Typical flow with confirmation:
+ *   1. pnpm outreach --queue --no-email     # agent processes leads, publishes reports
+ *   2. Human reviews report URLs
+ *   3. pnpm outreach --send-email cfprumasa # human approves, agent sends email
  */
 import * as fs from "fs";
 import * as path from "path";
@@ -36,15 +39,26 @@ const args = process.argv.slice(2).filter(a => !a.startsWith("--"));
 const flags = process.argv.slice(2).filter(a => a.startsWith("--"));
 const scanOnly = flags.includes("--scan-only");
 const noPush = flags.includes("--no-push");
+const noEmail = flags.includes("--no-email");
 
 if (flags.includes("--queue")) {
   processQueue().catch(err => { console.error("\n✗ Queue failed:", err); process.exit(1); });
+} else if (flags.includes("--send-email")) {
+  // Send email for an already-published lead: pnpm outreach --send-email <slug>
+  const slug = args[0];
+  if (!slug) { console.error("Usage: pnpm outreach --send-email <slug>"); process.exit(1); }
+  sendEmailForLead(slug).catch(err => { console.error("\n✗ Send failed:", err); process.exit(1); });
 } else {
   const rawUrl = args[0];
   const email = args[1];
   const cc = args[2];
   if (!rawUrl) {
-    console.error("Usage: pnpm outreach <url> [email] [cc] [--scan-only] [--no-push]\n       pnpm outreach --queue");
+    console.error([
+      "Usage:",
+      "  pnpm outreach <url> [email] [cc] [--scan-only] [--no-push] [--no-email]",
+      "  pnpm outreach --queue [--no-email]   Process pending leads from queue.json",
+      "  pnpm outreach --send-email <slug>    Send email for an already-published lead",
+    ].join("\n"));
     process.exit(1);
   }
   runPipeline(rawUrl, email, cc).catch(err => { console.error("\n✗ Pipeline failed:", err); process.exit(1); });
@@ -60,11 +74,72 @@ async function processQueue() {
   console.log(`\nFound ${pending.length} pending lead(s) in queue.\n`);
   for (const lead of pending) {
     await runPipeline(lead.url, lead.email, lead.cc);
-    lead.status = "done";
-    lead.sentAt = new Date().toISOString().split("T")[0];
+    if (noEmail) {
+      lead.status = "ready"; // published but email not sent — waiting for confirmation
+    } else {
+      lead.status = "done";
+      lead.sentAt = new Date().toISOString().split("T")[0];
+    }
     fs.writeFileSync(queuePath, JSON.stringify(queue, null, 2) + "\n");
   }
-  console.log("\n✓ All pending leads processed.");
+  if (noEmail) {
+    console.log("\n✓ All leads published. Email NOT sent (--no-email). Review reports and run:");
+    for (const lead of pending) {
+      const s = toSlug(lead.url.replace(/^(?!https?:\/\/)/i, "https://"));
+      console.log(`  pnpm outreach --send-email ${s}`);
+    }
+  } else {
+    console.log("\n✓ All pending leads processed.");
+  }
+}
+
+// --- Send email for already-published lead ---
+async function sendEmailForLead(slug: string) {
+  const queuePath = path.join("outreach", "queue.json");
+  if (!fs.existsSync(queuePath)) { console.error("No queue.json found."); process.exit(1); }
+  const queue = JSON.parse(fs.readFileSync(queuePath, "utf-8"));
+  const lead = queue.find((l: any) => toSlug(l.url.replace(/^(?!https?:\/\/)/i, "https://")) === slug);
+  if (!lead) { console.error(`No lead found for slug "${slug}"`); process.exit(1); }
+  if (!lead.email) { console.error(`Lead "${slug}" has no email`); process.exit(1); }
+
+  // Load report data for email content
+  const reportPath = path.join("src", "data", "reports", `${slug}.json`);
+  if (!fs.existsSync(reportPath)) { console.error(`No report found at ${reportPath}`); process.exit(1); }
+  const reportData = JSON.parse(fs.readFileSync(reportPath, "utf-8"));
+
+  const url = lead.url.replace(/^(?!https?:\/\/)/i, "https://");
+  const companyName = lead.company || slugToName(slug);
+
+  console.log(`\nSending email for ${companyName} (${url})`);
+  console.log(`  To: ${lead.email}${lead.cc ? ` CC: ${lead.cc}` : ""}`);
+
+  const transporter = nodemailer.createTransport({
+    host: "smtp.porkbun.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.PORKBUN_EMAIL,
+      pass: process.env.PORKBUN_EMAIL_PASSWORD,
+    },
+    tls: { rejectUnauthorized: false },
+  });
+
+  const subject = buildSubjectLine(reportData.agentTest, new URL(url).hostname);
+  const info = await transporter.sendMail({
+    from: '"Antonio @ CrawlReady" <hello@crawlready.dev>',
+    to: lead.email,
+    ...(lead.cc ? { cc: lead.cc } : {}),
+    subject,
+    html: buildEmailHtml(reportData.scanResult, reportData.agentTest, companyName, slug, url),
+  });
+
+  console.log(`  ✓ Email sent! (${info.messageId})`);
+
+  // Update queue
+  lead.status = "done";
+  lead.sentAt = new Date().toISOString().split("T")[0];
+  fs.writeFileSync(queuePath, JSON.stringify(queue, null, 2) + "\n");
+  console.log("  ✓ Queue updated");
 }
 
 // --- Helpers ---
@@ -206,7 +281,7 @@ async function runPipeline(rawUrl: string, email?: string, cc?: string) {
   }
 
   // Step 6: Send email
-  if (email && !noPush) {
+  if (email && !noPush && !noEmail) {
     console.log("\n[6/6] Sending cold email...");
     const transporter = nodemailer.createTransport({
       host: "smtp.porkbun.com",
@@ -229,6 +304,8 @@ async function runPipeline(rawUrl: string, email?: string, cc?: string) {
       html: buildEmailHtml(scanResult, agentTest, companyName, slug, url),
     });
     console.log(`  ✓ Email sent to ${email}${cc ? ` (cc: ${cc})` : ""} (${info.messageId})`);
+  } else if (noEmail) {
+    console.log("\n[6/6] Skipped (--no-email). To send later: pnpm outreach --send-email " + slug);
   } else if (!email) {
     console.log("\n[6/6] Skipped (no email provided)");
   } else {

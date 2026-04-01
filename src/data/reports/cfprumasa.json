@@ -3,9 +3,9 @@
   "companyName": "Cfprumasa",
   "scanResult": {
     "url": "https://www.cfprumasa.com",
-    "totalScore": 67,
+    "totalScore": 81,
     "maxPossibleScore": 100,
-    "grade": "C",
+    "grade": "B",
     "checks": [
       {
         "name": "llms.txt",
@@ -72,19 +72,17 @@
       },
       {
         "name": "Response Time",
-        "score": 1,
+        "score": 15,
         "maxScore": 15,
-        "status": "fail",
-        "details": "Very slow response time: 4742ms. AI agents may timeout.",
-        "detailKey": "response.verySlow",
+        "status": "pass",
+        "details": "Excellent response time: 68ms.",
+        "detailKey": "response.excellent",
         "params": {
-          "ms": 4742
-        },
-        "recommendation": "Optimize server response time to under 400ms. Use caching, CDN, and minimize server-side processing.",
-        "recommendationKey": "response.recSlow"
+          "ms": 68
+        }
       }
     ],
-    "scannedAt": "2026-04-01T06:37:24.621Z"
+    "scannedAt": "2026-04-01T13:30:21.790Z"
   },
   "agentTest": {
     "url": "https://www.cfprumasa.com",
@@ -92,25 +90,42 @@
     "steps": [
       {
         "step": "discovery",
-        "action": "Fetching https://www.cfprumasa.com (995ms)",
+        "action": "Fetching https://www.cfprumasa.com (993ms)",
         "status": "pass",
         "details": "Homepage loaded. \"CFP RUMASA (ANDRÉS DE RIBERA S.C.A.)Centro de F.P. Rumasa\". 2000 chars of readable content.",
-        "durationMs": 998,
+        "detailKey": "discovery.pass",
+        "durationMs": 994,
         "substeps": [
           {
             "label": "Page title",
+            "labelKey": "substep.pageTitle",
             "status": "pass",
-            "detail": "CFP RUMASA (ANDRÉS DE RIBERA S.C.A.)Centro de F.P. Rumasa"
+            "detail": "CFP RUMASA (ANDRÉS DE RIBERA S.C.A.)Centro de F.P. Rumasa",
+            "detailKey": "substep.titleFound",
+            "params": {
+              "title": "CFP RUMASA (ANDRÉS DE RIBERA S.C.A.)Centro de F.P. Rumasa"
+            }
           },
           {
             "label": "Headings",
+            "labelKey": "substep.headings",
             "status": "pass",
-            "detail": "2 found: \"Centro de Formación Profesional Rumasa\""
+            "detail": "2 found: \"Centro de Formación Profesional Rumasa\"",
+            "detailKey": "substep.headingsFound",
+            "params": {
+              "count": 2,
+              "first": "Centro de Formación Profesional Rumasa"
+            }
           },
           {
             "label": "Readable content",
+            "labelKey": "substep.readableContent",
             "status": "pass",
-            "detail": "2000 chars of extractable text"
+            "detail": "2000 chars of extractable text",
+            "detailKey": "substep.contentPass",
+            "params": {
+              "chars": 2000
+            }
           }
         ]
       },
@@ -119,32 +134,62 @@
         "action": "Following 4 relevant links",
         "status": "pass",
         "details": "Navigated to 4 relevant pages out of 34 total links.",
-        "durationMs": 4004,
+        "detailKey": "navigation.pass",
+        "params": {
+          "loaded": 4,
+          "total": 34
+        },
+        "durationMs": 4466,
         "substeps": [
           {
             "label": "Links found",
+            "labelKey": "substep.linksFound",
             "status": "pass",
-            "detail": "34 internal links"
+            "detail": "34 internal links",
+            "detailKey": "substep.linksCount",
+            "params": {
+              "count": 34
+            }
           },
           {
             "label": "/fp-basica-servicios-administrativos-2/",
             "status": "pass",
-            "detail": "\"GRADO BÁSICO SERVICIOS ADMINISTRATIVOS\" (3888ms)"
+            "detail": "\"GRADO BÁSICO SERVICIOS ADMINISTRATIVOS\" (4293ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "GRADO BÁSICO SERVICIOS ADMINISTRATIVOS",
+              "ms": 4293
+            }
           },
           {
             "label": "/trabaja-con-nosotros/",
             "status": "pass",
-            "detail": "\"TRABAJA CON NOSOTROS\" (3854ms)"
+            "detail": "\"TRABAJA CON NOSOTROS\" (4268ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "TRABAJA CON NOSOTROS",
+              "ms": 4268
+            }
           },
           {
             "label": "/",
             "status": "pass",
-            "detail": "(3905ms)"
+            "detail": "(4464ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "/",
+              "ms": 4464
+            }
           },
           {
             "label": "/nuestra-historia/",
             "status": "pass",
-            "detail": "\"NUESTRA HISTORIA\" (3960ms)"
+            "detail": "\"NUESTRA HISTORIA\" (4406ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "NUESTRA HISTORIA",
+              "ms": 4406
+            }
           }
         ]
       },
@@ -153,27 +198,43 @@
         "action": "Scanning for contact methods across all pages",
         "status": "pass",
         "details": "Found 5 contact channel(s): 5 form(s).",
-        "durationMs": 11,
+        "detailKey": "contact.pass",
+        "params": {
+          "count": 5,
+          "channels": "5 form(s)"
+        },
+        "durationMs": 4,
         "substeps": [
           {
             "label": "Email addresses",
+            "labelKey": "substep.emailAddresses",
             "status": "fail",
-            "detail": "None found in HTML"
+            "detail": "None found in HTML",
+            "detailKey": "substep.emailNone"
           },
           {
             "label": "Phone numbers",
+            "labelKey": "substep.phoneNumbers",
             "status": "partial",
-            "detail": "None found"
+            "detail": "None found",
+            "detailKey": "substep.phoneNone"
           },
           {
             "label": "WhatsApp",
+            "labelKey": "substep.whatsapp",
             "status": "partial",
-            "detail": "Not detected"
+            "detail": "Not detected",
+            "detailKey": "substep.whatsappNone"
           },
           {
             "label": "Contact forms",
+            "labelKey": "substep.contactForms",
             "status": "pass",
-            "detail": "5 form(s) found"
+            "detail": "5 form(s) found",
+            "detailKey": "substep.formsFound",
+            "params": {
+              "count": 5
+            }
           }
         ]
       },
@@ -182,32 +243,58 @@
         "action": "Checking 5 form(s) for AI agent operability",
         "status": "partial",
         "details": "Found 5 form(s) but none are fully operable — AI agents cannot submit requests.",
-        "durationMs": 1,
+        "detailKey": "formOp.partial",
+        "recommendationKey": "rec.formOp.partial",
+        "params": {
+          "operable": 0,
+          "total": 5
+        },
+        "durationMs": 0,
         "substeps": [
           {
             "label": "Form 1 (1 fields)",
             "status": "partial",
-            "detail": "No submit button found"
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "s"
+            }
           },
           {
             "label": "Form 2 (1 fields)",
             "status": "partial",
-            "detail": "No submit button found"
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "s"
+            }
           },
           {
             "label": "Form 3 (1 fields)",
             "status": "partial",
-            "detail": "No submit button found"
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "s"
+            }
           },
           {
             "label": "Form 4 (1 fields)",
             "status": "partial",
-            "detail": "No submit button found"
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "s"
+            }
           },
           {
             "label": "Form 5 (1 fields)",
             "status": "partial",
-            "detail": "No submit button found"
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "s"
+            }
           }
         ]
       },
@@ -215,33 +302,54 @@
         "step": "structured_data",
         "action": "Analyzing 5 JSON-LD block(s)",
         "status": "fail",
-        "details": "Found 5 JSON-LD block(s) with types: . 0/4 key fields present.",
-        "durationMs": 1,
+        "details": "Found 5 JSON-LD block(s) with types: unknown types. 0/4 key fields present.",
+        "detailKey": "structuredData.fail",
+        "recommendationKey": "rec.structuredData.fail",
+        "params": {
+          "count": 5,
+          "types": "unknown types",
+          "richness": 0
+        },
+        "durationMs": 0,
         "substeps": [
           {
             "label": "JSON-LD blocks",
+            "labelKey": "substep.jsonLdBlocks",
             "status": "pass",
-            "detail": "5 found: unknown types"
+            "detail": "5 found: unknown types",
+            "detailKey": "substep.jsonLdFound",
+            "params": {
+              "count": 5,
+              "types": "unknown types"
+            }
           },
           {
             "label": "Business name",
+            "labelKey": "substep.businessName",
             "status": "fail",
-            "detail": "Missing"
+            "detail": "Missing",
+            "detailKey": "substep.fieldMissing"
           },
           {
             "label": "Services/offers",
+            "labelKey": "substep.servicesOffers",
             "status": "fail",
-            "detail": "Missing"
+            "detail": "Missing",
+            "detailKey": "substep.fieldMissing"
           },
           {
             "label": "Pricing info",
+            "labelKey": "substep.pricingInfo",
             "status": "fail",
-            "detail": "Missing"
+            "detail": "Missing",
+            "detailKey": "substep.fieldMissing"
           },
           {
             "label": "Contact info",
+            "labelKey": "substep.contactInfo",
             "status": "fail",
-            "detail": "Missing"
+            "detail": "Missing",
+            "detailKey": "substep.fieldMissing"
           }
         ]
       },
@@ -255,7 +363,7 @@
     ],
     "verdict": "partial",
     "verdictSummary": "An AI agent can PARTIALLY complete the task \"Find this business, understand their services, and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
-    "totalDurationMs": 5018,
-    "testedAt": "2026-04-01T06:37:29.644Z"
+    "totalDurationMs": 5466,
+    "testedAt": "2026-04-01T13:30:27.257Z"
   }
 }
