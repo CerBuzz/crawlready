@@ -1,0 +1,261 @@
+{
+  "slug": "cfprumasa",
+  "companyName": "Cfprumasa",
+  "scanResult": {
+    "url": "https://www.cfprumasa.com",
+    "totalScore": 67,
+    "maxPossibleScore": 100,
+    "grade": "C",
+    "checks": [
+      {
+        "name": "llms.txt",
+        "score": 0,
+        "maxScore": 15,
+        "status": "fail",
+        "details": "No llms.txt file found.",
+        "detailKey": "llmsTxt.fail",
+        "recommendation": "Create a /llms.txt file that describes your site structure, key pages, and content for AI agents. See llmstxt.org for the specification.",
+        "recommendationKey": "llmsTxt.recFail"
+      },
+      {
+        "name": "robots.txt (AI Crawlers)",
+        "score": 15,
+        "maxScore": 15,
+        "status": "pass",
+        "details": "robots.txt allows AI crawlers to access your site.",
+        "detailKey": "robots.pass"
+      },
+      {
+        "name": "Structured Data",
+        "score": 18,
+        "maxScore": 20,
+        "status": "pass",
+        "details": "1 JSON-LD block(s) found. Schema types: WebSite, BreadcrumbList. RDFa markup detected.",
+        "detailKey": "structured.found",
+        "params": {
+          "findings": "1 JSON-LD block(s) found. Schema types: WebSite, BreadcrumbList. RDFa markup detected"
+        },
+        "recommendation": "Add more schema types (Organization, FAQPage, Product, BreadcrumbList) to improve AI comprehension.",
+        "recommendationKey": "structured.recPartial"
+      },
+      {
+        "name": "Meta Tags & Open Graph",
+        "score": 13,
+        "maxScore": 15,
+        "status": "pass",
+        "details": "Title tag present. Meta description present. Partial Open Graph (2/4). Canonical URL set.",
+        "detailKey": "meta.found",
+        "params": {
+          "findings": "Title tag present. Meta description present. Partial Open Graph (2/4). Canonical URL set"
+        },
+        "recommendation": "Add: missing OG tags: og:description, og:image. These help AI agents understand and cite your content.",
+        "recommendationKey": "meta.recMissing"
+      },
+      {
+        "name": "Sitemap",
+        "score": 10,
+        "maxScore": 10,
+        "status": "pass",
+        "details": "Sitemap index found with 9 sitemap(s).",
+        "detailKey": "sitemap.index",
+        "params": {
+          "count": 9
+        }
+      },
+      {
+        "name": "HTTPS",
+        "score": 10,
+        "maxScore": 10,
+        "status": "pass",
+        "details": "Site is served over HTTPS.",
+        "detailKey": "https.pass"
+      },
+      {
+        "name": "Response Time",
+        "score": 1,
+        "maxScore": 15,
+        "status": "fail",
+        "details": "Very slow response time: 4742ms. AI agents may timeout.",
+        "detailKey": "response.verySlow",
+        "params": {
+          "ms": 4742
+        },
+        "recommendation": "Optimize server response time to under 400ms. Use caching, CDN, and minimize server-side processing.",
+        "recommendationKey": "response.recSlow"
+      }
+    ],
+    "scannedAt": "2026-04-01T06:37:24.621Z"
+  },
+  "agentTest": {
+    "url": "https://www.cfprumasa.com",
+    "task": "Find this business, understand their services, and request a quote",
+    "steps": [
+      {
+        "step": "discovery",
+        "action": "Fetching https://www.cfprumasa.com (995ms)",
+        "status": "pass",
+        "details": "Homepage loaded. \"CFP RUMASA (ANDRÉS DE RIBERA S.C.A.)Centro de F.P. Rumasa\". 2000 chars of readable content.",
+        "durationMs": 998,
+        "substeps": [
+          {
+            "label": "Page title",
+            "status": "pass",
+            "detail": "CFP RUMASA (ANDRÉS DE RIBERA S.C.A.)Centro de F.P. Rumasa"
+          },
+          {
+            "label": "Headings",
+            "status": "pass",
+            "detail": "2 found: \"Centro de Formación Profesional Rumasa\""
+          },
+          {
+            "label": "Readable content",
+            "status": "pass",
+            "detail": "2000 chars of extractable text"
+          }
+        ]
+      },
+      {
+        "step": "navigation",
+        "action": "Following 4 relevant links",
+        "status": "pass",
+        "details": "Navigated to 4 relevant pages out of 34 total links.",
+        "durationMs": 4004,
+        "substeps": [
+          {
+            "label": "Links found",
+            "status": "pass",
+            "detail": "34 internal links"
+          },
+          {
+            "label": "/fp-basica-servicios-administrativos-2/",
+            "status": "pass",
+            "detail": "\"GRADO BÁSICO SERVICIOS ADMINISTRATIVOS\" (3888ms)"
+          },
+          {
+            "label": "/trabaja-con-nosotros/",
+            "status": "pass",
+            "detail": "\"TRABAJA CON NOSOTROS\" (3854ms)"
+          },
+          {
+            "label": "/",
+            "status": "pass",
+            "detail": "(3905ms)"
+          },
+          {
+            "label": "/nuestra-historia/",
+            "status": "pass",
+            "detail": "\"NUESTRA HISTORIA\" (3960ms)"
+          }
+        ]
+      },
+      {
+        "step": "contact",
+        "action": "Scanning for contact methods across all pages",
+        "status": "pass",
+        "details": "Found 5 contact channel(s): 5 form(s).",
+        "durationMs": 11,
+        "substeps": [
+          {
+            "label": "Email addresses",
+            "status": "fail",
+            "detail": "None found in HTML"
+          },
+          {
+            "label": "Phone numbers",
+            "status": "partial",
+            "detail": "None found"
+          },
+          {
+            "label": "WhatsApp",
+            "status": "partial",
+            "detail": "Not detected"
+          },
+          {
+            "label": "Contact forms",
+            "status": "pass",
+            "detail": "5 form(s) found"
+          }
+        ]
+      },
+      {
+        "step": "form_operability",
+        "action": "Checking 5 form(s) for AI agent operability",
+        "status": "partial",
+        "details": "Found 5 form(s) but none are fully operable — AI agents cannot submit requests.",
+        "durationMs": 1,
+        "substeps": [
+          {
+            "label": "Form 1 (1 fields)",
+            "status": "partial",
+            "detail": "No submit button found"
+          },
+          {
+            "label": "Form 2 (1 fields)",
+            "status": "partial",
+            "detail": "No submit button found"
+          },
+          {
+            "label": "Form 3 (1 fields)",
+            "status": "partial",
+            "detail": "No submit button found"
+          },
+          {
+            "label": "Form 4 (1 fields)",
+            "status": "partial",
+            "detail": "No submit button found"
+          },
+          {
+            "label": "Form 5 (1 fields)",
+            "status": "partial",
+            "detail": "No submit button found"
+          }
+        ]
+      },
+      {
+        "step": "structured_data",
+        "action": "Analyzing 5 JSON-LD block(s)",
+        "status": "fail",
+        "details": "Found 5 JSON-LD block(s) with types: . 0/4 key fields present.",
+        "durationMs": 1,
+        "substeps": [
+          {
+            "label": "JSON-LD blocks",
+            "status": "pass",
+            "detail": "5 found: unknown types"
+          },
+          {
+            "label": "Business name",
+            "status": "fail",
+            "detail": "Missing"
+          },
+          {
+            "label": "Services/offers",
+            "status": "fail",
+            "detail": "Missing"
+          },
+          {
+            "label": "Pricing info",
+            "status": "fail",
+            "detail": "Missing"
+          },
+          {
+            "label": "Contact info",
+            "status": "fail",
+            "detail": "Missing"
+          }
+        ]
+      },
+      {
+        "step": "verdict",
+        "action": "Synthesizing results",
+        "status": "partial",
+        "details": "An AI agent can PARTIALLY complete the task \"Find this business, understand their services, and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
+        "durationMs": 0
+      }
+    ],
+    "verdict": "partial",
+    "verdictSummary": "An AI agent can PARTIALLY complete the task \"Find this business, understand their services, and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
+    "totalDurationMs": 5018,
+    "testedAt": "2026-04-01T06:37:29.644Z"
+  }
+}

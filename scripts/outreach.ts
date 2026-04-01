@@ -4,13 +4,15 @@
  * Full pipeline: scan → agentic test → generate report → publish → send email
  *
  * Usage:
- *   pnpm outreach <url> [email]           # full pipeline
- *   pnpm outreach <url> --scan-only       # scan + test only, no email
- *   pnpm outreach <url> [email] --no-push # generate everything but don't push/email
+ *   pnpm outreach <url> [email] [cc]       # full pipeline
+ *   pnpm outreach <url> --scan-only        # scan + test only, no email
+ *   pnpm outreach <url> [email] --no-push  # generate everything but don't push/email
+ *   pnpm outreach --queue                  # process all pending leads from queue.json
  *
  * Examples:
  *   pnpm outreach esoesagency.com yulia@example.com
- *   pnpm outreach ecommaster.es --scan-only
+ *   pnpm outreach cfprumasa.com carvalja@gmail.com cernadas.business@gmail.com
+ *   pnpm outreach --queue
  */
 import * as fs from "fs";
 import * as path from "path";
@@ -32,61 +34,70 @@ if (fs.existsSync(envPath)) {
 // --- Parse args ---
 const args = process.argv.slice(2).filter(a => !a.startsWith("--"));
 const flags = process.argv.slice(2).filter(a => a.startsWith("--"));
-const rawUrl = args[0];
-const email = args[1];
 const scanOnly = flags.includes("--scan-only");
 const noPush = flags.includes("--no-push");
 
-if (!rawUrl) {
-  console.error("Usage: pnpm outreach <url> [email] [--scan-only] [--no-push]");
-  process.exit(1);
+if (flags.includes("--queue")) {
+  processQueue().catch(err => { console.error("\n✗ Queue failed:", err); process.exit(1); });
+} else {
+  const rawUrl = args[0];
+  const email = args[1];
+  const cc = args[2];
+  if (!rawUrl) {
+    console.error("Usage: pnpm outreach <url> [email] [cc] [--scan-only] [--no-push]\n       pnpm outreach --queue");
+    process.exit(1);
+  }
+  runPipeline(rawUrl, email, cc).catch(err => { console.error("\n✗ Pipeline failed:", err); process.exit(1); });
 }
 
-const url = rawUrl.replace(/^(?!https?:\/\/)/i, "https://");
-const slug = new URL(url).hostname.replace(/^www\./, "").replace(/\.\w+$/, "").replace(/[^a-z0-9]/gi, "-");
-const today = new Date().toISOString().split("T")[0];
+// --- Queue processor ---
+async function processQueue() {
+  const queuePath = path.join("outreach", "queue.json");
+  if (!fs.existsSync(queuePath)) { console.log("No queue.json found."); return; }
+  const queue = JSON.parse(fs.readFileSync(queuePath, "utf-8"));
+  const pending = queue.filter((l: any) => l.status === "pending");
+  if (pending.length === 0) { console.log("No pending leads in queue."); return; }
+  console.log(`\nFound ${pending.length} pending lead(s) in queue.\n`);
+  for (const lead of pending) {
+    await runPipeline(lead.url, lead.email, lead.cc);
+    lead.status = "done";
+    lead.sentAt = new Date().toISOString().split("T")[0];
+    fs.writeFileSync(queuePath, JSON.stringify(queue, null, 2) + "\n");
+  }
+  console.log("\n✓ All pending leads processed.");
+}
 
 // --- Helpers ---
+function toSlug(url: string): string {
+  return new URL(url).hostname.replace(/^www\./, "").replace(/\.\w+$/, "").replace(/[^a-z0-9]/gi, "-");
+}
+
 function slugToName(s: string): string {
   return s.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 }
 
-function gradeColor(grade: string): string {
-  if (grade === "A") return "#22c55e";
-  if (grade === "B") return "#22d3ee";
-  if (grade === "C") return "#eab308";
-  return "#ef4444";
-}
-
-function buildSubjectFinding(agentTest: AgentTestResult, hostname: string): string {
+function buildSubjectLine(agentTest: AgentTestResult, hostname: string): string {
   const failSteps = agentTest.steps.filter(s => s.status !== "pass" && s.step !== "verdict");
-  if (failSteps.length === 0) return `${hostname}: un agente IA complet&oacute; una tarea en tu web`;
-
-  // Pick the most relevant failing step for the subject
-  const step = failSteps[failSteps.length - 1]; // last failing step = deepest in funnel
+  if (failSteps.length === 0) return `${hostname}: un agente IA completó una tarea en tu web`;
+  const step = failSteps[failSteps.length - 1];
   const stepMap: Record<string, string> = {
-    contact: "un agente IA no pudo contactar con vosotros desde tu web",
-    form: "un agente IA no pudo completar el formulario en tu web",
-    quote: "un agente IA no pudo solicitar presupuesto en tu web",
-    booking: "un agente IA no pudo reservar cita en tu web",
-    services: "un agente IA no pudo entender vuestros servicios",
-    findability: "un agente IA no pudo encontraros",
+    discovery: "un agente IA no pudo encontrar tu negocio",
+    navigation: "un agente IA no pudo navegar tu web",
+    contact: "un agente IA no pudo contactar con vosotros",
+    form_operability: "un agente IA no pudo enviar un formulario en tu web",
+    structured_data: "un agente IA no entiende tu negocio",
   };
   return `${hostname}: ${stepMap[step.step] || "un agente IA no pudo completar una tarea en tu web"}`;
 }
 
-function buildResultSentence(agentTest: AgentTestResult): string {
-  const failSteps = agentTest.steps.filter(s => s.status !== "pass" && s.step !== "verdict");
-  if (failSteps.length === 0) return "El agente complet&oacute; la tarea con &eacute;xito.";
-  const lastFail = failSteps[failSteps.length - 1];
-  return `${lastFail.details.split(".")[0]}.`;
-}
-
-function buildEmailHtml(scanResult: ScanResult, agentTest: AgentTestResult, companyName: string): string {
+function buildEmailHtml(scanResult: ScanResult, agentTest: AgentTestResult, companyName: string, slug: string, url: string): string {
   const reportUrl = `https://crawlready.dev/es/report/${slug}`;
   const hostname = new URL(url).hostname;
 
-  const resultSentence = buildResultSentence(agentTest);
+  const failSteps = agentTest.steps.filter(s => s.status !== "pass" && s.step !== "verdict");
+  const resultSentence = failSteps.length === 0
+    ? "El agente completó la tarea con éxito."
+    : `${failSteps[failSteps.length - 1].details.split(".")[0]}.`;
 
   return `
 <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:600px;margin:0 auto;color:#1f2937">
@@ -113,14 +124,18 @@ function buildEmailHtml(scanResult: ScanResult, agentTest: AgentTestResult, comp
 }
 
 // --- Main pipeline ---
-async function main() {
+async function runPipeline(rawUrl: string, email?: string, cc?: string) {
+  const url = rawUrl.replace(/^(?!https?:\/\/)/i, "https://");
+  const slug = toSlug(url);
   const companyName = slugToName(slug);
+
   console.log(`\n========================================`);
   console.log(`  CrawlReady Outreach Pipeline`);
   console.log(`  Target: ${url}`);
   console.log(`  Slug: ${slug}`);
   console.log(`  Company: ${companyName}`);
   if (email) console.log(`  Email: ${email}`);
+  if (cc) console.log(`  CC: ${cc}`);
   console.log(`========================================\n`);
 
   // Step 1: Scan
@@ -176,9 +191,7 @@ async function main() {
     try {
       exec(`git add "${reportJsonPath}" "${terminalPath}"`);
       const msg = `Add/update ${companyName} report (${scanResult.totalScore}/${scanResult.maxPossibleScore} Grade ${scanResult.grade})`;
-      exec(`git commit -m "${msg}
-
-Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"`);
+      exec(`git commit -m "${msg}\n\nCo-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"`);
       exec("git push origin master");
       console.log("  ✓ Pushed to master — Vercel deploying");
     } catch (e: any) {
@@ -206,15 +219,16 @@ Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"`);
       tls: { rejectUnauthorized: false },
     });
 
-    const subject = buildSubjectFinding(agentTest, new URL(url).hostname);
+    const subject = buildSubjectLine(agentTest, new URL(url).hostname);
 
     const info = await transporter.sendMail({
       from: '"Antonio @ CrawlReady" <hello@crawlready.dev>',
       to: email,
+      ...(cc ? { cc } : {}),
       subject,
-      html: buildEmailHtml(scanResult, agentTest, companyName),
+      html: buildEmailHtml(scanResult, agentTest, companyName, slug, url),
     });
-    console.log(`  ✓ Email sent to ${email} (${info.messageId})`);
+    console.log(`  ✓ Email sent to ${email}${cc ? ` (cc: ${cc})` : ""} (${info.messageId})`);
   } else if (!email) {
     console.log("\n[6/6] Skipped (no email provided)");
   } else {
@@ -227,8 +241,3 @@ Co-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"`);
   console.log(`  Agent test: https://crawlready.dev/reports/${slug}-agent-test.html`);
   console.log(`========================================\n`);
 }
-
-main().catch(err => {
-  console.error("\n✗ Pipeline failed:", err);
-  process.exit(1);
-});
