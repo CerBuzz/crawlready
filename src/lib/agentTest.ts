@@ -568,6 +568,17 @@ function stepVerdict(steps: AgentStepResult[], task: string): AgentStepResult {
 
 // --- Main ---
 
+/** Convenience wrapper: runs the full agentic test and returns the final result. */
+export async function runAgentTestFull(
+  rawUrl: string,
+  task?: string
+): Promise<AgentTestResult> {
+  const gen = runAgentTest(rawUrl, task);
+  let result = await gen.next();
+  while (!result.done) result = await gen.next();
+  return result.value;
+}
+
 export async function* runAgentTest(
   rawUrl: string,
   task: string = "find this business and request a quote"

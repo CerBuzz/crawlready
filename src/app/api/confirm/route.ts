@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { list, put, del } from "@vercel/blob";
+import { notifyNewLead } from "@/lib/email";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -39,6 +40,11 @@ export async function GET(req: Request) {
       });
 
       console.log(`[CONFIRMED] ${lead.email} — ${lead.url}`);
+
+      // Notify team
+      notifyNewLead(updated).catch((err) =>
+        console.error("[NOTIFY ERROR]", err)
+      );
 
       return NextResponse.redirect(
         new URL(`/${lead.lang || "es"}/confirmed`, req.url)

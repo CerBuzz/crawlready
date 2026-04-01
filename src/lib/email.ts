@@ -6,8 +6,8 @@ function createTransporter() {
     port: 587,
     secure: false,
     auth: {
-      user: process.env.CORREO,
-      pass: process.env.PASSWORD,
+      user: process.env.PORKBUN_EMAIL,
+      pass: process.env.PORKBUN_EMAIL_PASSWORD,
     },
     tls: { rejectUnauthorized: false },
   });
@@ -70,5 +70,31 @@ export async function sendConfirmationEmail(
     to,
     subject,
     html,
+  });
+}
+
+/** Notify the team when a lead confirms their email. */
+export async function notifyNewLead(lead: {
+  email: string;
+  url: string;
+  lang?: string;
+  confirmedAt?: string;
+}) {
+  const transporter = createTransporter();
+  await transporter.sendMail({
+    from: '"CrawlReady Bot" <hello@crawlready.dev>',
+    to: "hello@crawlready.dev",
+    subject: `Nuevo lead confirmado: ${lead.url}`,
+    html: `
+<div style="font-family:monospace;font-size:14px;line-height:1.8;color:#1f2937">
+  <p><strong>Nuevo lead confirmado</strong></p>
+  <table style="border-collapse:collapse">
+    <tr><td style="padding:4px 12px 4px 0;color:#6b7280">Email:</td><td>${lead.email}</td></tr>
+    <tr><td style="padding:4px 12px 4px 0;color:#6b7280">URL:</td><td>${lead.url}</td></tr>
+    <tr><td style="padding:4px 12px 4px 0;color:#6b7280">Idioma:</td><td>${lead.lang || "es"}</td></tr>
+    <tr><td style="padding:4px 12px 4px 0;color:#6b7280">Confirmado:</td><td>${lead.confirmedAt || "ahora"}</td></tr>
+  </table>
+  <p style="margin-top:16px">Siguiente paso: <code>pnpm outreach ${lead.url} ${lead.email}</code></p>
+</div>`,
   });
 }
