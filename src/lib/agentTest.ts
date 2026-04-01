@@ -202,6 +202,9 @@ async function stepDiscovery(url: string): Promise<{ result: AgentStepResult; ht
         action: `Fetching ${url}`,
         status: "fail",
         details: `Could not load homepage (HTTP ${status || "timeout"}). An AI agent cannot interact with this site.`,
+        detailKey: "discovery.fail",
+        recommendationKey: "rec.discovery.fail",
+        params: { status: status || "timeout" },
         durationMs: Date.now() - start,
       },
     };
@@ -215,31 +218,36 @@ async function stepDiscovery(url: string): Promise<{ result: AgentStepResult; ht
   const substeps: AgentSubstep[] = [];
 
   if (title) {
-    substeps.push({ label: "Page title", status: "pass", detail: title });
+    substeps.push({ label: "Page title", labelKey: "substep.pageTitle", status: "pass", detail: title, detailKey: "substep.titleFound", params: { title } });
   } else {
-    substeps.push({ label: "Page title", status: "fail", detail: "No title found" });
+    substeps.push({ label: "Page title", labelKey: "substep.pageTitle", status: "fail", detail: "No title found", detailKey: "substep.noTitle" });
   }
 
   if (headings.length > 0) {
-    substeps.push({ label: "Headings", status: "pass", detail: `${headings.length} found: "${headings[0]}"` });
+    substeps.push({ label: "Headings", labelKey: "substep.headings", status: "pass", detail: `${headings.length} found: "${headings[0]}"`, detailKey: "substep.headingsFound", params: { count: headings.length, first: headings[0] } });
   } else {
-    substeps.push({ label: "Headings", status: "fail", detail: "No headings found" });
+    substeps.push({ label: "Headings", labelKey: "substep.headings", status: "fail", detail: "No headings found", detailKey: "substep.noHeadings" });
   }
 
   const contentStatus: AgentStepStatus = textLength > 200 ? "pass" : textLength > 50 ? "partial" : "fail";
   substeps.push({
     label: "Readable content",
+    labelKey: "substep.readableContent",
     status: contentStatus,
     detail: textLength > 200
       ? `${textLength} chars of extractable text`
       : textLength > 50
         ? `Only ${textLength} chars — page may rely on JavaScript rendering`
         : "Very little text content — likely a JS-rendered SPA",
+    detailKey: textLength > 200 ? "substep.contentPass" : textLength > 50 ? "substep.contentPartial" : "substep.contentFail",
+    params: { chars: textLength },
   });
 
   const overallStatus: AgentStepStatus =
     substeps.every((s) => s.status === "pass") ? "pass" :
     substeps.some((s) => s.status === "fail") ? "partial" : "pass";
+
+  const discoveryDetailKey = overallStatus === "pass" ? "discovery.pass" : "discovery.partial";
 
   return {
     html,
@@ -250,6 +258,8 @@ async function stepDiscovery(url: string): Promise<{ result: AgentStepResult; ht
       details: title
         ? `Homepage loaded. "${title}". ${textLength} chars of readable content.`
         : `Homepage loaded but no title found. ${textLength} chars of content.`,
+      detailKey: discoveryDetailKey,
+      recommendationKey: overallStatus !== "pass" ? `rec.discovery.${overallStatus}` : undefined,
       durationMs: Date.now() - start,
       substeps,
     },
@@ -272,7 +282,7 @@ async function stepNavigation(
     .slice(0, 4);
 
   const substeps: AgentSubstep[] = [
-    { label: "Links found", status: allLinks.length > 0 ? "pass" : "fail", detail: `${allLinks.length} internal links` },
+    { label: "Links found", labelKey: "substep.linksFound", status: allLinks.length > 0 ? "pass" : "fail", detail: `${allLinks.length} internal links`, detailKey: allLinks.length > 0 ? "substep.linksCount" : "substep.noLinks", params: { count: allLinks.length } },
   ];
 
   if (scored.length === 0) {
@@ -283,6 +293,9 @@ async function stepNavigation(
         action: "Scanning for relevant pages (services, contact, pricing...)",
         status: "fail",
         details: `Found ${allLinks.length} links but none match service/contact/pricing patterns. Agent cannot navigate the site.`,
+        detailKey: "navigation.fail",
+        recommendationKey: "rec.navigation.fail",
+        params: { total: allLinks.length },
         durationMs: Date.now() - start,
         substeps,
       },
@@ -300,20 +313,23 @@ async function stepNavigation(
   for (const f of fetches) {
     if (f.ok) {
       pages.set(f.href, f.html);
-      const path = new URL(f.href).pathname;
+      const p = new URL(f.href).pathname;
       substeps.push({
-        label: path,
+        label: p,
         status: "pass",
         detail: f.text ? `"${f.text}" (${f.durationMs}ms)` : `(${f.durationMs}ms)`,
+        detailKey: "substep.pageLoaded",
+        params: { text: f.text || p, ms: f.durationMs },
       });
     } else {
-      const path = new URL(f.href).pathname;
-      substeps.push({ label: path, status: "fail", detail: "Could not load" });
+      const p = new URL(f.href).pathname;
+      substeps.push({ label: p, status: "fail", detail: "Could not load", detailKey: "substep.pageLoadFailed" });
     }
   }
 
   const loadedCount = fetches.filter((f) => f.ok).length;
   const status: AgentStepStatus = loadedCount >= 2 ? "pass" : loadedCount === 1 ? "partial" : "fail";
+  const navDetailKey = status === "pass" ? "navigation.pass" : status === "partial" ? "navigation.partial" : "navigation.fail";
 
   return {
     pages,
@@ -322,6 +338,9 @@ async function stepNavigation(
       action: `Following ${scored.length} relevant links`,
       status,
       details: `Navigated to ${loadedCount} relevant pages out of ${allLinks.length} total links.`,
+      detailKey: navDetailKey,
+      recommendationKey: status !== "pass" ? `rec.navigation.${status}` : undefined,
+      params: { loaded: loadedCount, total: allLinks.length },
       durationMs: Date.now() - start,
       substeps,
     },
@@ -349,38 +368,43 @@ function stepContactDiscovery(pages: Map<string, string>): AgentStepResult {
   // Emails
   const emails = uniqueMethods.filter((m) => m.type === "email");
   substeps.push({
-    label: "Email addresses",
+    label: "Email addresses", labelKey: "substep.emailAddresses",
     status: emails.length > 0 ? "pass" : "fail",
     detail: emails.length > 0 ? emails.map((e) => e.value).join(", ") : "None found in HTML",
+    detailKey: emails.length > 0 ? undefined : "substep.emailNone",
   });
 
   // Phone
   const phones = uniqueMethods.filter((m) => m.type === "phone");
   substeps.push({
-    label: "Phone numbers",
+    label: "Phone numbers", labelKey: "substep.phoneNumbers",
     status: phones.length > 0 ? "pass" : "partial",
     detail: phones.length > 0 ? phones.map((p) => p.value).join(", ") : "None found",
+    detailKey: phones.length > 0 ? undefined : "substep.phoneNone",
   });
 
   // WhatsApp
   const wa = uniqueMethods.filter((m) => m.type === "whatsapp");
   substeps.push({
-    label: "WhatsApp",
+    label: "WhatsApp", labelKey: "substep.whatsapp",
     status: wa.length > 0 ? "pass" : "partial",
     detail: wa.length > 0 ? "WhatsApp link detected" : "Not detected",
+    detailKey: wa.length > 0 ? "substep.whatsappFound" : "substep.whatsappNone",
   });
 
   // Forms
   substeps.push({
-    label: "Contact forms",
+    label: "Contact forms", labelKey: "substep.contactForms",
     status: allForms.length > 0 ? "pass" : "fail",
     detail: allForms.length > 0 ? `${allForms.length} form(s) found` : "No forms found in HTML",
+    detailKey: allForms.length > 0 ? "substep.formsFound" : "substep.formsNone",
+    params: { count: allForms.length },
   });
 
   // Chat widgets
   if (uniqueWidgets.length > 0) {
     substeps.push({
-      label: "Chat widgets",
+      label: "Chat widgets", labelKey: "substep.chatWidgets",
       status: "pass",
       detail: uniqueWidgets.join(", "),
     });
@@ -388,20 +412,26 @@ function stepContactDiscovery(pages: Map<string, string>): AgentStepResult {
 
   const totalChannels = emails.length + phones.length + wa.length + allForms.length + uniqueWidgets.length;
   const status: AgentStepStatus = totalChannels >= 3 ? "pass" : totalChannels >= 1 ? "partial" : "fail";
+  const channels = [
+    emails.length > 0 ? `${emails.length} email` : "",
+    phones.length > 0 ? `${phones.length} phone` : "",
+    wa.length > 0 ? "WhatsApp" : "",
+    allForms.length > 0 ? `${allForms.length} form(s)` : "",
+    uniqueWidgets.length > 0 ? uniqueWidgets.join(", ") : "",
+  ].filter(Boolean).join(", ");
+
+  const contactDetailKey = status === "fail" ? "contact.fail" : status === "pass" ? "contact.pass" : "contact.partial";
 
   return {
     step: "contact",
     action: "Scanning for contact methods across all pages",
     status,
     details: totalChannels > 0
-      ? `Found ${totalChannels} contact channel(s): ${[
-          emails.length > 0 ? `${emails.length} email` : "",
-          phones.length > 0 ? `${phones.length} phone` : "",
-          wa.length > 0 ? "WhatsApp" : "",
-          allForms.length > 0 ? `${allForms.length} form(s)` : "",
-          uniqueWidgets.length > 0 ? uniqueWidgets.join(", ") : "",
-        ].filter(Boolean).join(", ")}.`
+      ? `Found ${totalChannels} contact channel(s): ${channels}.`
       : "No contact methods found. An AI agent cannot reach this business.",
+    detailKey: contactDetailKey,
+    recommendationKey: status !== "pass" ? `rec.contact.${status}` : undefined,
+    params: { count: totalChannels, channels },
     durationMs: Date.now() - start,
     substeps,
   };
@@ -420,6 +450,8 @@ function stepFormOperability(pages: Map<string, string>): AgentStepResult {
       action: "Checking if forms can be submitted by an AI agent",
       status: "fail",
       details: "No HTML forms found. An AI agent has no way to submit a request programmatically.",
+      detailKey: "formOp.fail",
+      recommendationKey: "rec.formOp.fail",
       durationMs: Date.now() - start,
     };
   }
@@ -439,14 +471,25 @@ function stepFormOperability(pages: Map<string, string>): AgentStepResult {
     const formStatus: AgentStepStatus = issues.length === 0 ? "pass" : issues.length === 1 ? "partial" : "fail";
     if (formStatus === "pass") operableCount++;
 
+    // Build translated detail key for most relevant issue
+    let formDetailKey: string | undefined;
+    if (issues.length === 0) formDetailKey = "substep.formOperable";
+    else if (form.hasCaptcha) formDetailKey = "substep.formCaptcha";
+    else if (!form.hasSubmit) formDetailKey = "substep.formNoSubmit";
+    else if (!form.action && !form.isMailto) formDetailKey = "substep.formNoAction";
+    else if (form.fields.length === 0) formDetailKey = "substep.formNoFields";
+
     substeps.push({
       label: `Form ${i + 1} (${form.fields.length} fields)`,
       status: formStatus,
       detail: issues.length > 0 ? issues.join("; ") : `Operable — fields: ${form.fields.join(", ")}`,
+      detailKey: formDetailKey,
+      params: { fields: form.fields.join(", ") },
     });
   }
 
   const status: AgentStepStatus = operableCount > 0 ? "pass" : substeps.some((s) => s.status === "partial") ? "partial" : "fail";
+  const formDetailKey = operableCount > 0 ? "formOp.pass" : "formOp.partial";
 
   return {
     step: "form_operability",
@@ -455,6 +498,9 @@ function stepFormOperability(pages: Map<string, string>): AgentStepResult {
     details: operableCount > 0
       ? `${operableCount} of ${allForms.length} form(s) are operable by an AI agent.`
       : `Found ${allForms.length} form(s) but none are fully operable — AI agents cannot submit requests.`,
+    detailKey: formDetailKey,
+    recommendationKey: status !== "pass" ? `rec.formOp.${status}` : undefined,
+    params: { operable: operableCount, total: allForms.length },
     durationMs: Date.now() - start,
     substeps,
   };
@@ -475,8 +521,10 @@ function stepStructuredData(pages: Map<string, string>): AgentStepResult {
       action: "Looking for structured data (JSON-LD) to understand the business",
       status: "fail",
       details: "No JSON-LD structured data found. AI agents cannot programmatically understand services, pricing, or business details.",
+      detailKey: "structuredData.fail",
+      recommendationKey: "rec.structuredData.fail",
       durationMs: Date.now() - start,
-      substeps: [{ label: "JSON-LD blocks", status: "fail", detail: "None found" }],
+      substeps: [{ label: "JSON-LD blocks", labelKey: "substep.jsonLdBlocks", status: "fail", detail: "None found", detailKey: "substep.jsonLdNone" }],
     };
   }
 
@@ -498,24 +546,31 @@ function stepStructuredData(pages: Map<string, string>): AgentStepResult {
     if (obj.email || obj.telephone || obj.contactPoint) hasContact = true;
   }
 
+  const types = [...new Set(schemaTypes)].join(", ") || "unknown types";
   substeps.push({
-    label: "JSON-LD blocks",
+    label: "JSON-LD blocks", labelKey: "substep.jsonLdBlocks",
     status: "pass",
-    detail: `${allSchemas.length} found: ${[...new Set(schemaTypes)].join(", ") || "unknown types"}`,
+    detail: `${allSchemas.length} found: ${types}`,
+    detailKey: "substep.jsonLdFound",
+    params: { count: allSchemas.length, types },
   });
-  substeps.push({ label: "Business name", status: hasName ? "pass" : "fail", detail: hasName ? "Found" : "Missing" });
-  substeps.push({ label: "Services/offers", status: hasServices ? "pass" : "fail", detail: hasServices ? "Found" : "Missing" });
-  substeps.push({ label: "Pricing info", status: hasPricing ? "pass" : "fail", detail: hasPricing ? "Found" : "Missing" });
-  substeps.push({ label: "Contact info", status: hasContact ? "pass" : "fail", detail: hasContact ? "Found" : "Missing" });
+  substeps.push({ label: "Business name", labelKey: "substep.businessName", status: hasName ? "pass" : "fail", detail: hasName ? "Found" : "Missing", detailKey: hasName ? "substep.fieldFound" : "substep.fieldMissing" });
+  substeps.push({ label: "Services/offers", labelKey: "substep.servicesOffers", status: hasServices ? "pass" : "fail", detail: hasServices ? "Found" : "Missing", detailKey: hasServices ? "substep.fieldFound" : "substep.fieldMissing" });
+  substeps.push({ label: "Pricing info", labelKey: "substep.pricingInfo", status: hasPricing ? "pass" : "fail", detail: hasPricing ? "Found" : "Missing", detailKey: hasPricing ? "substep.fieldFound" : "substep.fieldMissing" });
+  substeps.push({ label: "Contact info", labelKey: "substep.contactInfo", status: hasContact ? "pass" : "fail", detail: hasContact ? "Found" : "Missing", detailKey: hasContact ? "substep.fieldFound" : "substep.fieldMissing" });
 
   const richness = [hasName, hasServices, hasPricing, hasContact].filter(Boolean).length;
   const status: AgentStepStatus = richness >= 3 ? "pass" : richness >= 1 ? "partial" : "fail";
+  const sdDetailKey = status === "pass" ? "structuredData.pass" : status === "partial" ? "structuredData.partial" : "structuredData.fail";
 
   return {
     step: "structured_data",
     action: `Analyzing ${allSchemas.length} JSON-LD block(s)`,
     status,
-    details: `Found ${allSchemas.length} JSON-LD block(s) with types: ${[...new Set(schemaTypes)].join(", ")}. ${richness}/4 key fields present.`,
+    details: `Found ${allSchemas.length} JSON-LD block(s) with types: ${types}. ${richness}/4 key fields present.`,
+    detailKey: sdDetailKey,
+    recommendationKey: status !== "pass" ? `rec.structuredData.${status}` : undefined,
+    params: { count: allSchemas.length, types, richness },
     durationMs: Date.now() - start,
     substeps,
   };

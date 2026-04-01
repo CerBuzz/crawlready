@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { ReportData, CheckResult, AgentTestResult } from "@/lib/types";
+import type { ReportData, CheckResult, AgentStepResult, AgentTestResult } from "@/lib/types";
 import type { Dictionary } from "@/lib/i18n/es";
 import { trackEvent } from "@/lib/tracker";
 
@@ -127,41 +127,185 @@ function CheckCard({
 
 /* ── Agentic Test Section ───────────────────────────────── */
 
-const STEP_NAMES_ES: Record<string, string> = {
-  discovery: "Descubrimiento",
-  navigation: "Navegación",
-  contact: "Contacto",
-  form_operability: "Formularios",
-  structured_data: "Datos estructurados",
+// Map step.step IDs to detail key prefixes for deriving keys from old data
+const STEP_DETAIL_PREFIX: Record<string, string> = {
+  discovery: "discovery",
+  navigation: "navigation",
+  contact: "contact",
+  form_operability: "formOp",
+  structured_data: "structuredData",
 };
-const STEP_NAMES_EN: Record<string, string> = {
-  discovery: "Discovery",
-  navigation: "Navigation",
-  contact: "Contact",
-  form_operability: "Forms",
-  structured_data: "Structured Data",
+
+// Map English substep labels to i18n keys for old data without labelKey
+const SUBSTEP_LABEL_MAP: Record<string, string> = {
+  "Page title": "substep.pageTitle",
+  "Headings": "substep.headings",
+  "Readable content": "substep.readableContent",
+  "Links found": "substep.linksFound",
+  "Email addresses": "substep.emailAddresses",
+  "Phone numbers": "substep.phoneNumbers",
+  "WhatsApp": "substep.whatsapp",
+  "Contact forms": "substep.contactForms",
+  "Chat widgets": "substep.chatWidgets",
+  "JSON-LD blocks": "substep.jsonLdBlocks",
+  "Business name": "substep.businessName",
+  "Services/offers": "substep.servicesOffers",
+  "Pricing info": "substep.pricingInfo",
+  "Contact info": "substep.contactInfo",
 };
+
+// Map English substep details to i18n keys for old data without detailKey
+const SUBSTEP_DETAIL_MAP: Record<string, string> = {
+  "None found in HTML": "substep.emailNone",
+  "None found": "substep.phoneNone",
+  "Not detected": "substep.whatsappNone",
+  "WhatsApp link detected": "substep.whatsappFound",
+  "No forms found in HTML": "substep.formsNone",
+  "No title found": "substep.noTitle",
+  "No headings found": "substep.noHeadings",
+  "Found": "substep.fieldFound",
+  "Missing": "substep.fieldMissing",
+  "No submit button found": "substep.formNoSubmit",
+  "CAPTCHA blocks automated submission": "substep.formCaptcha",
+  "No action attribute (may be JS-only)": "substep.formNoAction",
+  "No visible fields in HTML": "substep.formNoFields",
+  "Could not load": "substep.pageLoadFailed",
+};
+
+function useStepTranslation(step: AgentStepResult, dict: Dictionary) {
+  const at = dict.agentTest;
+  const stepName = at[`step.${step.step}`] || step.step;
+
+  const prefix = STEP_DETAIL_PREFIX[step.step];
+  const derivedDetailKey = prefix ? `${prefix}.${step.status}` : undefined;
+  const effectiveDetailKey = step.detailKey || derivedDetailKey;
+  const details = effectiveDetailKey && at[effectiveDetailKey]
+    ? t(at[effectiveDetailKey], step.params)
+    : step.details;
+
+  const derivedRecKey = prefix && step.status !== "pass" ? `rec.${prefix}.${step.status}` : undefined;
+  const effectiveRecKey = step.recommendationKey || derivedRecKey;
+  const recommendation = effectiveRecKey && at[effectiveRecKey]
+    ? t(at[effectiveRecKey], step.params)
+    : undefined;
+
+  return { stepName, details, recommendation };
+}
+
+function AgentStepRow({
+  step,
+  dict,
+  isExpanded,
+  onToggle,
+}: {
+  step: AgentStepResult;
+  dict: Dictionary;
+  isExpanded: boolean;
+  onToggle: () => void;
+}) {
+  const at = dict.agentTest;
+  const { stepName, details, recommendation } = useStepTranslation(step, dict);
+  const hasDetail = (step.substeps && step.substeps.length > 0) || recommendation;
+
+  return (
+    <div>
+      {/* Summary row — always visible */}
+      <button
+        type="button"
+        onClick={hasDetail ? onToggle : undefined}
+        className={`w-full flex items-center gap-3 text-sm py-3 px-1 text-left ${hasDetail ? "cursor-pointer hover:bg-white/[0.02] rounded transition-colors" : "cursor-default"}`}
+      >
+        <StatusIcon status={step.status} />
+        <span className="text-zinc-200 font-medium shrink-0">{stepName}</span>
+        <span className="text-zinc-500 flex-1 truncate">{details}</span>
+        {hasDetail && (
+          <span className={`text-zinc-600 text-xs transition-transform ${isExpanded ? "rotate-180" : ""}`}>
+            &#9660;
+          </span>
+        )}
+      </button>
+
+      {/* Expanded detail */}
+      {isExpanded && (
+        <div className="pl-9 pb-4 space-y-3">
+          {/* Full detail text */}
+          <p className="text-sm text-zinc-400">{details}</p>
+
+          {/* Substeps */}
+          {step.substeps && step.substeps.length > 0 && (
+            <div className="space-y-1.5">
+              {step.substeps.map((sub, i) => {
+                const derivedLabelKey = SUBSTEP_LABEL_MAP[sub.label];
+                const effectiveLabelKey = sub.labelKey || derivedLabelKey;
+                const subLabel = effectiveLabelKey && at[effectiveLabelKey]
+                  ? at[effectiveLabelKey]
+                  : sub.label;
+
+                const derivedSubDetailKey = sub.detail ? SUBSTEP_DETAIL_MAP[sub.detail] : undefined;
+                const effectiveSubDetailKey = sub.detailKey || derivedSubDetailKey;
+                const subDetail = effectiveSubDetailKey && at[effectiveSubDetailKey]
+                  ? t(at[effectiveSubDetailKey], sub.params)
+                  : sub.detail;
+
+                return (
+                  <div key={i} className="flex items-start gap-2 text-sm">
+                    <span className="shrink-0 mt-0.5">
+                      {sub.status === "pass" ? (
+                        <span className="text-success text-xs">&#10003;</span>
+                      ) : sub.status === "partial" ? (
+                        <span className="text-warning text-xs">&#9679;</span>
+                      ) : (
+                        <span className="text-danger text-xs">&#10007;</span>
+                      )}
+                    </span>
+                    <span className="text-zinc-400">
+                      <span className="text-zinc-300">{subLabel}</span>
+                      {subDetail && (
+                        <span className="text-zinc-500 ml-1.5">— {subDetail}</span>
+                      )}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Recommendation */}
+          {recommendation && (
+            <div className="text-sm text-accent-dim bg-accent/5 rounded p-3 border border-accent/10">
+              {recommendation}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function AgenticTestSection({
   slug,
   companyName,
   isEs,
   agentTest,
+  dict,
 }: {
   slug: string;
   companyName: string;
   isEs: boolean;
   agentTest?: AgentTestResult;
+  dict: Dictionary;
 }) {
   const [clicked, setClicked] = useState(false);
+  const [expandedStep, setExpandedStep] = useState<string | null>(null);
 
   function handleClick() {
     trackEvent("cta_click", slug, { cta: "agentic_test_5eur" });
     setClicked(true);
   }
 
+  const at = dict.agentTest;
+
   if (agentTest) {
-    const stepNames = isEs ? STEP_NAMES_ES : STEP_NAMES_EN;
     const testSteps = agentTest.steps.filter((s) => s.step !== "verdict");
     const passed = testSteps.filter((s) => s.status === "pass").length;
     const partial = testSteps.filter((s) => s.status === "partial").length;
@@ -173,57 +317,53 @@ function AgenticTestSection({
           <div className="flex items-center gap-4 mb-8">
             <div className="flex-1 h-px bg-surface-light" />
             <span className="text-xs text-zinc-500 uppercase tracking-widest">
-              {isEs ? "Test agéntico" : "Agentic test"}
+              {at.sectionLabel}
             </span>
             <div className="flex-1 h-px bg-surface-light" />
           </div>
 
           <div className="bg-surface rounded-xl border border-surface-light p-8">
+            {/* Title + subtitle */}
             <div className="text-center mb-6">
               <h2 className="text-xl font-semibold">
-                {isEs
-                  ? `¿Qué pasa cuando un agente IA intenta contratar a ${companyName}?`
-                  : `What happens when an AI agent tries to hire ${companyName}?`}
+                {t(at.title, { company: companyName })}
               </h2>
               <p className="text-sm text-zinc-400 mt-2">
-                {isEs
-                  ? "Hemos simulado el proceso completo con peticiones HTTP reales."
-                  : "We simulated the full process with real HTTP requests."}
+                {at.subtitle}
               </p>
             </div>
 
-            {/* Mini summary counters */}
-            <div className="grid grid-cols-3 gap-4 text-center mb-6 pt-4 pb-4 border-t border-b border-surface-light">
+            {/* Summary counters */}
+            <div className="grid grid-cols-3 gap-4 text-center pt-4 pb-4 border-t border-b border-surface-light mb-4">
               <div>
                 <p className="text-2xl font-bold text-success">{passed}</p>
-                <p className="text-xs text-zinc-500 mt-1">{isEs ? "Aprobados" : "Passed"}</p>
+                <p className="text-xs text-zinc-500 mt-1">{at.passed}</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-warning">{partial}</p>
-                <p className="text-xs text-zinc-500 mt-1">{isEs ? "Parciales" : "Partial"}</p>
+                <p className="text-xs text-zinc-500 mt-1">{at.partial}</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-danger">{failed}</p>
-                <p className="text-xs text-zinc-500 mt-1">{isEs ? "Fallidos" : "Failed"}</p>
+                <p className="text-xs text-zinc-500 mt-1">{at.failed}</p>
               </div>
             </div>
 
-            {/* Step-by-step mini results */}
-            <div className="space-y-2 mb-8">
+            {/* Step rows (accordion) */}
+            <div className="divide-y divide-surface-light">
               {testSteps.map((step) => (
-                <div key={step.step} className="flex items-center gap-3 text-sm">
-                  <StatusIcon status={step.status} />
-                  <span className="text-zinc-300 font-medium">
-                    {stepNames[step.step] || step.step}
-                  </span>
-                  <span className="text-zinc-500 text-xs flex-1 truncate">
-                    {step.details.slice(0, 80)}
-                  </span>
-                </div>
+                <AgentStepRow
+                  key={step.step}
+                  step={step}
+                  dict={dict}
+                  isExpanded={expandedStep === step.step}
+                  onToggle={() => setExpandedStep(expandedStep === step.step ? null : step.step)}
+                />
               ))}
             </div>
 
-            <div className="text-center">
+            {/* CTA */}
+            <div className="text-center mt-8">
               <a
                 href={`/reports/${slug}-agent-test.html`}
                 target="_blank"
@@ -231,12 +371,10 @@ function AgenticTestSection({
                 onClick={() => trackEvent("cta_click", slug, { cta: "watch_agent_test" })}
                 className="inline-block px-8 py-3 rounded-lg bg-accent text-black font-semibold hover:bg-accent/90 transition-colors text-lg"
               >
-                {isEs ? "Ver simulación del agente" : "Watch agent simulation"} &rarr;
+                {at.watchSimulation} &rarr;
               </a>
               <p className="text-xs text-zinc-500 mt-3">
-                {isEs
-                  ? "Animación interactiva — datos reales obtenidos por HTTP"
-                  : "Interactive animation — real data obtained via HTTP"}
+                {at.simulationNote}
               </p>
             </div>
           </div>
@@ -508,6 +646,7 @@ export default function ReportClient({
         companyName={companyName}
         isEs={isEs}
         agentTest={report.agentTest}
+        dict={dict}
       />
 
       {/* Final CTA — "Hablamos" */}

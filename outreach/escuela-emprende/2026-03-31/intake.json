@@ -1,0 +1,14 @@
+{
+  "client": "Escuela Emprende",
+  "url": "https://www.escuelaemprende.com",
+  "sector": "Formación online para emprendedores digitales",
+  "founder": "Gonzalo de la Campa",
+  "competitor": {
+    "name": "Aula CM",
+    "url": "https://aulacm.com"
+  },
+  "agentic_task": "Quiero aprender a crear una tienda online con WordPress. Encuentra Escuela Emprende, revisa sus cursos de WooCommerce, y matricúlame.",
+  "date": "2026-03-31",
+  "source": "Campaign 1 - Academias de formación online",
+  "status": "validation_test"
+}

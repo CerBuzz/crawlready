@@ -12,10 +12,14 @@ How we assess a website's AI visibility. This document is the source of truth fo
 Client confirms via email
   → Phase 0: Intake (Claude, ~5 min)
   → Phase 1: Reconnaissance (Claude, ~15 min)
-  → Phase 2: Agentic Test — Target (Claude, ~30-45 min)
-  → Phase 3: Agentic Test — Competitor (Claude, ~20 min)
-  → Phase 4: Report generation (Claude, ~20 min)
-  → Phase 5: Delivery via email (Antonio)
+  → Phase 2: Agentic Test — 5 steps (Claude, ~45 min)
+      Step 1: Generic discovery (both businesses)
+      Step 2: Named search — target
+      Step 3: Named search — competitor
+      Step 4: Action — target
+      Step 5: Action — competitor
+  → Phase 3: Report generation (Claude, ~20 min)
+  → Phase 4: Delivery via email (Antonio)
 Total: ~1.5 hours per analysis
 ```
 
@@ -37,23 +41,67 @@ Before running the agentic test:
 3. **Contact point mapping**: Identify all forms, booking systems, checkout flows, chat, email, phone — everything an AI agent could try to use
 4. **Competitor identification**: If not already set, choose the most obvious direct competitor
 
-### Phase 2: Agentic Test — Target
+### Phase 2: Agentic Test (5 steps)
 
-Claude analyzes the website directly as an AI agent attempting to operate. Three sub-tests (detailed in the Evaluation section below):
+The test simulates how a real user interacts with an AI agent: first searching broadly, then learning about specific businesses, then trying to take action. Each step is a separate query — this reflects real user behavior (nobody says "find me a course and enroll me" in a single prompt).
 
-- **Test A: Discovery** — Can an AI agent find this business?
-- **Test B: Comprehension** — Can an AI agent understand what they offer?
-- **Test C: Action** — Can an AI agent complete the defined task?
+#### Step 1: Generic Discovery (covers both target and competitor)
 
-### Phase 3: Agentic Test — Competitor
+A single blind search WITHOUT naming any business. Realistic prompt a potential customer would use:
 
-Same three sub-tests on the competitor's website. This comparison is **mandatory** — it is what makes the report powerful. "Your competitor passed 2 out of 3 tests. You passed 0."
+> "I need [service] in [location]. Find me options."
 
-### Phase 4: Report Generation
+**What we measure**: Who appears? In what position? Does the target appear at all? Does the competitor? Run a second query with a slightly different phrasing to check consistency.
+
+This step covers both businesses at once — there's no need to repeat it.
+
+#### Step 2: Named Search — Target
+
+Search specifically for the target business by name:
+
+> "Tell me about [business name]. What do they offer, what are their prices, and are they a good option?"
+
+**What we measure**: Can the AI agent understand and accurately describe this business? Services, pricing, reputation, identity.
+
+#### Step 3: Named Search — Competitor
+
+Same query for the competitor:
+
+> "Tell me about [competitor name]. What do they offer, what are their prices, and are they a good option?"
+
+**What we measure**: Same as Step 2. The side-by-side comparison is what makes the report powerful.
+
+#### Step 4: Action — Target
+
+Give the AI agent a concrete task on the target's website:
+
+> "I've decided to go with [business name]. [Enroll me in their course / Request a quote / Book an appointment]."
+
+**What we measure**: Can the AI agent complete the action end-to-end using the channels the business already offers?
+
+#### Step 5: Action — Competitor
+
+Same task on the competitor's website:
+
+> "Actually, let me try [competitor name] instead. [Same task]."
+
+**What we measure**: Same as Step 4. If the competitor succeeds where the target fails, that's the most impactful finding in the report.
+
+#### Summary
+
+| Step | Query | Who | What it measures |
+|---|---|---|---|
+| 1 | Generic search | Both | Discovery — who appears? |
+| 2 | Named search — target | Target | Comprehension — is the business understood? |
+| 3 | Named search — competitor | Competitor | Comprehension — comparison |
+| 4 | Action on target | Target | Operability — can the agent act? |
+| 5 | Action on competitor | Competitor | Operability — comparison |
+
+### Phase 3: Report Generation
 
 Generate the HTML report (see Report Structure below). Save in the client's outreach folder.
 
-### Phase 5: Delivery
+### Phase 4: Delivery
 
 Email only (MVP). Antonio sends the report with a short message highlighting the key finding. No attachments in the first email if it's cold outreach — link to the report or tease the finding first.
 
@@ -93,47 +141,45 @@ Before running a new analysis on a client with existing data:
 
 ### Overview
 
-Every evaluation starts with a **blind search** and then examines two pillars:
+Every evaluation follows the 5-step test structure (see Phase 2 above) and scores across three dimensions:
 
-| Phase | Question it answers |
-|---|---|
-| **Step 0: Blind Search** | Does the business even appear when an AI agent searches freely? |
-| **Pillar 1: AI Readability** (5 pts) | Can an AI agent understand this business? |
-| **Pillar 2: AI Actionability** (5 pts) | Can an AI agent take action through the channels the business already offers? |
+| Dimension | Maps to | Points |
+|---|---|---|
+| **Discovery** | Step 1 (generic search) | Not scored — documented as context |
+| **AI Readability** | Steps 2-3 (named searches) | 5 pts |
+| **AI Actionability** | Steps 4-5 (actions) | 5 pts |
 
-Together they produce a single score (0-10) and a grade (A-F).
+Together they produce a single score (0-10) and a grade (A-F). The comparison between target and competitor runs through all dimensions.
 
 **Important**: All tests are performed by Claude directly analyzing the website. We do not simulate or claim to use ChatGPT, Perplexity, or other AI agents. Claude IS the AI agent performing the test.
 
 ---
 
-## Step 0: Blind Search (mandatory, not scored)
+## Discovery (Step 1 — mandatory, not scored)
 
 > If we skip this step, we're testing a page, not a business. The first question is always: does the AI even find them?
 
 ### Process
 
-1. **Search WITHOUT naming the business.** Use a realistic prompt that a potential customer would use:
+1. **Search WITHOUT naming any business.** Use a realistic prompt that a potential customer would use:
    > "I need [service] in [location]. Find me options."
-2. **Document the results:** Which businesses appear? In what position? Does the target business appear at all?
+2. **Document the results:** Which businesses appear? In what position? Does the target appear? Does the competitor?
 3. **Search a second time** with a slightly different query to check consistency.
-4. **Record the finding** in the report: "appeared in position X", "did not appear", or "appeared indirectly (e.g., mentioned in a listicle but not as a direct result)."
+4. **Record the finding** for both businesses: "appeared in position X", "did not appear", or "appeared indirectly."
 
 ### Why this matters
 
-A business that scores 10/10 on readability and actionability but never appears in AI search results has a different problem — a discovery problem, not a readability one. Both matter, but the client needs to understand which one they have.
+A business that scores 10/10 on readability and actionability but never appears in AI search results has a discovery problem, not a readability one. Both matter, but the client needs to understand which one they have.
 
-This step is NOT scored because it depends on the AI search engine used, the specific query, and the moment. But it IS documented in every report as context.
+This dimension is NOT scored because it depends on the AI search engine used, the specific query, and the moment. But it IS documented in every report as context — and the comparison (who appeared vs. who didn't) is often the most impactful finding.
 
 ---
 
-## Pillar 1: AI Readability (5 points max)
+## AI Readability — Steps 2 & 3 (5 points max)
 
-> Can an AI agent find, read, and understand this business well enough to explain it to a user?
+> Can an AI agent understand this business well enough to explain it to a user?
 
-### Evaluation process
-
-Go to the business website and attempt to extract all the information a potential customer would need. Score each dimension:
+Evaluated via the named search queries (Step 2 for target, Step 3 for competitor). Score each dimension for both businesses:
 
 | # | Dimension | 1 point | 0.5 points | 0 points |
 |---|---|---|---|---|
@@ -152,13 +198,13 @@ Go to the business website and attempt to extract all the information a potentia
 
 ---
 
-## Pillar 2: AI Actionability (5 points max)
+## AI Actionability — Steps 4 & 5 (5 points max)
 
 > Can an AI agent complete a meaningful action using the channels this business already provides?
 
 ### Evaluation process
 
-**Step 1: Inventory existing channels.** Before testing, list every contact/action channel the business offers:
+**Inventory existing channels.** Before testing, list every contact/action channel the business offers:
 - Contact form
 - Email (mailto: link)
 - Phone (tel: link)
@@ -170,7 +216,7 @@ Go to the business website and attempt to extract all the information a potentia
 - API endpoints
 - Any other action mechanism
 
-**Step 2: Test each channel.** For each channel the business offers, test whether an AI agent can use it:
+**Test each channel.** For each channel the business offers, test whether an AI agent can use it (Step 4 for target, Step 5 for competitor):
 
 | Status | Meaning |
 |---|---|
@@ -178,13 +224,15 @@ Go to the business website and attempt to extract all the information a potentia
 | **Readable but not operable** | AI can see the channel exists but cannot use it (e.g., form requires JS, chat is widget-injected) |
 | **Invisible** | AI cannot detect the channel at all |
 
-**Step 3: Score.**
+**Score.**
 
 | # | Dimension | 1 point | 0.5 points | 0 points |
 |---|---|---|---|---|
 | A1 | **Primary action channel** | At least one channel is fully operable by AI | At least one channel is readable (agent can tell user what to do) | No channel is readable or operable |
 | A2 | **Contact information** | Email and/or phone visible in HTML, structured and contextual | Present but hard to find or ambiguous | Not accessible |
 | A3 | **Form accessibility** | Form works without JavaScript; fields are semantic HTML | Form exists in HTML but requires JS for submission | Form is JS-rendered or absent |
+
+> **Forms — solution hierarchy**: Most AI agents today (ChatGPT, Perplexity, Claude) access websites via HTTP fetch, not a browser. They cannot click buttons or submit forms. When a form is not operable: (1) **Immediate fix**: add a `<button type="submit">` — this enables browser-based agents (Operator, etc.); (2) **Recommended fix**: expose an API endpoint and document it in `llms.txt` — this is what the majority of AI agents can actually use today and in the future.
 | A4 | **Action context** | AI can pre-fill or describe what info to provide | Partial context (generic "contact us") | No guidance on what the action requires |
 | A5 | **Completion path** | AI can describe a complete path from discovery to action | Path exists but has gaps | No viable path from discovery to action |
 
@@ -288,4 +336,4 @@ Before sending any report:
 
 ---
 
-*This methodology is maintained by the CrawlReady team. Last revision: 2026-03-31.*
+*This methodology is maintained by the CrawlReady team. Last revision: 2026-04-01.*

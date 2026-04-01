@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CrawlReady — Agentic Test: Escuela Emprende</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--surface:#0d1117;--surface2:#161b22;--border:#27272a;--text:#e4e4e7;--text-muted:#9ca3af;--text-dim:#6b7280;--cyan:#00e5ff;--cyan-dim:rgba(0,229,255,0.12);--green:#22c55e;--green-dim:rgba(34,197,94,0.12);--red:#ef4444;--red-dim:rgba(239,68,68,0.12);--yellow:#eab308;--yellow-dim:rgba(234,179,8,0.12);--font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;--mono:'SF Mono','Fira Code','Cascadia Code',monospace}
+body{background:var(--bg);color:var(--text);font-family:var(--font);line-height:1.6;padding:0}
+.report{max-width:820px;margin:0 auto;padding:24px 16px 60px}
+
+/* Header */
+.header{text-align:center;padding:48px 24px 40px;border-bottom:1px solid var(--border);margin-bottom:40px}
+.logo{font-size:13px;font-family:var(--mono);color:var(--cyan);letter-spacing:2px;text-transform:uppercase;margin-bottom:24px}
+.client-name{font-size:28px;font-weight:700;margin-bottom:4px}
+.client-url{font-size:14px;color:var(--text-dim);font-family:var(--mono);margin-bottom:24px}
+.score-ring{display:inline-flex;align-items:center;justify-content:center;width:100px;height:100px;border-radius:50%;border:3px solid var(--yellow);margin-bottom:12px;position:relative}
+.score-number{font-size:36px;font-weight:800;color:var(--yellow)}
+.score-max{font-size:14px;color:var(--text-dim)}
+.grade-badge{display:inline-block;padding:6px 20px;border-radius:6px;font-size:14px;font-weight:700;background:var(--yellow-dim);color:var(--yellow);letter-spacing:1px;margin-bottom:8px}
+.grade-label{font-size:13px;color:var(--text-muted)}
+.header-date{font-size:12px;color:var(--text-dim);margin-top:16px;font-family:var(--mono)}
+
+/* Sections */
+.section{margin-bottom:40px}
+.section-title{font-size:18px;font-weight:700;color:var(--cyan);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.section-number{font-size:12px;font-family:var(--mono);background:var(--cyan-dim);color:var(--cyan);padding:3px 8px;border-radius:4px}
+
+/* Executive summary */
+.headline{font-size:20px;font-weight:600;line-height:1.4;margin-bottom:16px;color:var(--text)}
+.summary-grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:600px){.summary-grid{grid-template-columns:1fr 1fr}}
+.summary-card{padding:16px;border-radius:8px;border:1px solid var(--border);background:var(--surface)}
+.summary-card h4{font-size:13px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.summary-card ul{list-style:none;padding:0}
+.summary-card li{font-size:13px;color:var(--text-muted);padding:3px 0;padding-left:16px;position:relative}
+.summary-card li::before{content:"";position:absolute;left:0;top:10px;width:6px;height:6px;border-radius:50%}
+.card-pass li::before{background:var(--green)}
+.card-fail li::before{background:var(--red)}
+.card-partial li::before{background:var(--yellow)}
+
+/* Test blocks */
+.test-block{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
+.test-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.test-name{font-size:16px;font-weight:700}
+.badge{display:inline-block;padding:4px 12px;border-radius:4px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.badge-pass{background:var(--green-dim);color:var(--green)}
+.badge-partial{background:var(--yellow-dim);color:var(--yellow)}
+.badge-fail{background:var(--red-dim);color:var(--red)}
+.test-score{font-size:13px;color:var(--text-muted);margin-bottom:12px;font-family:var(--mono)}
+.finding{font-size:13px;color:var(--text-muted);padding:6px 0;padding-left:20px;position:relative}
+.finding::before{content:"›";position:absolute;left:4px;color:var(--text-dim)}
+
+/* Dimension table */
+.dim-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+.dim-table th{text-align:left;padding:8px 10px;color:var(--text-dim);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--border)}
+.dim-table td{padding:8px 10px;border-bottom:1px solid rgba(39,39,42,0.5);vertical-align:top}
+.dim-table td:first-child{color:var(--text);font-weight:500;white-space:nowrap;width:160px}
+.dim-table td:nth-child(2){font-family:var(--mono);text-align:center;width:60px}
+.dim-table td:last-child{color:var(--text-muted)}
+.score-cell{font-weight:700}
+.score-1{color:var(--green)}
+.score-half{color:var(--yellow)}
+.score-0{color:var(--red)}
+
+/* Collapsible */
+details{margin-top:12px}
+summary{cursor:pointer;font-size:12px;color:var(--cyan);font-family:var(--mono);padding:6px 0;user-select:none}
+summary:hover{color:#fff}
+details[open] summary{margin-bottom:8px}
+
+/* Comparison table */
+.comp-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+.comp-table th{padding:10px 12px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-dim);border-bottom:2px solid var(--border);font-weight:700}
+.comp-table th:nth-child(2),.comp-table th:nth-child(3){text-align:center}
+.comp-table td{padding:10px 12px;border-bottom:1px solid rgba(39,39,42,0.5);vertical-align:middle}
+.comp-table td:first-child{font-weight:500}
+.comp-table td:nth-child(2),.comp-table td:nth-child(3){text-align:center;font-family:var(--mono);font-weight:700}
+.comp-highlight{background:rgba(0,229,255,0.04)}
+.comp-winner{color:var(--green)}
+.comp-loser{color:var(--red)}
+
+/* Recommendations */
+.rec{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:12px}
+.rec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.rec-title{font-size:14px;font-weight:600}
+.rec-impact{font-size:11px;font-family:var(--mono);padding:2px 8px;border-radius:3px}
+.impact-high{background:var(--red-dim);color:var(--red)}
+.impact-medium{background:var(--yellow-dim);color:var(--yellow)}
+.impact-low{background:var(--cyan-dim);color:var(--cyan)}
+.rec-body{font-size:13px;color:var(--text-muted)}
+
+/* CTA */
+.cta-section{text-align:center;padding:40px 24px;border-top:1px solid var(--border);margin-top:40px}
+.cta-title{font-size:18px;font-weight:700;margin-bottom:8px}
+.cta-subtitle{font-size:14px;color:var(--text-muted);margin-bottom:24px}
+.cta-buttons{display:flex;flex-direction:column;gap:12px;align-items:center}
+@media(min-width:500px){.cta-buttons{flex-direction:row;justify-content:center}}
+.btn{display:inline-block;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:all 0.2s}
+.btn-primary{background:var(--cyan);color:#000}
+.btn-primary:hover{background:#0891b2}
+.btn-secondary{background:transparent;color:var(--cyan);border:1px solid var(--cyan)}
+.btn-secondary:hover{background:var(--cyan-dim)}
+
+/* Footer */
+.footer{text-align:center;padding:20px;font-size:11px;color:var(--text-dim);border-top:1px solid var(--border);margin-top:20px}
+.footer a{color:var(--cyan);text-decoration:none}
+
+/* Disclaimer */
+.disclaimer{font-size:11px;color:#555;line-height:1.5;margin-top:24px;padding:12px;border:1px solid rgba(39,39,42,0.3);border-radius:6px;background:rgba(13,17,23,0.5)}
+</style>
+</head>
+<body>
+<div class="report">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">CrawlReady — Agentic Test</div>
+  <div class="client-name">Escuela Emprende</div>
+  <div class="client-url">https://www.escuelaemprende.com</div>
+  <div class="score-ring">
+    <span class="score-number">6.0</span>
+  </div>
+  <div class="score-max">/ 10</div>
+  <div><span class="grade-badge">Grado C</span></div>
+  <div class="grade-label">Parcial — brechas significativas para agentes IA</div>
+  <div class="header-date">31 de marzo de 2026</div>
+</div>
+
+<!-- RESUMEN EJECUTIVO -->
+<div class="section">
+  <div class="section-title"><span class="section-number">01</span> Resumen Ejecutivo</div>
+  <p class="headline">Un agente IA puede entender qué ofrece Escuela Emprende, pero no consigue encontrar precios ni completar la matrícula sin navegación humana.</p>
+  <div class="summary-grid">
+    <div class="summary-card card-pass">
+      <h4 style="color:var(--green)">✓ Qué funciona</h4>
+      <ul>
+        <li>El catálogo de 25+ cursos es legible en HTML</li>
+        <li>La identidad del negocio (nombre, fundador, redes) es extraíble</li>
+        <li>El sitemap y robots.txt están correctamente configurados</li>
+        <li>WooCommerce permite checkout en el dominio propio</li>
+      </ul>
+    </div>
+    <div class="summary-card card-fail">
+      <h4 style="color:var(--red)">✗ Qué no funciona</h4>
+      <ul>
+        <li>No hay schema de Course ni Product — los cursos son invisibles para IA en datos estructurados</li>
+        <li>No existe archivo llms.txt</li>
+        <li>Los precios solo aparecen en /todos/, no en la home ni en /cursos/</li>
+        <li>Meta description ausente o no visible en HTML</li>
+      </ul>
+    </div>
+    <div class="summary-card card-partial">
+      <h4 style="color:var(--yellow)">● Oportunidades</h4>
+      <ul>
+        <li>Los popups de ConvertPro pueden bloquear a agentes IA que leen HTML estático</li>
+        <li>El funnel de compra requiere 3+ clics sin ruta lineal</li>
+        <li>WhatsApp existe pero no hay email visible en páginas principales</li>
+        <li>El título de la home está truncado y es ambiguo</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAREA DEL AGENTE -->
+<div class="section">
+  <div class="section-title"><span class="section-number">02</span> La Tarea</div>
+  <div class="test-block">
+    <p style="font-size:14px;color:var(--cyan);font-family:var(--mono);margin-bottom:8px">Prompt del agente IA:</p>
+    <p style="font-size:15px;font-weight:600;line-height:1.5">"Quiero aprender a crear una tienda online con WordPress. Encuentra Escuela Emprende, revisa sus cursos de WooCommerce, y matricúlame."</p>
+    <p style="font-size:12px;color:var(--text-dim);margin-top:12px;font-family:var(--mono)">Agente: Claude (CrawlReady Agentic Test) · Fecha: 2026-03-31</p>
+  </div>
+</div>
+
+<!-- TEST A: DESCUBRIMIENTO -->
+<div class="section">
+  <div class="section-title"><span class="section-number">03</span> Test A — Descubrimiento</div>
+  <div class="test-block">
+    <div class="test-header">
+      <span class="test-name">¿Puede un agente IA encontrar este negocio?</span>
+      <span class="badge badge-partial">Parcial</span>
+    </div>
+    <div class="test-score">Puntuación: 0.5 / 1.0</div>
+    <div class="finding">El título de la homepage es truncado y genérico: "Curso de Inteligencia Artificial, WordPress, Academias..." — no comunica claramente la oferta</div>
+    <div class="finding">Meta description no claramente visible en HTML — el agente IA obtiene contexto limitado de los resultados de búsqueda</div>
+    <div class="finding">Schema Organization existe pero carece de detalle (sin cursos, sin precios, sin descripción de servicios)</div>
+    <div class="finding">El sitio SÍ es indexable y tiene sitemap — la infraestructura básica de descubribilidad existe</div>
+    <div class="finding">Un agente IA buscando "cursos WordPress WooCommerce" necesitaría aterrizar en el sitio para entender la oferta</div>
+  </div>
+</div>
+
+<!-- TEST B: COMPRENSIÓN -->
+<div class="section">
+  <div class="section-title"><span class="section-number">04</span> Test B — Comprensión</div>
+  <div class="test-block">
+    <div class="test-header">
+      <span class="test-name">¿Puede un agente IA entender qué ofrece?</span>
+      <span class="badge badge-pass">Pass</span>
+    </div>
+    <div class="test-score">Puntuación: 3.5 / 5.0 (Legibilidad IA)</div>
+    <table class="dim-table">
+      <tr><th>Dimensión</th><th>Nota</th><th>Observación</th></tr>
+      <tr>
+        <td>Comprensión de servicios</td>
+        <td class="score-cell score-1">1.0</td>
+        <td>El agente identifica 25+ cursos en IA, WordPress, ecommerce y marketing. Las categorías son claras en la navegación HTML.</td>
+      </tr>
+      <tr>
+        <td>Claridad de precios</td>
+        <td class="score-cell score-half">0.5</td>
+        <td>Precios NO visibles en homepage ni en /cursos/. Hay que navegar a /todos/ para ver: Pack Todos €737, Pack+Webs €997, Web 72h €1.837.</td>
+      </tr>
+      <tr>
+        <td>Acceso a reputación</td>
+        <td class="score-cell score-half">0.5</td>
+        <td>Gonzalo de la Campa aparece como autor. Stats de YouTube referenciados. Pero no hay testimonios ni reseñas accesibles en HTML.</td>
+      </tr>
+      <tr>
+        <td>Identidad del negocio</td>
+        <td class="score-cell score-1">1.0</td>
+        <td>Nombre, fundador, perfiles sociales y posicionamiento claramente extraíbles del HTML y datos estructurados.</td>
+      </tr>
+      <tr>
+        <td>Calidad datos estructurados</td>
+        <td class="score-cell score-half">0.5</td>
+        <td>Schema Organization y Website presente, pero SIN schema Course, SIN schema Product, SIN precios en datos estructurados.</td>
+      </tr>
+    </table>
+    <details>
+      <summary>▸ Detalle técnico</summary>
+      <p style="font-size:12px;color:var(--text-dim);line-height:1.7;padding:8px">
+        <strong>Plataforma:</strong> WordPress + Divi + WooCommerce<br>
+        <strong>LMS:</strong> Sensei LMS / Custom<br>
+        <strong>robots.txt:</strong> Presente, bloquea /lesson/ pero permite /wp-admin/admin-ajax.php, sitemap declarado<br>
+        <strong>llms.txt:</strong> No existe<br>
+        <strong>Sitemap:</strong> https://www.escuelaemprende.com/sitemap_index.xml<br>
+        <strong>HTTPS:</strong> Sí<br>
+        <strong>Schema detectado:</strong> Organization, WebSite (SearchAction), Author<br>
+        <strong>Schema ausente:</strong> Course, Product, Offer, AggregateRating<br>
+        <strong>Popups:</strong> ConvertPro (modales que pueden interferir con lectura HTML estática)<br>
+        <strong>Cookie banner:</strong> Moove GDPR
+      </p>
+    </details>
+  </div>
+</div>
+
+<!-- TEST C: ACCIÓN -->
+<div class="section">
+  <div class="section-title"><span class="section-number">05</span> Test C — Acción</div>
+  <div class="test-block">
+    <div class="test-header">
+      <span class="test-name">¿Puede un agente IA completar la matrícula?</span>
+      <span class="badge badge-partial">Parcial</span>
+    </div>
+    <div class="test-score">Puntuación: 2.5 / 5.0 (Accionabilidad IA)</div>
+    <table class="dim-table">
+      <tr><th>Dimensión</th><th>Nota</th><th>Observación</th></tr>
+      <tr>
+        <td>Canal de acción principal</td>
+        <td class="score-cell score-half">0.5</td>
+        <td>WooCommerce cart existe (/carro/) y los botones add-to-cart funcionan en /todos/. Pero llegar a la página de compra requiere navegar múltiples niveles. No hay CTA "comprar" directo en la homepage.</td>
+      </tr>
+      <tr>
+        <td>Información de contacto</td>
+        <td class="score-cell score-half">0.5</td>
+        <td>WhatsApp disponible (botón "Asesoría Gratis"). Página de contacto existe. Pero no hay email ni teléfono visible en HTML de las páginas principales.</td>
+      </tr>
+      <tr>
+        <td>Accesibilidad de formularios</td>
+        <td class="score-cell score-half">0.5</td>
+        <td>Popups de ConvertPro detectados — modales que pueden no ser accesibles para agentes IA que leen HTML estático. El formulario de contacto existe pero depende de popups.</td>
+      </tr>
+      <tr>
+        <td>Contexto de acción</td>
+        <td class="score-cell score-half">0.5</td>
+        <td>Los botones "Ver descuento" en cursos ofrecen algo de guía, pero la ruta de "quiero aprender WooCommerce" a "aquí está el checkout" requiere 3+ clics sin funnel claro.</td>
+      </tr>
+      <tr>
+        <td>Ruta de completación</td>
+        <td class="score-cell score-half">0.5</td>
+        <td>Ruta existente: Home → Cursos → Seleccionar curso → /todos/ → Añadir al carrito → Checkout. Pero no es lineal, los precios están ocultos hasta /todos/, y los popups pueden interrumpir.</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- COMPARATIVA -->
+<div class="section">
+  <div class="section-title"><span class="section-number">06</span> Comparativa: Escuela Emprende vs Aula CM</div>
+  <div class="test-block">
+    <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px">Misma tarea aplicada al competidor directo: encontrar cursos de marketing/WordPress y matricularse.</p>
+    <table class="comp-table">
+      <tr>
+        <th>Dimensión</th>
+        <th style="color:var(--cyan)">Escuela Emprende</th>
+        <th>Aula CM</th>
+      </tr>
+      <tr class="comp-highlight">
+        <td><strong>Puntuación total</strong></td>
+        <td class="comp-winner" style="font-size:18px">6.0 / 10</td>
+        <td class="comp-loser" style="font-size:18px">0.5 / 10</td>
+      </tr>
+      <tr class="comp-highlight">
+        <td><strong>Grado</strong></td>
+        <td><span class="badge badge-partial">C</span></td>
+        <td><span class="badge badge-fail">F</span></td>
+      </tr>
+      <tr>
+        <td>Test A: Descubrimiento</td>
+        <td class="comp-winner">Parcial (0.5)</td>
+        <td class="comp-loser">Fallo (0.0)</td>
+      </tr>
+      <tr>
+        <td>Test B: Comprensión</td>
+        <td class="comp-winner">3.5</td>
+        <td class="comp-loser">0.5</td>
+      </tr>
+      <tr>
+        <td>Test C: Acción</td>
+        <td class="comp-winner">2.5</td>
+        <td class="comp-loser">0.0</td>
+      </tr>
+      <tr>
+        <td>Contenido legible por IA</td>
+        <td style="color:var(--green)">Sí — cursos, precios, identidad</td>
+        <td style="color:var(--red)">No — solo CSS y JavaScript</td>
+      </tr>
+      <tr>
+        <td>Datos estructurados</td>
+        <td style="color:var(--yellow)">Organization, Website (sin Course)</td>
+        <td style="color:var(--red)">Ninguno detectable</td>
+      </tr>
+      <tr>
+        <td>Formularios accesibles</td>
+        <td style="color:var(--yellow)">Parcial (popups)</td>
+        <td style="color:var(--red)">Ninguno accesible</td>
+      </tr>
+      <tr>
+        <td>Checkout funcional</td>
+        <td style="color:var(--green)">Sí (WooCommerce)</td>
+        <td style="color:var(--red)">Invisible</td>
+      </tr>
+    </table>
+    <div style="margin-top:16px;padding:12px;background:var(--green-dim);border-radius:6px;border:1px solid rgba(34,197,94,0.2)">
+      <p style="font-size:14px;font-weight:600;color:var(--green);margin-bottom:4px">Escuela Emprende lleva una ventaja considerable</p>
+      <p style="font-size:13px;color:var(--text-muted)">Aula CM (aulacm.com) devuelve solo CSS y JavaScript — un agente IA no puede leer absolutamente nada de su contenido. Escuela Emprende ya es 12× más visible para agentes IA que su competidor directo.</p>
+    </div>
+    <details>
+      <summary>▸ Detalle del test de Aula CM</summary>
+      <p style="font-size:12px;color:var(--text-dim);line-height:1.7;padding:8px">
+        <strong>Descubrimiento:</strong> FALLO — Las peticiones de página devuelven solo CSS y JavaScript, cero contenido legible. El título "Los mejores Cursos de Marketing Digital Presencial y Online" es lo único visible.<br>
+        <strong>Comprensión:</strong> FALLO — El agente IA solo sabe que es una escuela de marketing en Madrid, nada más. Sin datos estructurados, sin catálogo legible, sin precios.<br>
+        <strong>Acción:</strong> FALLO — Sin formularios, sin información de contacto, sin mecanismo de matrícula accesible para el agente IA. El sitio es funcionalmente invisible.
+      </p>
+    </details>
+  </div>
+</div>
+
+<!-- RECOMENDACIONES -->
+<div class="section">
+  <div class="section-title"><span class="section-number">07</span> Recomendaciones</div>
+
+  <div class="rec">
+    <div class="rec-header">
+      <span class="rec-title">1. Añadir schema Course a cada curso</span>
+      <span class="rec-impact impact-high">Impacto alto</span>
+    </div>
+    <div class="rec-body">Los 25+ cursos existen en HTML pero son invisibles para IA en datos estructurados. Añadir JSON-LD con schema <code>Course</code> (nombre, descripción, provider, offers con precio) a cada página de curso haría que los agentes IA puedan listar y comparar cursos sin navegar el sitio.</div>
+  </div>
+
+  <div class="rec">
+    <div class="rec-header">
+      <span class="rec-title">2. Hacer los precios visibles en /cursos/</span>
+      <span class="rec-impact impact-high">Impacto alto</span>
+    </div>
+    <div class="rec-body">Actualmente un agente IA que aterriza en /cursos/ no ve ningún precio. Tiene que descubrir /todos/ para encontrar €737–€1.837. Mostrar el rango de precios (o al menos "desde €69/mes") en la página de catálogo de cursos elimina una barrera crítica.</div>
+  </div>
+
+  <div class="rec">
+    <div class="rec-header">
+      <span class="rec-title">3. Crear un archivo llms.txt</span>
+      <span class="rec-impact impact-high">Impacto alto</span>
+    </div>
+    <div class="rec-body">Un archivo /llms.txt en la raíz del dominio permite a los LLMs entender rápidamente quién es Escuela Emprende, qué cursos ofrece, cuánto cuestan y cómo matricularse. Es el equivalente a robots.txt pero para modelos de lenguaje. Implementación: 15 minutos.</div>
+  </div>
+
+  <div class="rec">
+    <div class="rec-header">
+      <span class="rec-title">4. Optimizar título y meta description de la homepage</span>
+      <span class="rec-impact impact-medium">Impacto medio</span>
+    </div>
+    <div class="rec-body">El título actual está truncado: "Curso de Inteligencia Artificial, WordPress, Academias...". Un título claro como "Escuela Emprende — Cursos Online de WordPress, WooCommerce e IA para Emprendedores" daría contexto inmediato a cualquier agente IA.</div>
+  </div>
+
+  <div class="rec">
+    <div class="rec-header">
+      <span class="rec-title">5. Simplificar la ruta de compra</span>
+      <span class="rec-impact impact-medium">Impacto medio</span>
+    </div>
+    <div class="rec-body">El path actual (Home → Cursos → Curso individual → /todos/ → Add to cart → Checkout) requiere 3+ clics y el agente IA pierde la pista. Un enlace directo al checkout desde cada página de curso (o un botón "Matricularme" con enlace al carrito) crearía una ruta lineal.</div>
+  </div>
+
+  <div class="rec">
+    <div class="rec-header">
+      <span class="rec-title">6. Exponer email de contacto en HTML principal</span>
+      <span class="rec-impact impact-low">Impacto bajo</span>
+    </div>
+    <div class="rec-body">WhatsApp está disponible, pero un agente IA que busca enviar un email no encuentra ninguna dirección en las páginas principales. Añadir un mailto: visible en el footer o la página de contacto cubre este canal sin esfuerzo.</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-title">Escuela Emprende tiene ventaja — consolídala</div>
+  <div class="cta-subtitle">Tu competidor directo saca 0.5/10. Tú sacas 6.0/10. Con las recomendaciones anteriores, puedes llegar a 8+/10 y ser referencia para agentes IA en tu sector.</div>
+  <div class="cta-buttons">
+    <a href="mailto:hello@crawlready.dev?subject=Implementación%20AI%20Readiness%20-%20Escuela%20Emprende" class="btn btn-primary">¿Quieres que lo implementemos? →</a>
+    <a href="mailto:hello@crawlready.dev?subject=Nuevo%20análisis%20-%20Escuela%20Emprende" class="btn btn-secondary">Analizar otro competidor u otra tarea</a>
+  </div>
+  <p style="font-size:12px;color:var(--text-dim);margin-top:16px">Implementación completa: €397 · Incluye verificación post-implementación + re-test con agente IA + 60 días de soporte</p>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  <strong>Metodología:</strong> Este informe documenta los resultados reales de un agente IA (Claude) intentando operar en el sitio web, tal como lo haría cualquier agente IA actual (asistentes de búsqueda, chatbots de compra, agentes de comparación). Todos los datos fueron obtenidos mediante peticiones HTTP directas al sitio web. No se simuló ningún resultado — lo que el agente vio es lo que se reporta. La puntuación sigue la metodología CrawlReady: Legibilidad IA (0-5) + Accionabilidad IA (0-5) = Puntuación total (0-10).
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <a href="https://crawlready.dev">crawlready.dev</a> · Preparamos tu web para la era de los agentes IA<br>
+  © 2026 CrawlReady · hello@crawlready.dev
+</div>
+
+</div>
+</body>
+</html>

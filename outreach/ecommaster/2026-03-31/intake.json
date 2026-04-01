@@ -1,0 +1,14 @@
+{
+  "client": "Ecommaster",
+  "url": "https://ecommaster.es",
+  "sector": "Escuela de e-commerce y marketing digital",
+  "founders": "Fabián López, Gerardo Salvador",
+  "competitor": {
+    "name": "Escuela Emprende",
+    "url": "https://www.escuelaemprende.com"
+  },
+  "agentic_task": "Quiero especializarme en e-commerce. Encuentra Ecommaster, compara sus másteres, y solicita información o matrícula para el Máster Online.",
+  "date": "2026-03-31",
+  "source": "Campaign 1 - Academias de formación online",
+  "status": "validation_test"
+}

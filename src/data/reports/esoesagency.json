@@ -1,6 +1,6 @@
 {
   "slug": "esoesagency",
-  "companyName": "Eso Es Agency",
+  "companyName": "Esoesagency",
   "scanResult": {
     "url": "https://esoesagency.com",
     "totalScore": 85,
@@ -71,25 +71,25 @@
         "score": 15,
         "maxScore": 15,
         "status": "pass",
-        "details": "Excellent response time: 133ms.",
+        "details": "Excellent response time: 119ms.",
         "detailKey": "response.excellent",
         "params": {
-          "ms": 133
+          "ms": 119
         }
       }
     ],
-    "scannedAt": "2026-03-31T17:37:56.172Z"
+    "scannedAt": "2026-04-01T06:25:39.655Z"
   },
   "agentTest": {
     "url": "https://esoesagency.com",
-    "task": "Find this agency, understand their services, and request a quote",
+    "task": "Find this business, understand their services, and request a quote",
     "steps": [
       {
         "step": "discovery",
-        "action": "Fetching https://esoesagency.com (101ms)",
+        "action": "Fetching https://esoesagency.com (95ms)",
         "status": "pass",
         "details": "Homepage loaded. \"Madrid Itinerary Made for You | Unique Custom Plans For Only €69\". 2000 chars of readable content.",
-        "durationMs": 102,
+        "durationMs": 97,
         "substeps": [
           {
             "label": "Page title",
@@ -113,7 +113,7 @@
         "action": "Following 4 relevant links",
         "status": "pass",
         "details": "Navigated to 4 relevant pages out of 9 total links.",
-        "durationMs": 119,
+        "durationMs": 136,
         "substeps": [
           {
             "label": "Links found",
@@ -123,22 +123,22 @@
           {
             "label": "/pricing/",
             "status": "pass",
-            "detail": "\"See Pricing\" (57ms)"
+            "detail": "\"See Pricing\" (70ms)"
           },
           {
             "label": "/contact/",
             "status": "pass",
-            "detail": "\"start planning\" (58ms)"
+            "detail": "\"start planning\" (113ms)"
           },
           {
             "label": "/about/",
             "status": "pass",
-            "detail": "\"About Us\" (78ms)"
+            "detail": "\"About Us\" (92ms)"
           },
           {
             "label": "/",
             "status": "pass",
-            "detail": "(117ms)"
+            "detail": "(132ms)"
           }
         ]
       },
@@ -147,7 +147,7 @@
         "action": "Scanning for contact methods across all pages",
         "status": "pass",
         "details": "Found 12 contact channel(s): 1 email, 1 phone, WhatsApp, 8 form(s), Crisp.",
-        "durationMs": 5,
+        "durationMs": 7,
         "substeps": [
           {
             "label": "Email addresses",
@@ -263,13 +263,13 @@
         "step": "verdict",
         "action": "Synthesizing results",
         "status": "partial",
-        "details": "An AI agent can PARTIALLY complete the task \"Find this agency, understand their services, and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
+        "details": "An AI agent can PARTIALLY complete the task \"Find this business, understand their services, and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
         "durationMs": 0
       }
     ],
     "verdict": "partial",
-    "verdictSummary": "An AI agent can PARTIALLY complete the task \"Find this agency, understand their services, and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
-    "totalDurationMs": 229,
-    "testedAt": "2026-03-31T17:37:56.403Z"
+    "verdictSummary": "An AI agent can PARTIALLY complete the task \"Find this business, understand their services, and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
+    "totalDurationMs": 242,
+    "testedAt": "2026-04-01T06:25:39.897Z"
   }
 }

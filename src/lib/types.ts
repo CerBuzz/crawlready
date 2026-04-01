@@ -40,12 +40,24 @@ export interface AgentStepResult {
   details: string;
   durationMs: number;
   substeps?: AgentSubstep[];
+  /** Translation key for details — used by frontend i18n */
+  detailKey?: string;
+  /** Translation key for recommendation — used by frontend i18n */
+  recommendationKey?: string;
+  /** Dynamic parameters for interpolation */
+  params?: Record<string, string | number>;
 }
 
 export interface AgentSubstep {
   label: string;
   status: AgentStepStatus;
   detail?: string;
+  /** Translation key for label — used by frontend i18n */
+  labelKey?: string;
+  /** Translation key for detail — used by frontend i18n */
+  detailKey?: string;
+  /** Dynamic parameters for interpolation */
+  params?: Record<string, string | number>;
 }
 
 export interface AgentTestResult {
