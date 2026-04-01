@@ -158,9 +158,16 @@ function buildEmailHtml(scanResult: ScanResult, agentTest: AgentTestResult, comp
   const hostname = new URL(url).hostname;
 
   const failSteps = agentTest.steps.filter(s => s.status !== "pass" && s.step !== "verdict");
+  const verdictMap: Record<string, string> = {
+    discovery: "No pudo ni cargar la p&aacute;gina.",
+    navigation: "Pudo entrar, pero no encontr&oacute; las p&aacute;ginas clave (servicios, contacto, precios).",
+    contact: "No encontr&oacute; ninguna forma de contactar con vosotros.",
+    agent_ready_forms: "No pudo enviar ninguna solicitud &mdash; no hay formularios que un agente IA pueda usar.",
+    structured_data: "No pudo entender vuestros servicios ni precios de forma autom&aacute;tica.",
+  };
   const resultSentence = failSteps.length === 0
-    ? "El agente completó la tarea con éxito."
-    : `${failSteps[failSteps.length - 1].details.split(".")[0]}.`;
+    ? "El agente complet&oacute; la tarea con &eacute;xito."
+    : verdictMap[failSteps[failSteps.length - 1].step] || "No pudo completar la tarea.";
 
   return `
 <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:600px;margin:0 auto;color:#1f2937">

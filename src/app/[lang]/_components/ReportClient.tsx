@@ -333,6 +333,29 @@ function AgenticTestSection({
               </p>
             </div>
 
+            {/* Verdict banner */}
+            {(() => {
+              const verdict = agentTest.verdict;
+              const verdictLabel = at[`verdict.${verdict}`] || verdict;
+              const verdictDetail = at[`verdict.${verdict}.detail`] || "";
+              const verdictColor = verdict === "pass" ? "#22c55e" : verdict === "partial" ? "#f97316" : "#ef4444";
+              const verdictBg = verdict === "pass" ? "rgba(34,197,94,0.08)" : verdict === "partial" ? "rgba(249,115,22,0.08)" : "rgba(239,68,68,0.08)";
+              const verdictBorder = verdict === "pass" ? "rgba(34,197,94,0.25)" : verdict === "partial" ? "rgba(249,115,22,0.25)" : "rgba(239,68,68,0.25)";
+              const verdictIcon = verdict === "pass" ? "\u2713" : verdict === "partial" ? "\u26A0" : "\u2717";
+              return (
+                <div
+                  className="rounded-lg px-5 py-4 mt-2 mb-4 flex items-start gap-3"
+                  style={{ background: verdictBg, border: `1px solid ${verdictBorder}` }}
+                >
+                  <span className="text-2xl leading-none mt-0.5" style={{ color: verdictColor }}>{verdictIcon}</span>
+                  <div>
+                    <p className="font-semibold text-base" style={{ color: verdictColor }}>{verdictLabel}</p>
+                    {verdictDetail && <p className="text-sm text-zinc-400 mt-1">{verdictDetail}</p>}
+                  </div>
+                </div>
+              );
+            })()}
+
             {/* Summary counters */}
             <div className="grid grid-cols-3 gap-4 text-center pt-4 pb-4 border-t border-b border-surface-light mb-4">
               <div>
