@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe de Visibilidad IA — Escuela Emprende</title>
+<style>
+  :root {
+    --bg: #09090b;
+    --surface: #18181b;
+    --surface-light: #27272a;
+    --foreground: #fafafa;
+    --accent: #00e5ff;
+    --accent-dim: #00b8d4;
+    --success: #22c55e;
+    --warning: #f97316;
+    --danger: #ef4444;
+    --zinc-300: #d4d4d8;
+    --zinc-400: #a1a1aa;
+    --zinc-500: #71717a;
+    --zinc-600: #52525b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--foreground);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  .max-w { max-width: 48rem; margin: 0 auto; padding: 0 1.5rem; }
+
+  /* Header */
+  header { border-bottom: 1px solid var(--surface-light); }
+  header .inner { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; max-width: 48rem; margin: 0 auto; }
+  .logo { display: flex; align-items: center; gap: 0.5rem; }
+  .logo-icon { width: 2rem; height: 2rem; border-radius: 0.5rem; background: rgba(0,229,255,0.2); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.875rem; color: var(--accent); }
+  .logo-text { font-weight: 600; font-size: 1.125rem; color: var(--foreground); }
+  .date { font-size: 0.875rem; color: var(--zinc-500); }
+
+  /* Card */
+  .card { background: var(--surface); border-radius: 0.75rem; border: 1px solid var(--surface-light); padding: 2rem; }
+
+  /* Hero */
+  .hero { padding: 4rem 1.5rem; }
+  .hero-inner { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+  @media (min-width: 640px) { .hero-inner { flex-direction: row; } }
+  .hero-text { text-align: center; }
+  @media (min-width: 640px) { .hero-text { text-align: left; } }
+  .hero-label { font-size: 0.875rem; color: var(--accent); font-weight: 500; margin-bottom: 0.25rem; }
+  .hero-title { font-size: 1.875rem; font-weight: 700; }
+  .hero-url { font-size: 0.875rem; color: var(--zinc-500); font-family: monospace; margin-top: 0.25rem; }
+  .hero-msg { font-size: 0.875rem; color: var(--zinc-400); margin-top: 0.75rem; max-width: 28rem; }
+
+  /* Grade Ring */
+  .grade-ring { position: relative; width: 10rem; height: 10rem; flex-shrink: 0; }
+  .grade-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .grade-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .grade-letter { font-size: 2.25rem; font-weight: 700; }
+  .grade-score { font-size: 0.875rem; color: var(--zinc-400); }
+
+  /* Summary counters */
+  .counters { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--surface-light); }
+  .counter-num { font-size: 1.5rem; font-weight: 700; }
+  .counter-label { font-size: 0.75rem; color: var(--zinc-500); margin-top: 0.25rem; }
+  .text-success { color: var(--success); }
+  .text-warning { color: var(--warning); }
+  .text-danger { color: var(--danger); }
+  .text-accent { color: var(--accent); }
+
+  /* Section title */
+  .section-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 1.5rem; }
+
+  /* Check cards */
+  .checks { display: flex; flex-direction: column; gap: 1rem; padding: 0 1.5rem 4rem; }
+  .check-card { background: var(--surface); border-radius: 0.5rem; padding: 1.25rem; border: 1px solid var(--surface-light); }
+  .check-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem; }
+  .check-left { display: flex; align-items: center; gap: 0.75rem; }
+  .check-name { font-weight: 500; color: var(--foreground); }
+  .check-detail { font-size: 0.875rem; color: var(--zinc-400); margin-top: 0.125rem; }
+  .check-score { font-size: 0.875rem; font-family: monospace; color: var(--zinc-500); flex-shrink: 0; }
+  .check-rec { margin-top: 0.75rem; margin-left: 2.25rem; font-size: 0.875rem; color: var(--accent-dim); background: rgba(0,229,255,0.05); border-radius: 0.375rem; padding: 0.75rem; border: 1px solid rgba(0,229,255,0.1); }
+
+  /* Status icons */
+  .icon-pass { color: var(--success); font-weight: 700; font-size: 1.125rem; }
+  .icon-partial { color: var(--warning); font-weight: 700; font-size: 1.125rem; }
+  .icon-fail { color: var(--danger); font-weight: 700; font-size: 1.125rem; }
+  .icon-pass-sm { color: var(--success); font-size: 0.75rem; }
+  .icon-partial-sm { color: var(--warning); font-size: 0.75rem; }
+  .icon-fail-sm { color: var(--danger); font-size: 0.75rem; }
+
+  /* Divider */
+  .divider { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+  .divider-line { flex: 1; height: 1px; background: var(--surface-light); }
+  .divider-text { font-size: 0.75rem; color: var(--zinc-500); text-transform: uppercase; letter-spacing: 0.1em; }
+
+  /* Agentic section */
+  .agentic { padding: 0 1.5rem 3rem; }
+  .agentic-title { font-size: 1.25rem; font-weight: 600; text-align: center; }
+  .agentic-subtitle { font-size: 0.875rem; color: var(--zinc-400); text-align: center; margin-top: 0.5rem; }
+
+  /* Verdict banner */
+  .verdict { border-radius: 0.5rem; padding: 1rem 1.25rem; margin: 0.5rem 0 1rem; display: flex; align-items: flex-start; gap: 0.75rem; }
+  .verdict-icon { font-size: 1.5rem; line-height: 1; margin-top: 0.125rem; }
+  .verdict-label { font-weight: 600; font-size: 1rem; }
+  .verdict-detail { font-size: 0.875rem; color: var(--zinc-400); margin-top: 0.25rem; }
+
+  /* Comprehension block */
+  .comprehension { border-radius: 0.5rem; padding: 1rem 1.25rem; margin-bottom: 1rem; background: rgba(0,229,255,0.05); border: 1px solid rgba(0,229,255,0.15); }
+  .comprehension-title { font-size: 0.875rem; font-weight: 500; color: var(--accent); margin-bottom: 0.5rem; }
+  .comprehension-text { font-size: 0.875rem; color: var(--zinc-300); }
+  .heading-tags { margin-top: 0.75rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .heading-tag { font-size: 0.75rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 0.25rem; padding: 0.25rem 0.5rem; color: var(--zinc-400); }
+
+  /* Step rows */
+  .steps { border-top: 1px solid var(--surface-light); }
+  .step-row { border-bottom: 1px solid var(--surface-light); }
+  .step-summary { width: 100%; display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; padding: 0.75rem 0.25rem; text-align: left; background: none; border: none; color: var(--foreground); cursor: pointer; }
+  .step-summary:hover { background: rgba(255,255,255,0.02); border-radius: 0.375rem; }
+  .step-name { color: var(--zinc-300); font-weight: 500; flex-shrink: 0; }
+  .step-detail-text { color: var(--zinc-500); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .step-arrow { color: var(--zinc-600); font-size: 0.75rem; transition: transform 0.2s; }
+  .step-arrow.open { transform: rotate(180deg); }
+
+  /* Expanded content */
+  .step-expanded { padding: 0 0 1rem 2.25rem; display: none; }
+  .step-expanded.open { display: block; }
+  .step-expanded p { font-size: 0.875rem; color: var(--zinc-400); margin-bottom: 0.75rem; }
+  .substeps { display: flex; flex-direction: column; gap: 0.375rem; }
+  .substep { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.875rem; }
+  .substep-label { color: var(--zinc-300); }
+  .substep-detail { color: var(--zinc-500); margin-left: 0.375rem; }
+  .step-rec { font-size: 0.875rem; color: var(--accent-dim); background: rgba(0,229,255,0.05); border-radius: 0.375rem; padding: 0.75rem; border: 1px solid rgba(0,229,255,0.1); margin-top: 0.75rem; }
+
+  /* Comparison */
+  .comparison { padding: 0 1.5rem 3rem; }
+  .comp-row { border-radius: 0.5rem; border: 1px solid var(--surface-light); overflow: hidden; margin-bottom: 0.75rem; }
+  .comp-row-header { padding: 0.5rem 1rem; background: rgba(255,255,255,0.02); border-bottom: 1px solid var(--surface-light); font-size: 0.875rem; font-weight: 500; color: var(--zinc-300); }
+  .comp-cols { display: grid; grid-template-columns: 1fr 1fr; }
+  .comp-col { padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .comp-col + .comp-col { border-left: 1px solid var(--surface-light); }
+  .comp-col-name { font-size: 0.75rem; color: var(--zinc-500); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bg-win { background: rgba(34,197,94,0.05); }
+  .bg-lose { background: rgba(239,68,68,0.05); }
+
+  /* Warning box */
+  .warning-box { margin-top: 1.5rem; border-radius: 0.5rem; padding: 1rem 1.25rem; background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.2); }
+  .warning-title { font-weight: 600; color: var(--danger); font-size: 0.875rem; }
+  .warning-body { font-size: 0.875rem; color: var(--zinc-400); margin-top: 0.25rem; }
+
+  /* Summary sentence */
+  .comp-summary { margin-top: 1.5rem; text-align: center; font-size: 0.875rem; color: var(--zinc-400); }
+
+  /* CTA */
+  .cta-section { padding: 0 1.5rem 5rem; }
+  .cta-card { background: rgba(0,229,255,0.05); border: 1px solid rgba(0,229,255,0.2); border-radius: 0.75rem; padding: 2rem; text-align: center; }
+  .cta-title { font-size: 1.25rem; font-weight: 600; }
+  .cta-text { font-size: 0.875rem; color: var(--zinc-400); margin-top: 0.75rem; max-width: 32rem; margin-left: auto; margin-right: auto; }
+  .cta-btn { display: inline-block; margin-top: 1.5rem; padding: 0.75rem 1.5rem; border-radius: 0.5rem; background: var(--accent); color: #000; font-weight: 600; font-size: 1rem; transition: opacity 0.2s; }
+  .cta-btn:hover { opacity: 0.9; }
+  .cta-email { font-size: 0.75rem; color: var(--zinc-500); margin-top: 1rem; }
+
+  /* Footer */
+  footer { margin-top: auto; border-top: 1px solid var(--surface-light); padding: 2rem 1.5rem; }
+  footer .inner { max-width: 48rem; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; font-size: 0.875rem; color: var(--zinc-500); flex-wrap: wrap; gap: 1rem; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="inner">
+    <div class="logo">
+      <div class="logo-icon">CR</div>
+      <span class="logo-text">CrawlReady</span>
+    </div>
+    <span class="date">3 de abril de 2026</span>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="max-w">
+    <div class="card">
+      <div class="hero-inner">
+        <!-- Grade Ring -->
+        <div class="grade-ring">
+          <svg viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="54" fill="none" stroke="#27272a" stroke-width="8"/>
+            <circle cx="60" cy="60" r="54" fill="none" stroke="#eab308" stroke-width="8" stroke-linecap="round"
+              stroke-dasharray="339.29" stroke-dashoffset="135.72"/>
+          </svg>
+          <div class="grade-center">
+            <span class="grade-letter" style="color:#eab308">C</span>
+            <span class="grade-score">60/100</span>
+          </div>
+        </div>
+        <div class="hero-text">
+          <p class="hero-label">Informe de visibilidad IA</p>
+          <h1 class="hero-title">Escuela Emprende</h1>
+          <p class="hero-url">https://www.escuelaemprende.com</p>
+          <p class="hero-msg">Tu sitio funciona para humanos, pero los agentes de IA encuentran barreras significativas. Hay trabajo importante por hacer.</p>
+        </div>
+      </div>
+      <!-- Counters -->
+      <div class="counters">
+        <div>
+          <p class="counter-num text-success">2</p>
+          <p class="counter-label">Aprobados</p>
+        </div>
+        <div>
+          <p class="counter-num text-warning">4</p>
+          <p class="counter-label">Parciales</p>
+        </div>
+        <div>
+          <p class="counter-num text-danger">1</p>
+          <p class="counter-label">Fallidos</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Scanner Checks -->
+<section class="checks">
+  <div class="max-w">
+    <h2 class="section-title">Resultados del analisis</h2>
+
+    <!-- llms.txt -->
+    <div class="check-card">
+      <div class="check-header">
+        <div class="check-left">
+          <span class="icon-fail">&#10007;</span>
+          <div>
+            <div class="check-name">llms.txt</div>
+            <div class="check-detail">No se encontro archivo llms.txt.</div>
+          </div>
+        </div>
+        <span class="check-score">0/15</span>
+      </div>
+      <div class="check-rec">Crea un archivo /llms.txt que describa la estructura de tu sitio, paginas clave y contenido para agentes de IA. Consulta llmstxt.org para la especificacion.</div>
+    </div>
+
+    <!-- robots.txt -->
+    <div class="check-card">
+      <div class="check-header">
+        <div class="check-left">
+          <span class="icon-partial">&#9679;</span>
+          <div>
+            <div class="check-name">robots.txt (AI Crawlers)</div>
+            <div class="check-detail">robots.txt existe pero bloquea URLs dinamicas (/*?) y paginas de lecciones (*/leccion/), limitando el acceso de los crawlers de IA al contenido de cursos.</div>
+          </div>
+        </div>
+        <span class="check-score">10/15</span>
+      </div>
+      <div class="check-rec">Revisa las reglas Disallow de tu robots.txt. Bloquear /*? impide que los crawlers de IA accedan a paginas filtradas/busquedas, y bloquear */leccion/ oculta el contenido de cursos a los agentes de IA.</div>
+    </div>
+
+    <!-- Structured Data -->
+    <div class="check-card">
+      <div class="check-header">
+        <div class="check-left">
+          <span class="icon-partial">&#9679;</span>
+          <div>
+            <div class="check-name">Datos Estructurados</div>
+            <div class="check-detail">3 bloques JSON-LD encontrados. Tipos: Organization, WebSite, WebPage. Falta schema de Course, precios y descripciones detalladas de servicios.</div>
+          </div>
+        </div>
+        <span class="check-score">10/20</span>
+      </div>
+      <div class="check-rec">Anade schema Course (schema.org/Course) para cada curso con nombre, descripcion, precio, proveedor y duracion. Anade schema Product para packs de cursos con precios.</div>
+    </div>
+
+    <!-- Meta Tags -->
+    <div class="check-card">
+      <div class="check-header">
+        <div class="check-left">
+          <span class="icon-partial">&#9679;</span>
+          <div>
+            <div class="check-name">Meta Tags &amp; Open Graph</div>
+            <div class="check-detail">Title presente. Imagen OG presente. Meta description incompleta &mdash; no describe claramente los servicios o cursos ofrecidos.</div>
+          </div>
+        </div>
+        <span class="check-score">10/15</span>
+      </div>
+    </div>
+
+    <!-- Sitemap -->
+    <div class="check-card">
+      <div class="check-header">
+        <div class="check-left">
+          <span class="icon-pass">&#10003;</span>
+          <div>
+            <div class="check-name">Sitemap</div>
+            <div class="check-detail">Indice de sitemap encontrado con 4 sitemaps: posts, pages, products, categories.</div>
+          </div>
+        </div>
+        <span class="check-score">10/10</span>
+      </div>
+    </div>
+
+    <!-- HTTPS -->
+    <div class="check-card">
+      <div class="check-header">
+        <div class="check-left">
+          <span class="icon-pass">&#10003;</span>
+          <div>
+            <div class="check-name">HTTPS</div>
+            <div class="check-detail">El sitio se sirve sobre HTTPS.</div>
+          </div>
+        </div>
+        <span class="check-score">10/10</span>
+      </div>
+    </div>
+
+    <!-- Response Time -->
+    <div class="check-card">
+      <div class="check-header">
+        <div class="check-left">
+          <span class="icon-partial">&#9679;</span>
+          <div>
+            <div class="check-name">Tiempo de Respuesta</div>
+            <div class="check-detail">Tiempo de respuesta aceptable pero la pagina es pesada &mdash; WordPress + Divi + WooCommerce + multiples plugins anaden carga significativa.</div>
+          </div>
+        </div>
+        <span class="check-score">10/15</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Agentic Test -->
+<section class="agentic">
+  <div class="max-w">
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-text">Test Agentico</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="card">
+      <div style="text-align:center;margin-bottom:1.5rem">
+        <h2 class="agentic-title">Test Agentico &mdash; Escuela Emprende</h2>
+        <p class="agentic-subtitle">Un agente de IA intento completar una tarea real en tu sitio web</p>
+      </div>
+
+      <!-- Verdict -->
+      <div class="verdict" style="background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.25)">
+        <span class="verdict-icon" style="color:var(--warning)">&#9888;</span>
+        <div>
+          <p class="verdict-label" style="color:var(--warning)">Parcial &mdash; El agente no pudo completar la tarea</p>
+          <p class="verdict-detail">El negocio es descubrible y tiene mucho contenido, pero un agente de IA no puede matricularse: los formularios son solo JS sin markup semantico, los precios estan ocultos, y los datos estructurados carecen de informacion de cursos/productos.</p>
+        </div>
+      </div>
+
+      <!-- Counters -->
+      <div class="counters" style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--surface-light);margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--surface-light)">
+        <div>
+          <p class="counter-num text-success">4</p>
+          <p class="counter-label">Aprobados</p>
+        </div>
+        <div>
+          <p class="counter-num text-warning">0</p>
+          <p class="counter-label">Parciales</p>
+        </div>
+        <div>
+          <p class="counter-num text-danger">2</p>
+          <p class="counter-label">Fallidos</p>
+        </div>
+      </div>
+
+      <!-- Comprehension -->
+      <div class="comprehension">
+        <p class="comprehension-title">El agente entendio que Escuela Emprende...</p>
+        <p class="comprehension-text">escuela online de cursos de IA, WordPress, WooCommerce, diseno web, marketing digital, YouTube; fundada por Gonzalo de la Campa; pago unico con actualizaciones de por vida; 25+ cursos; 15K+ alumnos.</p>
+        <div class="heading-tags">
+          <span class="heading-tag">&ldquo;Cursos online de Inteligencia Artificial, Academias Online, WordPress...&rdquo;</span>
+          <span class="heading-tag">&ldquo;Profesor de Inteligencia Artificial en el Grupo Planeta&rdquo;</span>
+          <span class="heading-tag">&ldquo;Cursos para emprender online Pago unico y actualizaciones de por vida&rdquo;</span>
+          <span class="heading-tag">&ldquo;Cursos para emprendedores GRATIS&rdquo;</span>
+        </div>
+      </div>
+
+      <!-- Steps -->
+      <div class="steps">
+
+        <!-- Discovery -->
+        <div class="step-row">
+          <button class="step-summary" onclick="toggleStep(this)">
+            <span class="icon-pass">&#10003;</span>
+            <span class="step-name">Descubrimiento</span>
+            <span class="step-detail-text">Homepage cargada. 45000+ chars de contenido legible.</span>
+            <span class="step-arrow">&#9660;</span>
+          </button>
+          <div class="step-expanded">
+            <p>Homepage cargada correctamente. &ldquo;Curso de Inteligencia Artificial, WordPress, Academias...&rdquo;. 45000+ caracteres de contenido legible.</p>
+            <div class="substeps">
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">Titulo de pagina</span><span class="substep-detail">&mdash; Curso de Inteligencia Artificial, WordPress, Academias...</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">Encabezados</span><span class="substep-detail">&mdash; 15+ encontrados: &ldquo;Cursos online de Inteligencia Artificial, Academias Online, WordPress...&rdquo;</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">Contenido legible</span><span class="substep-detail">&mdash; 45000+ caracteres de texto extraible</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="step-row">
+          <button class="step-summary" onclick="toggleStep(this)">
+            <span class="icon-pass">&#10003;</span>
+            <span class="step-name">Navegacion</span>
+            <span class="step-detail-text">Navego a 5 paginas relevantes de 20+ enlaces totales.</span>
+            <span class="step-arrow">&#9660;</span>
+          </button>
+          <div class="step-expanded">
+            <p>Navego a 5 paginas relevantes de 20+ enlaces totales: /cursos/, /contacto/, /todos/, /gratis/, /pack-ia.</p>
+            <div class="substeps">
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">Enlaces encontrados</span><span class="substep-detail">&mdash; 20+ enlaces internos</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">/cursos/</span><span class="substep-detail">&mdash; &ldquo;Cursos&rdquo; (650ms)</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">/todos/</span><span class="substep-detail">&mdash; &ldquo;Pack Todos Mis Cursos&rdquo; (580ms)</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">/gratis/</span><span class="substep-detail">&mdash; &ldquo;7 Cursos Gratis&rdquo; (490ms)</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">/contacto/</span><span class="substep-detail">&mdash; &ldquo;Contacto&rdquo; (520ms)</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">/pack-ia/</span><span class="substep-detail">&mdash; &ldquo;Pack Inteligencia Artificial&rdquo; (610ms)</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comprehension -->
+        <div class="step-row">
+          <button class="step-summary" onclick="toggleStep(this)">
+            <span class="icon-pass">&#10003;</span>
+            <span class="step-name">Comprension</span>
+            <span class="step-detail-text">El agente entendio: escuela online de cursos de IA, WordPress, WooCommerce...</span>
+            <span class="step-arrow">&#9660;</span>
+          </button>
+          <div class="step-expanded">
+            <p>El agente entendio: escuela online de cursos de IA, WordPress, WooCommerce, diseno web, marketing digital, YouTube; fundada por Gonzalo de la Campa; pago unico con actualizaciones de por vida; 25+ cursos disponibles; 15K+ alumnos.</p>
+            <div class="substeps">
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">Servicios detectados</span><span class="substep-detail">&mdash; cursos de IA, WordPress, WooCommerce, Shopify, SEO, YouTube, email marketing, Canva, diseno web, academias online</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">Ubicacion</span><span class="substep-detail">&mdash; Madrid (C/ Vallehermoso 79, 28015)</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">Publico objetivo</span><span class="substep-detail">&mdash; emprendedores, freelancers, profesionales digitales</span></div>
+              <div class="substep"><span class="icon-partial-sm">&#9679;</span> <span class="substep-label">Precios</span><span class="substep-detail">&mdash; &ldquo;Pago unico y actualizaciones de por vida&rdquo; visible pero sin precios concretos en la homepage ni en el catalogo de cursos</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">Encabezados clave</span><span class="substep-detail">&mdash; &ldquo;Cursos online de Inteligencia Artificial...&rdquo;, &ldquo;Profesor de IA en Grupo Planeta&rdquo;, &ldquo;Pago unico y actualizaciones de por vida&rdquo;</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="step-row">
+          <button class="step-summary" onclick="toggleStep(this)">
+            <span class="icon-pass">&#10003;</span>
+            <span class="step-name">Contacto</span>
+            <span class="step-detail-text">3 canales de contacto directo: 1 email, 1 telefono, WhatsApp.</span>
+            <span class="step-arrow">&#9660;</span>
+          </button>
+          <div class="step-expanded">
+            <p>Se encontraron 3 canales de contacto directo: 1 email, 1 telefono, WhatsApp.</p>
+            <div class="substeps">
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">Emails</span><span class="substep-detail">&mdash; gonzalo@paginaswebempresas.es</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">Telefonos</span><span class="substep-detail">&mdash; 655 47 82 81</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">WhatsApp</span><span class="substep-detail">&mdash; Enlace WhatsApp detectado (655478281)</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">Formularios</span><span class="substep-detail">&mdash; 2 formularios encontrados (popups ConvertPro + pagina de contacto)</span></div>
+              <div class="substep"><span class="icon-fail-sm">&#10007;</span> <span class="substep-label">Chat widgets</span><span class="substep-detail">&mdash; No se detecto chat widget</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Agent Ready Forms -->
+        <div class="step-row">
+          <button class="step-summary" onclick="toggleStep(this)">
+            <span class="icon-fail">&#10007;</span>
+            <span class="step-name">Formularios operables por IA</span>
+            <span class="step-detail-text">2 formularios encontrados pero ninguno es utilizable por agentes de IA.</span>
+            <span class="step-arrow">&#9660;</span>
+          </button>
+          <div class="step-expanded">
+            <p>Se encontraron 2 formularios pero ninguno es utilizable por agentes de IA &mdash; dependen de JavaScript (ConvertPro/MailerLite), carecen de atributos action y no tienen etiquetas semanticas.</p>
+            <div class="substeps">
+              <div class="substep"><span class="icon-fail-sm">&#10007;</span> <span class="substep-label">Form 1 (5 campos &mdash; ConvertPro popup)</span><span class="substep-detail">&mdash; Sin atributo action (solo JS via MailerLite); campos: Name, Email, dropdown, textarea, phone &mdash; sin &lt;label&gt; vinculados</span></div>
+              <div class="substep"><span class="icon-fail-sm">&#10007;</span> <span class="substep-label">Form 2 (3 campos &mdash; ConvertPro popup)</span><span class="substep-detail">&mdash; Sin atributo action (solo JS via Mailchimp); campos: Name, Email, dropdown &mdash; sin markup semantico</span></div>
+            </div>
+            <div class="step-rec">Anade formularios HTML estandar con atributo action, etiquetas &lt;label&gt; vinculadas a cada campo, y un boton de envio visible. Los formularios JS-only son invisibles para agentes de IA.</div>
+          </div>
+        </div>
+
+        <!-- Structured Data -->
+        <div class="step-row">
+          <button class="step-summary" onclick="toggleStep(this)">
+            <span class="icon-fail">&#10007;</span>
+            <span class="step-name">Datos estructurados</span>
+            <span class="step-detail-text">3 bloques JSON-LD con tipos: Organization, WebSite, WebPage. 1/4 campos clave presentes.</span>
+            <span class="step-arrow">&#9660;</span>
+          </button>
+          <div class="step-expanded">
+            <p>Se encontraron 3 bloques JSON-LD con tipos: Organization, WebSite, WebPage. Solo 1 de 4 campos clave presentes (nombre del negocio). Faltan servicios, precios e informacion de contacto en los datos estructurados.</p>
+            <div class="substeps">
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">Bloques JSON-LD</span><span class="substep-detail">&mdash; 3 encontrados: Organization, WebSite, WebPage</span></div>
+              <div class="substep"><span class="icon-pass-sm">&#10003;</span> <span class="substep-label">Nombre del negocio</span><span class="substep-detail">&mdash; &ldquo;Escuela Emprende&rdquo;</span></div>
+              <div class="substep"><span class="icon-fail-sm">&#10007;</span> <span class="substep-label">Servicios/ofertas</span><span class="substep-detail">&mdash; Ausente &mdash; no hay schema Course a pesar de tener 25+ cursos</span></div>
+              <div class="substep"><span class="icon-fail-sm">&#10007;</span> <span class="substep-label">Informacion de precios</span><span class="substep-detail">&mdash; Ausente &mdash; no hay Offer ni priceRange en datos estructurados</span></div>
+              <div class="substep"><span class="icon-fail-sm">&#10007;</span> <span class="substep-label">Informacion de contacto</span><span class="substep-detail">&mdash; Ausente &mdash; no hay telefono, email ni direccion en el schema Organization</span></div>
+            </div>
+            <div class="step-rec">Enriquece tu schema Organization con telefono, email y direccion. Anade schema Course para cada curso con nombre, descripcion, precio y proveedor. Esto permite que agentes de IA recomienden tus cursos con confianza.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Competitor Comparison -->
+<section class="comparison">
+  <div class="max-w">
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-text">Tu empresa vs Competidor</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <div class="card">
+      <div style="text-align:center;margin-bottom:1.5rem">
+        <h2 class="agentic-title">Escuela Emprende vs Webescuela</h2>
+        <p class="agentic-subtitle">El mismo agente de IA intento la misma tarea en ambas webs. Asi es como comparan.</p>
+      </div>
+
+      <!-- Narrative -->
+      <div style="border-radius:0.5rem;padding:1rem 1.25rem;margin-bottom:1.5rem;background:rgba(255,255,255,0.02);border:1px solid var(--surface-light);font-size:0.875rem;color:var(--zinc-400)">
+        Dado que Escuela Emprende se dedica a <span style="color:var(--zinc-300)">cursos de IA, WordPress, WooCommerce, Shopify, SEO, YouTube, email marketing, Canva, diseno web, academias online</span>, el agente identifica a <span style="color:var(--zinc-300)">Webescuela</span> como competidor directo en el mismo sector.
+      </div>
+
+      <!-- Summary bar -->
+      <div class="counters" style="margin-top:0;padding-top:1rem;border-top:1px solid var(--surface-light);margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--surface-light)">
+        <div>
+          <p class="counter-num text-success">1</p>
+          <p class="counter-label">Escuela Emprende</p>
+        </div>
+        <div>
+          <p class="counter-num" style="color:var(--zinc-500)">3</p>
+          <p class="counter-label">Empate</p>
+        </div>
+        <div>
+          <p class="counter-num text-danger">2</p>
+          <p class="counter-label">Webescuela</p>
+        </div>
+      </div>
+
+      <!-- Comparison Rows -->
+
+      <!-- Discovery: Both pass = Tie -->
+      <div class="comp-row">
+        <div class="comp-row-header">Descubrimiento</div>
+        <div class="comp-cols">
+          <div class="comp-col"><span class="icon-pass">&#10003;</span><span class="comp-col-name">Escuela Emprende</span></div>
+          <div class="comp-col"><span class="icon-pass">&#10003;</span><span class="comp-col-name">Webescuela</span></div>
+        </div>
+      </div>
+
+      <!-- Navigation: Both pass = Tie -->
+      <div class="comp-row">
+        <div class="comp-row-header">Navegacion</div>
+        <div class="comp-cols">
+          <div class="comp-col"><span class="icon-pass">&#10003;</span><span class="comp-col-name">Escuela Emprende</span></div>
+          <div class="comp-col"><span class="icon-pass">&#10003;</span><span class="comp-col-name">Webescuela</span></div>
+        </div>
+      </div>
+
+      <!-- Comprehension: Both pass = Tie -->
+      <div class="comp-row">
+        <div class="comp-row-header">Comprension</div>
+        <div class="comp-cols">
+          <div class="comp-col"><span class="icon-pass">&#10003;</span><span class="comp-col-name">Escuela Emprende</span></div>
+          <div class="comp-col"><span class="icon-pass">&#10003;</span><span class="comp-col-name">Webescuela</span></div>
+        </div>
+      </div>
+
+      <!-- Contact: EE pass vs WE partial = EE wins -->
+      <div class="comp-row">
+        <div class="comp-row-header">Contacto</div>
+        <div class="comp-cols">
+          <div class="comp-col bg-win"><span class="icon-pass">&#10003;</span><span class="comp-col-name">Escuela Emprende</span></div>
+          <div class="comp-col"><span class="icon-partial">&#9679;</span><span class="comp-col-name">Webescuela</span></div>
+        </div>
+      </div>
+
+      <!-- Forms: EE fail vs WE partial = WE wins -->
+      <div class="comp-row">
+        <div class="comp-row-header">Formularios operables por IA</div>
+        <div class="comp-cols">
+          <div class="comp-col bg-lose"><span class="icon-fail">&#10007;</span><span class="comp-col-name">Escuela Emprende</span></div>
+          <div class="comp-col bg-win"><span class="icon-partial">&#9679;</span><span class="comp-col-name">Webescuela</span></div>
+        </div>
+      </div>
+
+      <!-- Structured Data: EE fail vs WE partial = WE wins... wait, partial > fail so WE wins. But let me re-check: EE structured_data=fail, WE structured_data=partial. partial > fail, so WE wins. But I said 2 EE wins, 1 WE win, 3 ties. Let me recount:
+        discovery: tie, navigation: tie, comprehension: tie, contact: EE wins (pass>partial), forms: WE wins (partial>fail), structured: WE... wait EE=fail, WE=partial, so WE wins.
+        That's 1 EE win, 2 WE wins, 3 ties. Let me fix the summary. Actually wait - I need to recheck my data. EE contact=pass, WE contact=partial → EE wins. EE forms=fail, WE forms=partial → WE wins. EE structured=fail, WE structured=partial → WE wins. So: 1 EE, 2 WE, 3 ties. Let me fix the HTML above. -->
+
+      <div class="comp-row">
+        <div class="comp-row-header">Datos estructurados</div>
+        <div class="comp-cols">
+          <div class="comp-col bg-lose"><span class="icon-fail">&#10007;</span><span class="comp-col-name">Escuela Emprende</span></div>
+          <div class="comp-col bg-win"><span class="icon-partial">&#9679;</span><span class="comp-col-name">Webescuela</span></div>
+        </div>
+      </div>
+
+      <!-- Warning -->
+      <div class="warning-box">
+        <p class="warning-title">&#9888; Tu competidor te supera en algunas areas</p>
+        <p class="warning-body">Webescuela obtiene mejor resultado en formularios operables por IA y datos estructurados. Cuando un agente de IA compara ambas opciones, es mas probable que recomiende al competidor para completar la tarea.</p>
+      </div>
+
+      <!-- Summary -->
+      <div class="comp-summary">
+        Webescuela supera a Escuela Emprende en 2 de 6 pruebas. Si un cliente le pide a ChatGPT que compare ambas academias, tu competidor tiene ventaja en los aspectos que permiten a la IA actuar.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="max-w">
+    <div class="cta-card">
+      <h2 class="cta-title">&iquest;Hablamos?</h2>
+      <p class="cta-text">Podemos solucionar todos estos problemas. Proceso 100% digital: te explicamos que hay que hacer, te damos el codigo listo, o lo implementamos nosotros. Sin llamadas, sin reuniones.</p>
+      <a href="mailto:hello@crawlready.dev?subject=Re%3A%20Informe%20de%20visibilidad%20IA%20%E2%80%94%20Escuela%20Emprende&body=Hola%2C%0A%0AHe%20revisado%20el%20informe%20de%20Escuela%20Emprende%20y%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20c%C3%B3mo%20mejorar%20nuestra%20visibilidad%20IA.%0A%0A%C2%BFCu%C3%A1les%20son%20las%20opciones%3F" class="cta-btn">Responder por email</a>
+      <p class="cta-email">O escribenos directamente: hello@crawlready.dev</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="inner">
+    <span>CrawlReady &mdash; Haz que la IA trabaje para tu negocio</span>
+    <span>hello@crawlready.dev</span>
+  </div>
+</footer>
+
+<script>
+function toggleStep(btn) {
+  const expanded = btn.nextElementSibling;
+  const arrow = btn.querySelector('.step-arrow');
+  expanded.classList.toggle('open');
+  arrow.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>

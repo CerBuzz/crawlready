@@ -1,0 +1,803 @@
+{
+  "slug": "escuela-emprende",
+  "companyName": "Escuela Emprende",
+  "scanResult": {
+    "url": "https://www.escuelaemprende.com",
+    "totalScore": 60,
+    "maxPossibleScore": 100,
+    "grade": "C",
+    "checks": [
+      {
+        "name": "llms.txt",
+        "score": 0,
+        "maxScore": 15,
+        "status": "fail",
+        "details": "No llms.txt file found.",
+        "detailKey": "llmsTxt.fail",
+        "recommendation": "Create a /llms.txt file that describes your site structure, key pages, and content for AI agents. See llmstxt.org for the specification.",
+        "recommendationKey": "llmsTxt.recFail"
+      },
+      {
+        "name": "robots.txt (AI Crawlers)",
+        "score": 10,
+        "maxScore": 15,
+        "status": "partial",
+        "details": "robots.txt exists but blocks dynamic URLs (/*?) and lesson pages (*/leccion/), limiting AI crawler access to course content.",
+        "detailKey": "robots.partial",
+        "recommendation": "Review your robots.txt Disallow rules. Blocking /*? prevents AI crawlers from accessing filtered/search pages, and blocking */leccion/ hides your course content from AI agents.",
+        "recommendationKey": "robots.recPartial"
+      },
+      {
+        "name": "Structured Data",
+        "score": 10,
+        "maxScore": 20,
+        "status": "partial",
+        "details": "3 JSON-LD block(s) found. Schema types: Organization, WebSite, WebPage. Missing Course schema, pricing, and detailed service descriptions.",
+        "detailKey": "structured.found",
+        "params": {
+          "findings": "3 JSON-LD block(s) found. Schema types: Organization, WebSite, WebPage. Missing Course schema, pricing, and detailed service descriptions"
+        },
+        "recommendation": "Add Course schema (schema.org/Course) for each course with name, description, price, provider, and duration. Add Product schema for course packs with pricing.",
+        "recommendationKey": "structured.recPartial"
+      },
+      {
+        "name": "Meta Tags & Open Graph",
+        "score": 10,
+        "maxScore": 15,
+        "status": "partial",
+        "details": "Title tag present. OG image present. Meta description incomplete — does not clearly describe services or courses offered.",
+        "detailKey": "meta.found",
+        "params": {
+          "findings": "Title tag present. OG image present. Meta description incomplete"
+        }
+      },
+      {
+        "name": "Sitemap",
+        "score": 10,
+        "maxScore": 10,
+        "status": "pass",
+        "details": "Sitemap index found with 4 sitemap(s): posts, pages, products, categories.",
+        "detailKey": "sitemap.index",
+        "params": {
+          "count": 4
+        }
+      },
+      {
+        "name": "HTTPS",
+        "score": 10,
+        "maxScore": 10,
+        "status": "pass",
+        "details": "Site is served over HTTPS.",
+        "detailKey": "https.pass"
+      },
+      {
+        "name": "Response Time",
+        "score": 10,
+        "maxScore": 15,
+        "status": "partial",
+        "details": "Acceptable response time but page is heavy — WordPress + Divi + WooCommerce + multiple plugins add significant load.",
+        "detailKey": "response.acceptable",
+        "params": {
+          "ms": 1800
+        }
+      }
+    ],
+    "scannedAt": "2026-04-03T14:30:00.000Z"
+  },
+  "agentTest": {
+    "url": "https://www.escuelaemprende.com",
+    "task": "Quiero aprender a crear una tienda online con WordPress. Encuentra Escuela Emprende, revisa sus cursos de WooCommerce, y matriculame.",
+    "steps": [
+      {
+        "step": "discovery",
+        "action": "Fetching https://www.escuelaemprende.com (1800ms)",
+        "status": "pass",
+        "details": "Homepage loaded. \"Curso de Inteligencia Artificial, WordPress, Academias...\". 45000+ chars of readable content.",
+        "detailKey": "discovery.pass",
+        "durationMs": 1800,
+        "substeps": [
+          {
+            "label": "Page title",
+            "labelKey": "substep.pageTitle",
+            "status": "pass",
+            "detail": "Curso de Inteligencia Artificial, WordPress, Academias...",
+            "detailKey": "substep.titleFound",
+            "params": {
+              "title": "Curso de Inteligencia Artificial, WordPress, Academias..."
+            }
+          },
+          {
+            "label": "Headings",
+            "labelKey": "substep.headings",
+            "status": "pass",
+            "detail": "15+ found: \"Cursos online de Inteligencia Artificial, Academias Online, WordPress...\"",
+            "detailKey": "substep.headingsFound",
+            "params": {
+              "count": 15,
+              "first": "Cursos online de Inteligencia Artificial, Academias Online, WordPress..."
+            }
+          },
+          {
+            "label": "Readable content",
+            "labelKey": "substep.readableContent",
+            "status": "pass",
+            "detail": "45000+ chars of extractable text",
+            "detailKey": "substep.contentPass",
+            "params": {
+              "chars": 45000
+            }
+          }
+        ]
+      },
+      {
+        "step": "navigation",
+        "action": "Following 5 relevant links",
+        "status": "pass",
+        "details": "Navigated to 5 relevant pages out of 20+ total links: /cursos/, /contacto/, /todos/, /gratis/, /pack-ia.",
+        "detailKey": "navigation.pass",
+        "params": {
+          "loaded": 5,
+          "total": 20
+        },
+        "durationMs": 3200,
+        "substeps": [
+          {
+            "label": "Links found",
+            "labelKey": "substep.linksFound",
+            "status": "pass",
+            "detail": "20+ internal links",
+            "detailKey": "substep.linksCount",
+            "params": {
+              "count": 20
+            }
+          },
+          {
+            "label": "/cursos/",
+            "status": "pass",
+            "detail": "\"Cursos\" (650ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "Cursos",
+              "ms": 650
+            }
+          },
+          {
+            "label": "/todos/",
+            "status": "pass",
+            "detail": "\"Pack Todos Mis Cursos\" (580ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "Pack Todos Mis Cursos",
+              "ms": 580
+            }
+          },
+          {
+            "label": "/gratis/",
+            "status": "pass",
+            "detail": "\"7 Cursos Gratis\" (490ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "7 Cursos Gratis",
+              "ms": 490
+            }
+          },
+          {
+            "label": "/contacto/",
+            "status": "pass",
+            "detail": "\"Contacto\" (520ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "Contacto",
+              "ms": 520
+            }
+          },
+          {
+            "label": "/pack-ia/",
+            "status": "pass",
+            "detail": "\"Pack Inteligencia Artificial\" (610ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "Pack Inteligencia Artificial",
+              "ms": 610
+            }
+          }
+        ]
+      },
+      {
+        "step": "comprehension",
+        "action": "Analyzing content to understand what this business does",
+        "status": "pass",
+        "details": "The agent understood: escuela online de cursos de IA, WordPress, WooCommerce, diseño web, marketing digital, YouTube; fundada por Gonzalo de la Campa; pago unico con actualizaciones de por vida; 25+ cursos disponibles; 15K+ alumnos.",
+        "detailKey": "comprehension.pass",
+        "durationMs": 8,
+        "substeps": [
+          {
+            "label": "Services detected",
+            "labelKey": "substep.servicesDetected",
+            "status": "pass",
+            "detail": "cursos de IA, WordPress, WooCommerce, Shopify, SEO, YouTube, email marketing, Canva, diseño web, academias online",
+            "detailKey": "substep.servicesDetectedList",
+            "params": {
+              "list": "cursos de IA, WordPress, WooCommerce, Shopify, SEO, YouTube, email marketing, Canva, diseño web, academias online",
+              "count": 10
+            }
+          },
+          {
+            "label": "Location",
+            "labelKey": "substep.location",
+            "status": "pass",
+            "detail": "Madrid (C/ Vallehermoso 79, 28015)",
+            "detailKey": "substep.locationFound",
+            "params": {
+              "cities": "Madrid"
+            }
+          },
+          {
+            "label": "Target audience",
+            "labelKey": "substep.audience",
+            "status": "pass",
+            "detail": "emprendedores, freelancers, profesionales digitales",
+            "detailKey": "substep.audienceFound",
+            "params": {
+              "list": "emprendedores, freelancers, profesionales digitales"
+            }
+          },
+          {
+            "label": "Pricing",
+            "labelKey": "substep.pricing",
+            "status": "partial",
+            "detail": "\"Pago unico y actualizaciones de por vida\" visible but no specific prices found on homepage or course catalog",
+            "detailKey": "substep.pricingPartial",
+            "params": {
+              "prices": "pago unico (amounts not visible)"
+            }
+          },
+          {
+            "label": "Key headings",
+            "labelKey": "substep.keyHeadings",
+            "status": "pass",
+            "detail": "\"Cursos online de Inteligencia Artificial, Academias Online, WordPress...\", \"Profesor de Inteligencia Artificial en el Grupo Planeta\", \"Cursos para emprender online Pago unico y actualizaciones de por vida\", \"Cursos para emprendedores GRATIS\"",
+            "detailKey": "substep.keyHeadingsList",
+            "params": {
+              "list": "\"Cursos online de Inteligencia Artificial, Academias Online, WordPress...\", \"Profesor de Inteligencia Artificial en el Grupo Planeta\", \"Cursos para emprender online Pago unico y actualizaciones de por vida\", \"Cursos para emprendedores GRATIS\""
+            }
+          }
+        ]
+      },
+      {
+        "step": "contact",
+        "action": "Scanning for direct contact methods across all pages",
+        "status": "pass",
+        "details": "Found 3 direct contact channel(s): 1 email, 1 phone, WhatsApp.",
+        "detailKey": "contact.pass",
+        "params": {
+          "count": 3,
+          "channels": "1 email, 1 phone, WhatsApp"
+        },
+        "durationMs": 5,
+        "substeps": [
+          {
+            "label": "Email addresses",
+            "labelKey": "substep.emailAddresses",
+            "status": "pass",
+            "detail": "gonzalo@paginaswebempresas.es"
+          },
+          {
+            "label": "Phone numbers",
+            "labelKey": "substep.phoneNumbers",
+            "status": "pass",
+            "detail": "655 47 82 81"
+          },
+          {
+            "label": "WhatsApp",
+            "labelKey": "substep.whatsapp",
+            "status": "pass",
+            "detail": "WhatsApp link detected (655478281)",
+            "detailKey": "substep.whatsappFound"
+          },
+          {
+            "label": "Contact forms",
+            "labelKey": "substep.contactForms",
+            "status": "pass",
+            "detail": "2 form(s) found (ConvertPro popups + contact page form)",
+            "detailKey": "substep.formsFound",
+            "params": {
+              "count": 2
+            }
+          },
+          {
+            "label": "Chat widgets",
+            "labelKey": "substep.chatWidgets",
+            "status": "fail",
+            "detail": "No chat widget detected",
+            "detailKey": "substep.chatNone"
+          }
+        ]
+      },
+      {
+        "step": "agent_ready_forms",
+        "action": "Checking 2 form(s) — can an AI agent understand and use them?",
+        "status": "fail",
+        "details": "Found 2 form(s) but none are usable by AI agents — forms rely on JavaScript (ConvertPro/MailerLite), lack action attributes, and have no semantic labels.",
+        "detailKey": "formOp.partial",
+        "recommendationKey": "rec.formOp.fail",
+        "params": {
+          "operable": 0,
+          "total": 2
+        },
+        "durationMs": 3,
+        "substeps": [
+          {
+            "label": "Form 1 (5 fields — ConvertPro popup)",
+            "status": "fail",
+            "detail": "No action attribute (JS-only via MailerLite); fields: Name, Email, dropdown, textarea, phone — but no <label> elements tied to inputs",
+            "detailKey": "substep.formNoAction",
+            "params": {
+              "fields": "Name, Email, Dropdown, Message, Phone",
+              "opaque": 2,
+              "total": 5
+            }
+          },
+          {
+            "label": "Form 2 (3 fields — ConvertPro popup)",
+            "status": "fail",
+            "detail": "No action attribute (JS-only via Mailchimp); fields: Name, Email, dropdown — no semantic markup",
+            "detailKey": "substep.formNoAction",
+            "params": {
+              "fields": "Name, Email, Dropdown",
+              "opaque": 1,
+              "total": 3
+            }
+          }
+        ]
+      },
+      {
+        "step": "structured_data",
+        "action": "Analyzing 3 JSON-LD block(s)",
+        "status": "fail",
+        "details": "Found 3 JSON-LD block(s) with types: Organization, WebSite, WebPage. 1/4 key fields present (business name only). Missing services, pricing, and contact info in structured data.",
+        "detailKey": "structuredData.fail",
+        "recommendationKey": "rec.structuredData.fail",
+        "params": {
+          "count": 3,
+          "types": "Organization, WebSite, WebPage",
+          "richness": 1
+        },
+        "durationMs": 2,
+        "substeps": [
+          {
+            "label": "JSON-LD blocks",
+            "labelKey": "substep.jsonLdBlocks",
+            "status": "pass",
+            "detail": "3 found: Organization, WebSite, WebPage",
+            "detailKey": "substep.jsonLdFound",
+            "params": {
+              "count": 3,
+              "types": "Organization, WebSite, WebPage"
+            }
+          },
+          {
+            "label": "Business name",
+            "labelKey": "substep.businessName",
+            "status": "pass",
+            "detail": "\"Escuela Emprende\"",
+            "detailKey": "substep.fieldPresent"
+          },
+          {
+            "label": "Services/offers",
+            "labelKey": "substep.servicesOffers",
+            "status": "fail",
+            "detail": "Missing — no Course or Product schema despite 25+ courses",
+            "detailKey": "substep.fieldMissing"
+          },
+          {
+            "label": "Pricing info",
+            "labelKey": "substep.pricingInfo",
+            "status": "fail",
+            "detail": "Missing — no Offer or priceRange in structured data",
+            "detailKey": "substep.fieldMissing"
+          },
+          {
+            "label": "Contact info",
+            "labelKey": "substep.contactInfo",
+            "status": "fail",
+            "detail": "Missing — no telephone, email, or address in Organization schema",
+            "detailKey": "substep.fieldMissing"
+          }
+        ]
+      },
+      {
+        "step": "verdict",
+        "action": "Synthesizing results",
+        "status": "partial",
+        "details": "The AI agent COULD NOT fully complete the task \"Quiero aprender a crear una tienda online con WordPress. Encuentra Escuela Emprende, revisa sus cursos de WooCommerce, y matriculame.\". The business is discoverable and content-rich, but an AI agent cannot enroll in a course: forms are JS-only with no semantic markup, pricing is hidden, and structured data lacks course/product information. Failures: agent_ready_forms, structured_data.",
+        "durationMs": 0
+      }
+    ],
+    "verdict": "partial",
+    "verdictSummary": "The AI agent COULD NOT fully complete the task \"Quiero aprender a crear una tienda online con WordPress. Encuentra Escuela Emprende, revisa sus cursos de WooCommerce, y matriculame.\". The business is discoverable and content-rich, but an AI agent cannot enroll in a course: forms are JS-only with no semantic markup, pricing is hidden, and structured data lacks course/product information. Failures: agent_ready_forms, structured_data.",
+    "comprehension": {
+      "services": [
+        "cursos de IA",
+        "WordPress",
+        "WooCommerce",
+        "Shopify",
+        "SEO",
+        "YouTube",
+        "email marketing",
+        "Canva",
+        "diseño web",
+        "academias online"
+      ],
+      "locations": [
+        "Madrid"
+      ],
+      "audiences": [
+        "emprendedores",
+        "freelancers",
+        "profesionales digitales"
+      ],
+      "prices": [],
+      "description": "escuela online de cursos de IA, WordPress, WooCommerce, diseño web, marketing digital, YouTube; fundada por Gonzalo de la Campa; pago unico con actualizaciones de por vida; 25+ cursos; 15K+ alumnos.",
+      "headingSample": [
+        "Cursos online de Inteligencia Artificial, Academias Online, WordPress...",
+        "Profesor de Inteligencia Artificial en el Grupo Planeta",
+        "Cursos para emprender online Pago unico y actualizaciones de por vida",
+        "Cursos para emprendedores GRATIS",
+        "Mis Cursos incluyen todo esto",
+        "Pack Todos Mis Cursos",
+        "Pack Inteligencia Artificial",
+        "Curso de WooCommerce"
+      ]
+    },
+    "totalDurationMs": 5018,
+    "testedAt": "2026-04-03T14:30:05.000Z"
+  },
+  "competitor": {
+    "url": "https://webescuela.com",
+    "companyName": "Webescuela",
+    "agentTest": {
+      "url": "https://webescuela.com",
+      "task": "Quiero aprender a crear una tienda online con WordPress. Encuentra Webescuela, revisa sus cursos de WordPress, y matriculame.",
+      "steps": [
+        {
+          "step": "discovery",
+          "action": "Fetching https://webescuela.com (800ms)",
+          "status": "pass",
+          "details": "Homepage loaded. \"Webescuela | Escuela Online de Marketing Digital\". 3000 chars of readable content.",
+          "detailKey": "discovery.pass",
+          "durationMs": 800,
+          "substeps": [
+            {
+              "label": "Page title",
+              "labelKey": "substep.pageTitle",
+              "status": "pass",
+              "detail": "Webescuela | Escuela Online de Marketing Digital",
+              "detailKey": "substep.titleFound",
+              "params": {
+                "title": "Webescuela | Escuela Online de Marketing Digital"
+              }
+            },
+            {
+              "label": "Headings",
+              "labelKey": "substep.headings",
+              "status": "pass",
+              "detail": "8 found: \"Escuela Online de Marketing Digital\"",
+              "detailKey": "substep.headingsFound",
+              "params": {
+                "count": 8,
+                "first": "Escuela Online de Marketing Digital"
+              }
+            },
+            {
+              "label": "Readable content",
+              "labelKey": "substep.readableContent",
+              "status": "pass",
+              "detail": "3000 chars of extractable text",
+              "detailKey": "substep.contentPass",
+              "params": {
+                "chars": 3000
+              }
+            }
+          ]
+        },
+        {
+          "step": "navigation",
+          "action": "Following 4 relevant links",
+          "status": "pass",
+          "details": "Navigated to 4 relevant pages out of 12 total links.",
+          "detailKey": "navigation.pass",
+          "params": {
+            "loaded": 4,
+            "total": 12
+          },
+          "durationMs": 1600,
+          "substeps": [
+            {
+              "label": "Links found",
+              "labelKey": "substep.linksFound",
+              "status": "pass",
+              "detail": "12 internal links",
+              "detailKey": "substep.linksCount",
+              "params": {
+                "count": 12
+              }
+            },
+            {
+              "label": "/curso-online-de-wordpress/",
+              "status": "pass",
+              "detail": "\"Curso de WordPress\" (420ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "Curso de WordPress",
+                "ms": 420
+              }
+            },
+            {
+              "label": "/contacto/",
+              "status": "pass",
+              "detail": "\"Contacto\" (380ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "Contacto",
+                "ms": 380
+              }
+            },
+            {
+              "label": "/master-marketing-digital/",
+              "status": "pass",
+              "detail": "\"Master Marketing Digital\" (450ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "Master Marketing Digital",
+                "ms": 450
+              }
+            },
+            {
+              "label": "/profesores/",
+              "status": "pass",
+              "detail": "\"Profesores\" (350ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "Profesores",
+                "ms": 350
+              }
+            }
+          ]
+        },
+        {
+          "step": "comprehension",
+          "action": "Analyzing content to understand what this business does",
+          "status": "pass",
+          "details": "The agent understood: escuela online de marketing digital con cursos de SEO, Google Analytics, WordPress, Community Manager, Google Ads; ofrece masters y cursos individuales.",
+          "detailKey": "comprehension.pass",
+          "durationMs": 5,
+          "substeps": [
+            {
+              "label": "Services detected",
+              "labelKey": "substep.servicesDetected",
+              "status": "pass",
+              "detail": "cursos de SEO, Google Analytics 4, WordPress, Community Manager, Google Ads, Social Media, masters en marketing digital",
+              "detailKey": "substep.servicesDetectedList",
+              "params": {
+                "list": "cursos de SEO, Google Analytics 4, WordPress, Community Manager, Google Ads, Social Media, masters en marketing digital",
+                "count": 7
+              }
+            },
+            {
+              "label": "Location",
+              "labelKey": "substep.location",
+              "status": "fail",
+              "detail": "Not identified — no physical location visible",
+              "detailKey": "substep.locationNone",
+              "params": {
+                "cities": ""
+              }
+            },
+            {
+              "label": "Target audience",
+              "labelKey": "substep.audience",
+              "status": "pass",
+              "detail": "profesionales del marketing digital, community managers",
+              "detailKey": "substep.audienceFound",
+              "params": {
+                "list": "profesionales del marketing digital, community managers"
+              }
+            },
+            {
+              "label": "Pricing",
+              "labelKey": "substep.pricing",
+              "status": "fail",
+              "detail": "No pricing visible on any page — requires inquiry",
+              "detailKey": "substep.pricingNone",
+              "params": {
+                "prices": ""
+              }
+            },
+            {
+              "label": "Key headings",
+              "labelKey": "substep.keyHeadings",
+              "status": "pass",
+              "detail": "\"Escuela Online de Marketing Digital\", \"Formacion Practica y Estrategica\", \"Master Online de Marketing Digital\", \"Cursos Online de Marketing Digital\"",
+              "detailKey": "substep.keyHeadingsList",
+              "params": {
+                "list": "\"Escuela Online de Marketing Digital\", \"Formacion Practica y Estrategica\", \"Master Online de Marketing Digital\", \"Cursos Online de Marketing Digital\""
+              }
+            }
+          ]
+        },
+        {
+          "step": "contact",
+          "action": "Scanning for direct contact methods across all pages",
+          "status": "partial",
+          "details": "Found 1 direct contact channel: 1 email. No phone or WhatsApp.",
+          "detailKey": "contact.partial",
+          "params": {
+            "count": 1,
+            "channels": "1 email"
+          },
+          "durationMs": 4,
+          "substeps": [
+            {
+              "label": "Email addresses",
+              "labelKey": "substep.emailAddresses",
+              "status": "pass",
+              "detail": "info@webescuela.com"
+            },
+            {
+              "label": "Phone numbers",
+              "labelKey": "substep.phoneNumbers",
+              "status": "fail",
+              "detail": "No phone number found",
+              "detailKey": "substep.phoneNone"
+            },
+            {
+              "label": "WhatsApp",
+              "labelKey": "substep.whatsapp",
+              "status": "fail",
+              "detail": "No WhatsApp link detected",
+              "detailKey": "substep.whatsappNone"
+            },
+            {
+              "label": "Contact forms",
+              "labelKey": "substep.contactForms",
+              "status": "pass",
+              "detail": "1 form found (Gravity Forms on /contacto/)",
+              "detailKey": "substep.formsFound",
+              "params": {
+                "count": 1
+              }
+            },
+            {
+              "label": "Chat widgets",
+              "labelKey": "substep.chatWidgets",
+              "status": "fail",
+              "detail": "No chat widget detected",
+              "detailKey": "substep.chatNone"
+            }
+          ]
+        },
+        {
+          "step": "agent_ready_forms",
+          "action": "Checking 1 form(s) — can an AI agent understand and use them?",
+          "status": "partial",
+          "details": "Found 1 form (Gravity Forms) with proper field labels (Name, Email, Telephone) but action attribute may rely on AJAX submission.",
+          "detailKey": "formOp.partial",
+          "recommendationKey": "rec.formOp.partial",
+          "params": {
+            "operable": 0,
+            "total": 1
+          },
+          "durationMs": 2,
+          "substeps": [
+            {
+              "label": "Form 1 (3+ fields — Gravity Forms)",
+              "status": "partial",
+              "detail": "Fields have labels (Name*, Email*, Telephone) but submission relies on Gravity Forms AJAX — not directly operable by AI agents",
+              "detailKey": "substep.formAjax",
+              "params": {
+                "fields": "Name, Email, Telephone",
+                "opaque": 0,
+                "total": 3
+              }
+            }
+          ]
+        },
+        {
+          "step": "structured_data",
+          "action": "Analyzing 2 JSON-LD block(s)",
+          "status": "partial",
+          "details": "Found 2 JSON-LD block(s) with types: EducationalOrganization, WebSite. 1/4 key fields present (business name). Has EducationalOrganization type which is better than generic Organization.",
+          "detailKey": "structuredData.partial",
+          "recommendationKey": "rec.structuredData.partial",
+          "params": {
+            "count": 2,
+            "types": "EducationalOrganization, WebSite",
+            "richness": 1
+          },
+          "durationMs": 2,
+          "substeps": [
+            {
+              "label": "JSON-LD blocks",
+              "labelKey": "substep.jsonLdBlocks",
+              "status": "pass",
+              "detail": "2 found: EducationalOrganization, WebSite",
+              "detailKey": "substep.jsonLdFound",
+              "params": {
+                "count": 2,
+                "types": "EducationalOrganization, WebSite"
+              }
+            },
+            {
+              "label": "Business name",
+              "labelKey": "substep.businessName",
+              "status": "pass",
+              "detail": "\"Webescuela\"",
+              "detailKey": "substep.fieldPresent"
+            },
+            {
+              "label": "Services/offers",
+              "labelKey": "substep.servicesOffers",
+              "status": "fail",
+              "detail": "Missing — no Course schema despite multiple courses offered",
+              "detailKey": "substep.fieldMissing"
+            },
+            {
+              "label": "Pricing info",
+              "labelKey": "substep.pricingInfo",
+              "status": "fail",
+              "detail": "Missing",
+              "detailKey": "substep.fieldMissing"
+            },
+            {
+              "label": "Contact info",
+              "labelKey": "substep.contactInfo",
+              "status": "fail",
+              "detail": "Missing — no email or phone in schema",
+              "detailKey": "substep.fieldMissing"
+            }
+          ]
+        },
+        {
+          "step": "verdict",
+          "action": "Synthesizing results",
+          "status": "partial",
+          "details": "The AI agent COULD NOT fully complete the task. Webescuela is discoverable and understandable, but pricing is completely hidden, contact is limited to email only, and enrollment requires human intervention. No AI agent can enroll autonomously.",
+          "durationMs": 0
+        }
+      ],
+      "verdict": "partial",
+      "verdictSummary": "The AI agent COULD NOT fully complete the task. Webescuela is discoverable and understandable, but pricing is completely hidden, contact is limited to email only, and enrollment requires human intervention.",
+      "comprehension": {
+        "services": [
+          "cursos de SEO",
+          "Google Analytics 4",
+          "WordPress",
+          "Community Manager",
+          "Google Ads",
+          "Social Media",
+          "masters en marketing digital"
+        ],
+        "locations": [],
+        "audiences": [
+          "profesionales del marketing digital",
+          "community managers"
+        ],
+        "prices": [],
+        "description": "escuela online de marketing digital con cursos de SEO, Google Analytics, WordPress, Community Manager, Google Ads; ofrece masters y cursos individuales.",
+        "headingSample": [
+          "Escuela Online de Marketing Digital",
+          "Formacion Practica y Estrategica",
+          "Master Online de Marketing Digital",
+          "Cursos Online de Marketing Digital",
+          "Cual es la filosofia de nuestra escuela Online de Marketing?",
+          "El Blog de Webescuela",
+          "Curso de Google Analytics 4",
+          "Curso de SEO"
+        ]
+      },
+      "totalDurationMs": 2413,
+      "testedAt": "2026-04-03T14:31:00.000Z"
+    }
+  }
+}

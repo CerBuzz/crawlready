@@ -5,7 +5,8 @@
  *
  * Usage:
  *   pnpm outreach <url> [email] [cc]        # full pipeline (scan → publish → email)
- *   pnpm outreach <url> --competitor=<url>  # include competitor comparison
+ *   pnpm outreach <url> --competitor=<url>  # include specific competitor
+ *   pnpm outreach <url> --no-competitor     # skip auto competitor search
  *   pnpm outreach <url> --scan-only         # scan + test only, save locally
  *   pnpm outreach <url> [email] --no-email  # scan + publish, skip email
  *   pnpm outreach <url> [email] --no-push   # scan + generate, skip publish + email
@@ -40,6 +41,7 @@ const flags = process.argv.slice(2).filter(a => a.startsWith("--"));
 const scanOnly = flags.includes("--scan-only");
 const noPush = flags.includes("--no-push");
 const noEmail = flags.includes("--no-email");
+const noCompetitor = flags.includes("--no-competitor");
 const competitorFlag = flags.find(f => f.startsWith("--competitor="));
 const competitorUrl = competitorFlag ? competitorFlag.split("=")[1] : undefined;
 
@@ -141,6 +143,52 @@ function slugToName(s: string): string {
   return s.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
 }
 
+async function findCompetitor(services: string, location: string, targetUrl: string): Promise<string | undefined> {
+  const targetHost = new URL(targetUrl).hostname.replace(/^www\./, "");
+  // Use first service + "agencia" + location for a focused business search
+  const mainService = services.split(",")[0].trim();
+  const query = `agencia ${mainService} ${location}`;
+  const searchUrl = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+
+  try {
+    const res = await fetch(searchUrl, {
+      headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" },
+    });
+    const html = await res.text();
+
+    // Extract organic result URLs from DuckDuckGo uddg= parameters
+    const uddgRegex = /uddg=(https%3A%2F%2F[^&"]+)/g;
+    const seen = new Set<string>();
+    const candidates: string[] = [];
+    let match;
+    while ((match = uddgRegex.exec(html)) !== null) {
+      try {
+        const decoded = decodeURIComponent(match[1]);
+        // Skip DDG tracking/ad redirects
+        if (decoded.includes("duckduckgo.com/y.js")) continue;
+        const host = new URL(decoded).hostname.replace(/^www\./, "");
+        if (seen.has(host)) continue;
+        seen.add(host);
+        // Skip target, social media, directories, educational, and non-business sites
+        const skip = [targetHost, "facebook.com", "instagram.com", "twitter.com", "x.com",
+          "linkedin.com", "youtube.com", "tiktok.com", "wikipedia.org", "yelp.com",
+          "tripadvisor.com", "google.com", "paginasamarillas.es", "infobel.com",
+          "bing.com", "amazon.com", "reddit.com"];
+        const skipEdu = [".edu", "universidad", "ucm.es", "upc.edu", "emagister.com",
+          "escuela", "curso", "master", "formacion"];
+        if (skip.some(s => host.includes(s))) continue;
+        if (skipEdu.some(s => host.includes(s) || decoded.toLowerCase().includes(s))) continue;
+        candidates.push(`https://${host}`);
+      } catch { /* skip malformed URLs */ }
+    }
+
+    return candidates.length > 0 ? candidates[0] : undefined;
+  } catch (err) {
+    console.error(`  ✗ Search failed:`, (err as Error).message);
+    return undefined;
+  }
+}
+
 function buildSubjectLine(agentTest: AgentTestResult, hostname: string): string {
   const failSteps = agentTest.steps.filter(s => s.status !== "pass" && s.step !== "verdict");
   if (failSteps.length === 0) return `${hostname}: un agente IA completó una tarea en tu web`;
@@ -240,19 +288,28 @@ async function runPipeline(rawUrl: string, email?: string, cc?: string, competit
     if (c.prices.length > 0) console.log(`    Prices: ${c.prices.join(", ")}`);
   }
 
-  if (!competitorRawUrl && agentTest.comprehension?.services.length) {
+  // Step 2b: Auto-find competitor if none provided
+  let resolvedCompetitorUrl = competitorRawUrl;
+  if (!resolvedCompetitorUrl && !noCompetitor && agentTest.comprehension?.services.length) {
     const svc = agentTest.comprehension.services.join(", ");
     const loc = agentTest.comprehension.locations.join(", ") || "España";
-    console.log(`\n  ⚠ No competitor provided. Suggested search: "${svc} ${loc}"`);
-    console.log(`    Re-run with --competitor=<url> to include comparison.`);
+    console.log(`\n[2b/6] Auto-searching competitor: "${svc} ${loc}"...`);
+    resolvedCompetitorUrl = await findCompetitor(svc, loc, url);
+    if (resolvedCompetitorUrl) {
+      console.log(`  ✓ Found: ${resolvedCompetitorUrl}`);
+    } else {
+      console.log(`  ✗ No competitor found automatically. Use --competitor=<url> to set manually.`);
+    }
+  } else if (!resolvedCompetitorUrl && !noCompetitor) {
+    console.log(`\n  ⚠ No competitor (no comprehension data to search). Use --competitor=<url>.`);
   }
 
-  // Step 2b: Competitor agentic test (if provided)
+  // Step 2c: Competitor agentic test
   let competitor: CompetitorData | undefined;
-  if (competitorRawUrl) {
-    const cUrl = competitorRawUrl.replace(/^(?!https?:\/\/)/i, "https://");
+  if (resolvedCompetitorUrl) {
+    const cUrl = resolvedCompetitorUrl.replace(/^(?!https?:\/\/)/i, "https://");
     const cName = slugToName(toSlug(cUrl));
-    console.log(`\n[2b/6] Running competitor agentic test (${cName})...`);
+    console.log(`\n[2c/6] Running competitor agentic test (${cName})...`);
     const cAgentTest = await runAgentTestFull(cUrl, task);
     console.log(`  Verdict: ${cAgentTest.verdict} (${cAgentTest.totalDurationMs}ms)`);
     for (const step of cAgentTest.steps) {

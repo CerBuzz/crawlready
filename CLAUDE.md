@@ -30,8 +30,8 @@ See **@COMPANY.md** for the full handbook: services, pricing, culture, target cl
 - **Live**: https://crawlready.dev
 - **Leads**: Stored in Vercel Blob, admin dashboard at `/admin/leads` (tracks `emailSent` status)
 - **Email sending**: Resend API (hello@crawlready.dev). Migrated from Nodemailer+SMTP 2026-04-01
-- **Email receiving**: Porkbun mailbox (hello@crawlready.dev, trial until 2026-04-11)
-- **Telegram alerts**: Real-time notifications to Antonio via @crawlready_bot (new lead, email failure, lead confirmed)
+- **Email receiving**: Resend Inbound → webhook `/api/inbound` → Telegram alert + forward to crawlready@gmail.com
+- **Telegram alerts**: Real-time notifications to Antonio via @crawlready_bot (new lead, email failure, lead confirmed, inbound email)
 - **Gmail**: crawlready@gmail.com ACTIVE (restored 2026-04-01) — Google APIs enabled
 - **Clients**: None yet. Priority #1: outreach to Spanish mid-size companies with free Agentic Tests
 - **Outreach**: See `outreach/campaigns.md` for active campaign research
