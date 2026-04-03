@@ -71,14 +71,14 @@
         "score": 15,
         "maxScore": 15,
         "status": "pass",
-        "details": "Excellent response time: 119ms.",
+        "details": "Excellent response time: 111ms.",
         "detailKey": "response.excellent",
         "params": {
-          "ms": 119
+          "ms": 111
         }
       }
     ],
-    "scannedAt": "2026-04-01T06:25:39.655Z"
+    "scannedAt": "2026-04-03T08:36:57.532Z"
   },
   "agentTest": {
     "url": "https://esoesagency.com",
@@ -86,25 +86,42 @@
     "steps": [
       {
         "step": "discovery",
-        "action": "Fetching https://esoesagency.com (95ms)",
+        "action": "Fetching https://esoesagency.com (69ms)",
         "status": "pass",
         "details": "Homepage loaded. \"Madrid Itinerary Made for You | Unique Custom Plans For Only €69\". 2000 chars of readable content.",
-        "durationMs": 97,
+        "detailKey": "discovery.pass",
+        "durationMs": 72,
         "substeps": [
           {
             "label": "Page title",
+            "labelKey": "substep.pageTitle",
             "status": "pass",
-            "detail": "Madrid Itinerary Made for You | Unique Custom Plans For Only €69"
+            "detail": "Madrid Itinerary Made for You | Unique Custom Plans For Only €69",
+            "detailKey": "substep.titleFound",
+            "params": {
+              "title": "Madrid Itinerary Made for You | Unique Custom Plans For Only €69"
+            }
           },
           {
             "label": "Headings",
+            "labelKey": "substep.headings",
             "status": "pass",
-            "detail": "10 found: \"Personalised  Travel Plans In Madrid\""
+            "detail": "10 found: \"Personalised  Travel Plans In Madrid\"",
+            "detailKey": "substep.headingsFound",
+            "params": {
+              "count": 10,
+              "first": "Personalised  Travel Plans In Madrid"
+            }
           },
           {
             "label": "Readable content",
+            "labelKey": "substep.readableContent",
             "status": "pass",
-            "detail": "2000 chars of extractable text"
+            "detail": "2000 chars of extractable text",
+            "detailKey": "substep.contentPass",
+            "params": {
+              "chars": 2000
+            }
           }
         ]
       },
@@ -113,115 +130,275 @@
         "action": "Following 4 relevant links",
         "status": "pass",
         "details": "Navigated to 4 relevant pages out of 9 total links.",
-        "durationMs": 136,
+        "detailKey": "navigation.pass",
+        "params": {
+          "loaded": 4,
+          "total": 9
+        },
+        "durationMs": 187,
         "substeps": [
           {
             "label": "Links found",
+            "labelKey": "substep.linksFound",
             "status": "pass",
-            "detail": "9 internal links"
+            "detail": "9 internal links",
+            "detailKey": "substep.linksCount",
+            "params": {
+              "count": 9
+            }
           },
           {
             "label": "/pricing/",
             "status": "pass",
-            "detail": "\"See Pricing\" (70ms)"
+            "detail": "\"See Pricing\" (186ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "See Pricing",
+              "ms": 186
+            }
           },
           {
             "label": "/contact/",
             "status": "pass",
-            "detail": "\"start planning\" (113ms)"
+            "detail": "\"start planning\" (49ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "start planning",
+              "ms": 49
+            }
           },
           {
             "label": "/about/",
             "status": "pass",
-            "detail": "\"About Us\" (92ms)"
+            "detail": "\"About Us\" (91ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "About Us",
+              "ms": 91
+            }
           },
           {
             "label": "/",
             "status": "pass",
-            "detail": "(132ms)"
+            "detail": "(108ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "/",
+              "ms": 108
+            }
+          }
+        ]
+      },
+      {
+        "step": "comprehension",
+        "action": "Analyzing content to understand what this business does",
+        "status": "pass",
+        "details": "The agent understood: ofrece fotografía, formación, relaciones públicas; con sede en Madrid; precios desde €69.",
+        "detailKey": "comprehension.pass",
+        "durationMs": 14,
+        "substeps": [
+          {
+            "label": "Services detected",
+            "labelKey": "substep.servicesDetected",
+            "status": "pass",
+            "detail": "fotografía, formación, relaciones públicas",
+            "detailKey": "substep.servicesDetectedList",
+            "params": {
+              "list": "fotografía, formación, relaciones públicas",
+              "count": 3
+            }
+          },
+          {
+            "label": "Location",
+            "labelKey": "substep.location",
+            "status": "pass",
+            "detail": "Madrid",
+            "detailKey": "substep.locationFound",
+            "params": {
+              "cities": "Madrid"
+            }
+          },
+          {
+            "label": "Target audience",
+            "labelKey": "substep.audience",
+            "status": "partial",
+            "detail": "Not identified",
+            "detailKey": "substep.audienceNone",
+            "params": {
+              "list": ""
+            }
+          },
+          {
+            "label": "Pricing",
+            "labelKey": "substep.pricing",
+            "status": "pass",
+            "detail": "€69, € 69",
+            "detailKey": "substep.pricingFound",
+            "params": {
+              "prices": "€69, € 69"
+            }
+          },
+          {
+            "label": "Key headings",
+            "labelKey": "substep.keyHeadings",
+            "status": "pass",
+            "detail": "\"Personalised Travel Plans In Madrid\", \"Your Madrid itinerary custom-made for only €69\", \"What If Everyone Had a travel Concierge?\", \"For just € 69 our experts will create your dream itinerary.\"",
+            "detailKey": "substep.keyHeadingsList",
+            "params": {
+              "list": "\"Personalised Travel Plans In Madrid\", \"Your Madrid itinerary custom-made for only €69\", \"What If Everyone Had a travel Concierge?\", \"For just € 69 our experts will create your dream itinerary.\""
+            }
           }
         ]
       },
       {
         "step": "contact",
-        "action": "Scanning for contact methods across all pages",
+        "action": "Scanning for direct contact methods across all pages",
         "status": "pass",
-        "details": "Found 12 contact channel(s): 1 email, 1 phone, WhatsApp, 8 form(s), Crisp.",
-        "durationMs": 7,
+        "details": "Found 3 direct contact channel(s): 1 email, 1 phone, WhatsApp.",
+        "detailKey": "contact.pass",
+        "params": {
+          "count": 3,
+          "channels": "1 email, 1 phone, WhatsApp"
+        },
+        "durationMs": 14,
         "substeps": [
           {
             "label": "Email addresses",
+            "labelKey": "substep.emailAddresses",
             "status": "pass",
             "detail": "info@esoesagency.com"
           },
           {
             "label": "Phone numbers",
+            "labelKey": "substep.phoneNumbers",
             "status": "pass",
             "detail": "+34671884811"
           },
           {
             "label": "WhatsApp",
+            "labelKey": "substep.whatsapp",
             "status": "pass",
-            "detail": "WhatsApp link detected"
+            "detail": "WhatsApp link detected",
+            "detailKey": "substep.whatsappFound"
           },
           {
             "label": "Contact forms",
+            "labelKey": "substep.contactForms",
             "status": "pass",
-            "detail": "8 form(s) found"
+            "detail": "8 form(s) found",
+            "detailKey": "substep.formsFound",
+            "params": {
+              "count": 8
+            }
           },
           {
             "label": "Chat widgets",
+            "labelKey": "substep.chatWidgets",
             "status": "pass",
             "detail": "Crisp"
           }
         ]
       },
       {
-        "step": "form_operability",
-        "action": "Checking 8 form(s) for AI agent operability",
-        "status": "partial",
-        "details": "Found 8 form(s) but none are fully operable — AI agents cannot submit requests.",
-        "durationMs": 0,
+        "step": "agent_ready_forms",
+        "action": "Checking 8 form(s) — can an AI agent understand and use them?",
+        "status": "fail",
+        "details": "Found 8 form(s) but none are understandable by AI agents — field labels are missing or opaque.",
+        "detailKey": "formOp.partial",
+        "recommendationKey": "rec.formOp.fail",
+        "params": {
+          "operable": 0,
+          "total": 8
+        },
+        "durationMs": 1,
         "substeps": [
           {
-            "label": "Form 1 (6 fields)",
-            "status": "partial",
-            "detail": "No action attribute (may be JS-only)"
+            "label": "Form 1 (2 fields)",
+            "status": "fail",
+            "detail": "No action attribute (may be JS-only)",
+            "detailKey": "substep.formNoAction",
+            "params": {
+              "fields": "Name, Email",
+              "opaque": 0,
+              "total": 2
+            }
           },
           {
-            "label": "Form 2 (6 fields)",
-            "status": "partial",
-            "detail": "CAPTCHA blocks automated submission"
+            "label": "Form 2 (2 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Name, Email Address",
+              "opaque": 0,
+              "total": 2
+            }
           },
           {
-            "label": "Form 3 (6 fields)",
-            "status": "partial",
-            "detail": "No action attribute (may be JS-only)"
+            "label": "Form 3 (2 fields)",
+            "status": "fail",
+            "detail": "No action attribute (may be JS-only)",
+            "detailKey": "substep.formNoAction",
+            "params": {
+              "fields": "Name, Email",
+              "opaque": 0,
+              "total": 2
+            }
           },
           {
-            "label": "Form 4 (9 fields)",
-            "status": "partial",
-            "detail": "CAPTCHA blocks automated submission"
+            "label": "Form 4 (5 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "First Name, Last Name, Phone Number, Email Address, Your Message",
+              "opaque": 0,
+              "total": 5
+            }
           },
           {
-            "label": "Form 5 (6 fields)",
-            "status": "partial",
-            "detail": "No action attribute (may be JS-only)"
+            "label": "Form 5 (2 fields)",
+            "status": "fail",
+            "detail": "No action attribute (may be JS-only)",
+            "detailKey": "substep.formNoAction",
+            "params": {
+              "fields": "Name, Email",
+              "opaque": 0,
+              "total": 2
+            }
           },
           {
-            "label": "Form 6 (6 fields)",
-            "status": "partial",
-            "detail": "No action attribute (may be JS-only)"
+            "label": "Form 6 (2 fields)",
+            "status": "fail",
+            "detail": "No action attribute (may be JS-only)",
+            "detailKey": "substep.formNoAction",
+            "params": {
+              "fields": "Name, Email",
+              "opaque": 0,
+              "total": 2
+            }
           },
           {
-            "label": "Form 7 (6 fields)",
-            "status": "partial",
-            "detail": "No action attribute (may be JS-only)"
+            "label": "Form 7 (2 fields)",
+            "status": "fail",
+            "detail": "No action attribute (may be JS-only)",
+            "detailKey": "substep.formNoAction",
+            "params": {
+              "fields": "Name, Email",
+              "opaque": 0,
+              "total": 2
+            }
           },
           {
-            "label": "Form 8 (6 fields)",
-            "status": "partial",
-            "detail": "CAPTCHA blocks automated submission"
+            "label": "Form 8 (2 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Name, Email Address",
+              "opaque": 0,
+              "total": 2
+            }
           }
         ]
       },
@@ -230,32 +407,53 @@
         "action": "Analyzing 5 JSON-LD block(s)",
         "status": "fail",
         "details": "Found 5 JSON-LD block(s) with types: FAQPage. 0/4 key fields present.",
+        "detailKey": "structuredData.fail",
+        "recommendationKey": "rec.structuredData.fail",
+        "params": {
+          "count": 5,
+          "types": "FAQPage",
+          "richness": 0
+        },
         "durationMs": 1,
         "substeps": [
           {
             "label": "JSON-LD blocks",
+            "labelKey": "substep.jsonLdBlocks",
             "status": "pass",
-            "detail": "5 found: FAQPage"
+            "detail": "5 found: FAQPage",
+            "detailKey": "substep.jsonLdFound",
+            "params": {
+              "count": 5,
+              "types": "FAQPage"
+            }
           },
           {
             "label": "Business name",
+            "labelKey": "substep.businessName",
             "status": "fail",
-            "detail": "Missing"
+            "detail": "Missing",
+            "detailKey": "substep.fieldMissing"
           },
           {
             "label": "Services/offers",
+            "labelKey": "substep.servicesOffers",
             "status": "fail",
-            "detail": "Missing"
+            "detail": "Missing",
+            "detailKey": "substep.fieldMissing"
           },
           {
             "label": "Pricing info",
+            "labelKey": "substep.pricingInfo",
             "status": "fail",
-            "detail": "Missing"
+            "detail": "Missing",
+            "detailKey": "substep.fieldMissing"
           },
           {
             "label": "Contact info",
+            "labelKey": "substep.contactInfo",
             "status": "fail",
-            "detail": "Missing"
+            "detail": "Missing",
+            "detailKey": "substep.fieldMissing"
           }
         ]
       },
@@ -263,13 +461,537 @@
         "step": "verdict",
         "action": "Synthesizing results",
         "status": "partial",
-        "details": "An AI agent can PARTIALLY complete the task \"Find this business, understand their services, and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
+        "details": "The AI agent COULD NOT fully complete the task \"Find this business, understand their services, and request a quote\". Some channels exist but have barriers that prevent AI agents from completing the action. Failures: agent_ready_forms, structured_data.",
         "durationMs": 0
       }
     ],
     "verdict": "partial",
-    "verdictSummary": "An AI agent can PARTIALLY complete the task \"Find this business, understand their services, and request a quote\". Some channels are accessible but there are gaps that reduce AI operability. Failures: structured_data.",
-    "totalDurationMs": 242,
-    "testedAt": "2026-04-01T06:25:39.897Z"
+    "verdictSummary": "The AI agent COULD NOT fully complete the task \"Find this business, understand their services, and request a quote\". Some channels exist but have barriers that prevent AI agents from completing the action. Failures: agent_ready_forms, structured_data.",
+    "comprehension": {
+      "services": [
+        "fotografía",
+        "formación",
+        "relaciones públicas"
+      ],
+      "locations": [
+        "Madrid"
+      ],
+      "audiences": [],
+      "prices": [
+        "€69",
+        "€ 69"
+      ],
+      "description": "ofrece fotografía, formación, relaciones públicas; con sede en Madrid; precios desde €69.",
+      "headingSample": [
+        "Personalised Travel Plans In Madrid",
+        "Your Madrid itinerary custom-made for only €69",
+        "What If Everyone Had a travel Concierge?",
+        "For just € 69 our experts will create your dream itinerary.",
+        "Save Your time",
+        "spend smartly",
+        "be unique",
+        "Our clients say \"Eso Es!\" because..."
+      ]
+    },
+    "totalDurationMs": 291,
+    "testedAt": "2026-04-03T08:36:57.829Z"
+  },
+  "competitor": {
+    "url": "https://thankium.com",
+    "companyName": "Thankium",
+    "agentTest": {
+      "url": "https://thankium.com",
+      "task": "Find this business, understand their services, and request a quote",
+      "steps": [
+        {
+          "step": "discovery",
+          "action": "Fetching https://thankium.com (303ms)",
+          "status": "pass",
+          "details": "Homepage loaded. \"Agencia Creativa y Consultora Tecnológica | Thankium\". 2000 chars of readable content.",
+          "detailKey": "discovery.pass",
+          "durationMs": 310,
+          "substeps": [
+            {
+              "label": "Page title",
+              "labelKey": "substep.pageTitle",
+              "status": "pass",
+              "detail": "Agencia Creativa y Consultora Tecnológica | Thankium",
+              "detailKey": "substep.titleFound",
+              "params": {
+                "title": "Agencia Creativa y Consultora Tecnológica | Thankium"
+              }
+            },
+            {
+              "label": "Headings",
+              "labelKey": "substep.headings",
+              "status": "pass",
+              "detail": "10 found: \"Thankium, agencia creativa y consultora tecnológica\"",
+              "detailKey": "substep.headingsFound",
+              "params": {
+                "count": 10,
+                "first": "Thankium, agencia creativa y consultora tecnológica"
+              }
+            },
+            {
+              "label": "Readable content",
+              "labelKey": "substep.readableContent",
+              "status": "pass",
+              "detail": "2000 chars of extractable text",
+              "detailKey": "substep.contentPass",
+              "params": {
+                "chars": 2000
+              }
+            }
+          ]
+        },
+        {
+          "step": "navigation",
+          "action": "Following 4 relevant links",
+          "status": "pass",
+          "details": "Navigated to 4 relevant pages out of 29 total links.",
+          "detailKey": "navigation.pass",
+          "params": {
+            "loaded": 4,
+            "total": 29
+          },
+          "durationMs": 445,
+          "substeps": [
+            {
+              "label": "Links found",
+              "labelKey": "substep.linksFound",
+              "status": "pass",
+              "detail": "29 internal links",
+              "detailKey": "substep.linksCount",
+              "params": {
+                "count": 29
+              }
+            },
+            {
+              "label": "/portfolio",
+              "status": "pass",
+              "detail": "\"Portfolio\" (385ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "Portfolio",
+                "ms": 385
+              }
+            },
+            {
+              "label": "/portfolio/unicaja-real-madrid-tarjeta-madridista-premium",
+              "status": "pass",
+              "detail": "\"UNICAJA Campaña de patrocinio\" (437ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "UNICAJA Campaña de patrocinio",
+                "ms": 437
+              }
+            },
+            {
+              "label": "/portfolio/santander-smartbank-experiencia-modo-smart",
+              "status": "pass",
+              "detail": "\"SantanderCampaña digital con vídeo\" (437ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "SantanderCampaña digital con vídeo",
+                "ms": 437
+              }
+            },
+            {
+              "label": "/portfolio/alphabet-juego-enigma-mini",
+              "status": "pass",
+              "detail": "\"Alphabet EspañaActivación RR. SS.\" (424ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "Alphabet EspañaActivación RR. SS.",
+                "ms": 424
+              }
+            }
+          ]
+        },
+        {
+          "step": "comprehension",
+          "action": "Analyzing content to understand what this business does",
+          "status": "pass",
+          "details": "The agent understood: ofrece video production, SEO, ecommerce, publicidad, consultoría, formación, relaciones públicas, eventos; con sede en Madrid; dirigido a empresas / B2B, agencias, ecommerce.",
+          "detailKey": "comprehension.pass",
+          "durationMs": 23,
+          "substeps": [
+            {
+              "label": "Services detected",
+              "labelKey": "substep.servicesDetected",
+              "status": "pass",
+              "detail": "video production, SEO, ecommerce, publicidad, consultoría, formación, relaciones públicas, eventos",
+              "detailKey": "substep.servicesDetectedList",
+              "params": {
+                "list": "video production, SEO, ecommerce, publicidad, consultoría, formación, relaciones públicas, eventos",
+                "count": 8
+              }
+            },
+            {
+              "label": "Location",
+              "labelKey": "substep.location",
+              "status": "pass",
+              "detail": "Madrid",
+              "detailKey": "substep.locationFound",
+              "params": {
+                "cities": "Madrid"
+              }
+            },
+            {
+              "label": "Target audience",
+              "labelKey": "substep.audience",
+              "status": "pass",
+              "detail": "empresas / B2B, agencias, ecommerce",
+              "detailKey": "substep.audienceFound",
+              "params": {
+                "list": "empresas / B2B, agencias, ecommerce"
+              }
+            },
+            {
+              "label": "Pricing",
+              "labelKey": "substep.pricing",
+              "status": "partial",
+              "detail": "Not visible on the site",
+              "detailKey": "substep.pricingNone",
+              "params": {
+                "prices": ""
+              }
+            },
+            {
+              "label": "Key headings",
+              "labelKey": "substep.keyHeadings",
+              "status": "pass",
+              "detail": "\"Thankium, agencia creativa y consultora tecnológica\", \"Portfolio\", \"Más que una agencia de publicidad\", \"IA, marketing y tecnología aplicada a la empresa\"",
+              "detailKey": "substep.keyHeadingsList",
+              "params": {
+                "list": "\"Thankium, agencia creativa y consultora tecnológica\", \"Portfolio\", \"Más que una agencia de publicidad\", \"IA, marketing y tecnología aplicada a la empresa\""
+              }
+            }
+          ]
+        },
+        {
+          "step": "contact",
+          "action": "Scanning for direct contact methods across all pages",
+          "status": "pass",
+          "details": "Found 4 direct contact channel(s): 4 phone.",
+          "detailKey": "contact.pass",
+          "params": {
+            "count": 4,
+            "channels": "4 phone"
+          },
+          "durationMs": 54,
+          "substeps": [
+            {
+              "label": "Email addresses",
+              "labelKey": "substep.emailAddresses",
+              "status": "fail",
+              "detail": "None found in HTML",
+              "detailKey": "substep.emailNone"
+            },
+            {
+              "label": "Phone numbers",
+              "labelKey": "substep.phoneNumbers",
+              "status": "pass",
+              "detail": "+34652634396, +34916228158, +34683313930, +15619104425"
+            },
+            {
+              "label": "WhatsApp",
+              "labelKey": "substep.whatsapp",
+              "status": "partial",
+              "detail": "Not detected",
+              "detailKey": "substep.whatsappNone"
+            },
+            {
+              "label": "Contact forms",
+              "labelKey": "substep.contactForms",
+              "status": "pass",
+              "detail": "15 form(s) found",
+              "detailKey": "substep.formsFound",
+              "params": {
+                "count": 15
+              }
+            }
+          ]
+        },
+        {
+          "step": "agent_ready_forms",
+          "action": "Checking 15 form(s) — can an AI agent understand and use them?",
+          "status": "fail",
+          "details": "Found 15 form(s) but none are understandable by AI agents — field labels are missing or opaque.",
+          "detailKey": "formOp.partial",
+          "recommendationKey": "rec.formOp.fail",
+          "params": {
+            "operable": 0,
+            "total": 15
+          },
+          "durationMs": 5,
+          "substeps": [
+            {
+              "label": "Form 1 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 2 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 3 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 4 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 5 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 6 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 7 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 8 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 9 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 10 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 11 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 12 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 13 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 14 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            },
+            {
+              "label": "Form 15 (16 fields)",
+              "status": "fail",
+              "detail": "No action attribute (may be JS-only)",
+              "detailKey": "substep.formNoAction",
+              "params": {
+                "fields": "Name, Email, Empresa, Mensaje..., rgpd, website, company, message, subject, title, description, feedback, notes, details, remarks, comments",
+                "opaque": 0,
+                "total": 16
+              }
+            }
+          ]
+        },
+        {
+          "step": "structured_data",
+          "action": "Analyzing 14 JSON-LD block(s)",
+          "status": "fail",
+          "details": "Found 14 JSON-LD block(s) with types: unknown types. 0/4 key fields present.",
+          "detailKey": "structuredData.fail",
+          "recommendationKey": "rec.structuredData.fail",
+          "params": {
+            "count": 14,
+            "types": "unknown types",
+            "richness": 0
+          },
+          "durationMs": 3,
+          "substeps": [
+            {
+              "label": "JSON-LD blocks",
+              "labelKey": "substep.jsonLdBlocks",
+              "status": "pass",
+              "detail": "14 found: unknown types",
+              "detailKey": "substep.jsonLdFound",
+              "params": {
+                "count": 14,
+                "types": "unknown types"
+              }
+            },
+            {
+              "label": "Business name",
+              "labelKey": "substep.businessName",
+              "status": "fail",
+              "detail": "Missing",
+              "detailKey": "substep.fieldMissing"
+            },
+            {
+              "label": "Services/offers",
+              "labelKey": "substep.servicesOffers",
+              "status": "fail",
+              "detail": "Missing",
+              "detailKey": "substep.fieldMissing"
+            },
+            {
+              "label": "Pricing info",
+              "labelKey": "substep.pricingInfo",
+              "status": "fail",
+              "detail": "Missing",
+              "detailKey": "substep.fieldMissing"
+            },
+            {
+              "label": "Contact info",
+              "labelKey": "substep.contactInfo",
+              "status": "fail",
+              "detail": "Missing",
+              "detailKey": "substep.fieldMissing"
+            }
+          ]
+        },
+        {
+          "step": "verdict",
+          "action": "Synthesizing results",
+          "status": "partial",
+          "details": "The AI agent COULD NOT fully complete the task \"Find this business, understand their services, and request a quote\". Some channels exist but have barriers that prevent AI agents from completing the action. Failures: agent_ready_forms, structured_data.",
+          "durationMs": 0
+        }
+      ],
+      "verdict": "partial",
+      "verdictSummary": "The AI agent COULD NOT fully complete the task \"Find this business, understand their services, and request a quote\". Some channels exist but have barriers that prevent AI agents from completing the action. Failures: agent_ready_forms, structured_data.",
+      "comprehension": {
+        "services": [
+          "video production",
+          "SEO",
+          "ecommerce",
+          "publicidad",
+          "consultoría",
+          "formación",
+          "relaciones públicas",
+          "eventos"
+        ],
+        "locations": [
+          "Madrid"
+        ],
+        "audiences": [
+          "empresas / B2B",
+          "agencias",
+          "ecommerce"
+        ],
+        "prices": [],
+        "description": "ofrece video production, SEO, ecommerce, publicidad, consultoría, formación, relaciones públicas, eventos; con sede en Madrid; dirigido a empresas / B2B, agencias, ecommerce.",
+        "headingSample": [
+          "Thankium, agencia creativa y consultora tecnológica",
+          "Portfolio",
+          "Más que una agencia de publicidad",
+          "IA, marketing y tecnología aplicada a la empresa",
+          "Thankium Media: agencia de comunicación y PR",
+          "Thankium creative: agencia de publicidad en Madrid",
+          "Thankium Islands: agencia de marketing y tecnología en tenerife",
+          "Thankium Miami: Creative & Tech Consulting Hub"
+        ]
+      },
+      "totalDurationMs": 840,
+      "testedAt": "2026-04-03T08:36:58.670Z"
+    }
   }
 }
