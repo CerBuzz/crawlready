@@ -22,11 +22,18 @@ export interface ScanResult {
   scannedAt: string;
 }
 
+export interface CompetitorData {
+  url: string;
+  companyName: string;
+  agentTest: AgentTestResult;
+}
+
 export interface ReportData {
   slug: string;
   companyName: string;
   scanResult: ScanResult;
   agentTest?: AgentTestResult;
+  competitor?: CompetitorData;
 }
 
 // --- Agentic Test Types ---
@@ -60,12 +67,22 @@ export interface AgentSubstep {
   params?: Record<string, string | number>;
 }
 
+export interface BusinessComprehension {
+  services: string[];
+  locations: string[];
+  audiences: string[];
+  prices: string[];
+  description: string;
+  headingSample: string[];
+}
+
 export interface AgentTestResult {
   url: string;
   task: string;
   steps: AgentStepResult[];
   verdict: AgentStepStatus;
   verdictSummary: string;
+  comprehension?: BusinessComprehension;
   totalDurationMs: number;
   testedAt: string;
 }

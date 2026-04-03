@@ -5,6 +5,7 @@
  *
  * Usage:
  *   pnpm outreach <url> [email] [cc]        # full pipeline (scan → publish → email)
+ *   pnpm outreach <url> --competitor=<url>  # include competitor comparison
  *   pnpm outreach <url> --scan-only         # scan + test only, save locally
  *   pnpm outreach <url> [email] --no-email  # scan + publish, skip email
  *   pnpm outreach <url> [email] --no-push   # scan + generate, skip publish + email
@@ -21,9 +22,8 @@ import * as fs from "fs";
 import * as path from "path";
 import { scanUrl } from "../src/lib/scanner";
 import { runAgentTestFull } from "../src/lib/agentTest";
-import { generateTerminalHtml } from "../src/lib/agentTerminalHtml";
 import { sendOutreachEmail } from "../src/lib/email";
-import type { ScanResult, AgentTestResult } from "../src/lib/types";
+import type { ScanResult, AgentTestResult, CompetitorData } from "../src/lib/types";
 
 // --- Load .env.local ---
 const envPath = path.join(process.cwd(), ".env.local");
@@ -40,6 +40,8 @@ const flags = process.argv.slice(2).filter(a => a.startsWith("--"));
 const scanOnly = flags.includes("--scan-only");
 const noPush = flags.includes("--no-push");
 const noEmail = flags.includes("--no-email");
+const competitorFlag = flags.find(f => f.startsWith("--competitor="));
+const competitorUrl = competitorFlag ? competitorFlag.split("=")[1] : undefined;
 
 if (flags.includes("--queue")) {
   processQueue().catch(err => { console.error("\n✗ Queue failed:", err); process.exit(1); });
@@ -55,13 +57,13 @@ if (flags.includes("--queue")) {
   if (!rawUrl) {
     console.error([
       "Usage:",
-      "  pnpm outreach <url> [email] [cc] [--scan-only] [--no-push] [--no-email]",
+      "  pnpm outreach <url> [email] [cc] [--competitor=<url>] [--scan-only] [--no-push] [--no-email]",
       "  pnpm outreach --queue [--no-email]   Process pending leads from queue.json",
       "  pnpm outreach --send-email <slug>    Send email for an already-published lead",
     ].join("\n"));
     process.exit(1);
   }
-  runPipeline(rawUrl, email, cc).catch(err => { console.error("\n✗ Pipeline failed:", err); process.exit(1); });
+  runPipeline(rawUrl, email, cc, competitorUrl).catch(err => { console.error("\n✗ Pipeline failed:", err); process.exit(1); });
 }
 
 // --- Queue processor ---
@@ -73,7 +75,7 @@ async function processQueue() {
   if (pending.length === 0) { console.log("No pending leads in queue."); return; }
   console.log(`\nFound ${pending.length} pending lead(s) in queue.\n`);
   for (const lead of pending) {
-    await runPipeline(lead.url, lead.email, lead.cc);
+    await runPipeline(lead.url, lead.email, lead.cc, lead.competitor);
     if (noEmail) {
       lead.status = "ready"; // published but email not sent — waiting for confirmation
     } else {
@@ -194,7 +196,7 @@ function buildEmailHtml(scanResult: ScanResult, agentTest: AgentTestResult, comp
 }
 
 // --- Main pipeline ---
-async function runPipeline(rawUrl: string, email?: string, cc?: string) {
+async function runPipeline(rawUrl: string, email?: string, cc?: string, competitorRawUrl?: string) {
   const url = rawUrl.replace(/^(?!https?:\/\/)/i, "https://");
   const slug = toSlug(url);
   const companyName = slugToName(slug);
@@ -204,6 +206,7 @@ async function runPipeline(rawUrl: string, email?: string, cc?: string) {
   console.log(`  Target: ${url}`);
   console.log(`  Slug: ${slug}`);
   console.log(`  Company: ${companyName}`);
+  if (competitorRawUrl) console.log(`  Competitor: ${competitorRawUrl}`);
   if (email) console.log(`  Email: ${email}`);
   if (cc) console.log(`  CC: ${cc}`);
   console.log(`========================================\n`);
@@ -227,39 +230,59 @@ async function runPipeline(rawUrl: string, email?: string, cc?: string) {
     console.log(`  ${icon} ${step.step}: ${step.details.substring(0, 100)}`);
   }
 
+  // Log comprehension for competitor research
+  if (agentTest.comprehension) {
+    const c = agentTest.comprehension;
+    console.log(`\n  Business comprehension:`);
+    if (c.services.length > 0) console.log(`    Services: ${c.services.join(", ")}`);
+    if (c.locations.length > 0) console.log(`    Location: ${c.locations.join(", ")}`);
+    if (c.audiences.length > 0) console.log(`    Audience: ${c.audiences.join(", ")}`);
+    if (c.prices.length > 0) console.log(`    Prices: ${c.prices.join(", ")}`);
+  }
+
+  if (!competitorRawUrl && agentTest.comprehension?.services.length) {
+    const svc = agentTest.comprehension.services.join(", ");
+    const loc = agentTest.comprehension.locations.join(", ") || "España";
+    console.log(`\n  ⚠ No competitor provided. Suggested search: "${svc} ${loc}"`);
+    console.log(`    Re-run with --competitor=<url> to include comparison.`);
+  }
+
+  // Step 2b: Competitor agentic test (if provided)
+  let competitor: CompetitorData | undefined;
+  if (competitorRawUrl) {
+    const cUrl = competitorRawUrl.replace(/^(?!https?:\/\/)/i, "https://");
+    const cName = slugToName(toSlug(cUrl));
+    console.log(`\n[2b/6] Running competitor agentic test (${cName})...`);
+    const cAgentTest = await runAgentTestFull(cUrl, task);
+    console.log(`  Verdict: ${cAgentTest.verdict} (${cAgentTest.totalDurationMs}ms)`);
+    for (const step of cAgentTest.steps) {
+      const icon = step.status === "pass" ? "✓" : step.status === "partial" ? "●" : "✗";
+      console.log(`  ${icon} ${step.step}: ${step.details.substring(0, 100)}`);
+    }
+    competitor = { url: cUrl, companyName: cName, agentTest: cAgentTest };
+  }
+
   // Step 3: Save report JSON
   console.log("\n[3/6] Saving report data...");
-  const reportData = { slug, companyName, scanResult, agentTest };
+  const reportData = { slug, companyName, scanResult, agentTest, ...(competitor ? { competitor } : {}) };
   const reportJsonPath = path.join("src", "data", "reports", `${slug}.json`);
   fs.mkdirSync(path.dirname(reportJsonPath), { recursive: true });
   fs.writeFileSync(reportJsonPath, JSON.stringify(reportData, null, 2));
   console.log(`  ✓ ${reportJsonPath}`);
-
-  // Step 4: Generate terminal HTML
-  console.log("\n[4/6] Generating terminal animation...");
-  const terminalHtml = generateTerminalHtml(agentTest.steps, {
-    url: agentTest.url,
-    task: agentTest.task,
-    reportUrl: `https://crawlready.dev/es/report/${slug}`,
-  });
-  const terminalPath = path.join("public", "reports", `${slug}-agent-test.html`);
-  fs.mkdirSync(path.dirname(terminalPath), { recursive: true });
-  fs.writeFileSync(terminalPath, terminalHtml);
-  console.log(`  ✓ ${terminalPath}`);
 
   if (scanOnly) {
     console.log("\n✓ Scan complete (--scan-only). Files saved locally.");
     return;
   }
 
-  // Step 5: Git commit + push
+  // Step 4: Git commit + push
   if (!noPush) {
-    console.log("\n[5/6] Publishing (git commit + push)...");
+    console.log("\n[4/5] Publishing (git commit + push)...");
     const { execSync } = await import("child_process");
     const exec = (cmd: string) => execSync(cmd, { encoding: "utf-8", stdio: "pipe" });
 
     try {
-      exec(`git add "${reportJsonPath}" "${terminalPath}"`);
+      exec(`git add "${reportJsonPath}"`);
       const msg = `Add/update ${companyName} report (${scanResult.totalScore}/${scanResult.maxPossibleScore} Grade ${scanResult.grade})`;
       exec(`git commit -m "${msg}\n\nCo-Authored-By: Claude Opus 4.6 (1M context) <noreply@anthropic.com>"`);
       exec("git push origin master");
@@ -272,12 +295,12 @@ async function runPipeline(rawUrl: string, email?: string, cc?: string) {
       }
     }
   } else {
-    console.log("\n[5/6] Skipped (--no-push)");
+    console.log("\n[4/5] Skipped (--no-push)");
   }
 
-  // Step 6: Send email
+  // Step 5: Send email
   if (email && !noPush && !noEmail) {
-    console.log("\n[6/6] Sending cold email...");
+    console.log("\n[5/5] Sending cold email...");
     const subject = buildSubjectLine(agentTest, new URL(url).hostname);
     await sendOutreachEmail({
       to: email,
@@ -287,16 +310,15 @@ async function runPipeline(rawUrl: string, email?: string, cc?: string) {
     });
     console.log(`  ✓ Email sent to ${email}${cc ? ` (cc: ${cc})` : ""}`);
   } else if (noEmail) {
-    console.log("\n[6/6] Skipped (--no-email). To send later: pnpm outreach --send-email " + slug);
+    console.log("\n[5/5] Skipped (--no-email). To send later: pnpm outreach --send-email " + slug);
   } else if (!email) {
-    console.log("\n[6/6] Skipped (no email provided)");
+    console.log("\n[5/5] Skipped (no email provided)");
   } else {
-    console.log("\n[6/6] Skipped (--no-push)");
+    console.log("\n[5/5] Skipped (--no-push)");
   }
 
   console.log(`\n========================================`);
   console.log(`  ✓ Pipeline complete!`);
   console.log(`  Report: https://crawlready.dev/es/report/${slug}`);
-  console.log(`  Agent test: https://crawlready.dev/reports/${slug}-agent-test.html`);
   console.log(`========================================\n`);
 }

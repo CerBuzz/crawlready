@@ -1,4 +1,4 @@
-import { AgentStepResult, AgentStepStatus, AgentSubstep, AgentTestResult } from "./types";
+import { AgentStepResult, AgentStepStatus, AgentSubstep, AgentTestResult, BusinessComprehension } from "./types";
 
 const FETCH_TIMEOUT = 8000;
 const USER_AGENT =
@@ -91,13 +91,75 @@ function scoreLink(link: { href: string; text: string }): number {
   return score;
 }
 
+interface FormFieldInfo {
+  name: string;
+  type: string;
+  label: string; // best human-readable label found (from <label>, placeholder, aria-label, or name)
+  semantic: boolean; // true if a human/agent can understand what this field is for
+}
+
 interface FormInfo {
   action: string;
   method: string;
-  fields: string[];
+  fields: FormFieldInfo[];
   hasSubmit: boolean;
   hasCaptcha: boolean;
   isMailto: boolean;
+  semanticFieldCount: number; // how many fields are understandable
+  hiddenFieldCount: number; // hidden inputs (not user-facing)
+}
+
+/** Patterns that indicate a field name is semantic (an agent can understand it) */
+const SEMANTIC_FIELD_PATTERNS = /^(name|email|e-mail|phone|tel|message|comment|subject|company|organization|city|address|url|website|first.?name|last.?name|nombre|apellido|correo|telefono|mensaje|asunto|empresa|ciudad|direccion|your.?name|your.?email|your.?message|contact.?name|full.?name)$/i;
+
+/** Patterns that indicate a field is internal/tracking (not user-facing) */
+const HIDDEN_FIELD_PATTERNS = /^(page_title|page_url|page_id|url_referer|post_id|_wp|_token|_nonce|csrf|honeypot|bot.?trap|timestamp|referrer|source|utm_|hf_|hs_|__)/i;
+
+/** Field names that are opaque numeric IDs — an agent can't know what they mean */
+const OPAQUE_FIELD_PATTERN = /\[\d+\]|fields\[\d|field_\d|input_\d|q\d+_/i;
+
+function extractFieldLabel(fieldHtml: string, formHtml: string, fieldName: string): string {
+  // 1. Check placeholder
+  const placeholder = fieldHtml.match(/placeholder\s*=\s*["']([^"']+)["']/i);
+  if (placeholder) return placeholder[1].trim();
+
+  // 2. Check aria-label
+  const ariaLabel = fieldHtml.match(/aria-label\s*=\s*["']([^"']+)["']/i);
+  if (ariaLabel) return ariaLabel[1].trim();
+
+  // 3. Check for <label for="fieldId">
+  const idMatch = fieldHtml.match(/id\s*=\s*["']([^"']+)["']/i);
+  if (idMatch) {
+    const labelRegex = new RegExp(`<label[^>]*for\\s*=\\s*["']${idMatch[1].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["'][^>]*>([\\s\\S]*?)<\\/label>`, "i");
+    const labelMatch = formHtml.match(labelRegex);
+    if (labelMatch) {
+      const text = labelMatch[1].replace(/<[^>]+>/g, "").trim();
+      if (text.length > 0) return text;
+    }
+  }
+
+  // 4. Fall back to name attribute cleaned up
+  return fieldName;
+}
+
+function isFieldSemantic(field: FormFieldInfo): boolean {
+  // Hidden/tracking fields don't count
+  if (HIDDEN_FIELD_PATTERNS.test(field.name)) return false;
+  if (field.type === "hidden") return false;
+
+  // If the label (from placeholder, aria-label, or <label>) is descriptive, it's semantic
+  if (field.label !== field.name && field.label.length > 1) return true;
+
+  // If the name itself is a known semantic pattern, it's semantic
+  if (SEMANTIC_FIELD_PATTERNS.test(field.name)) return true;
+
+  // If the name is an opaque ID (wpforms[fields][5]), it's NOT semantic
+  if (OPAQUE_FIELD_PATTERN.test(field.name)) return false;
+
+  // Short lowercase single-word names are likely semantic (e.g. "email", "name")
+  if (/^[a-z_-]{2,20}$/i.test(field.name) && !HIDDEN_FIELD_PATTERNS.test(field.name)) return true;
+
+  return false;
 }
 
 function extractForms(html: string): FormInfo[] {
@@ -109,11 +171,24 @@ function extractForms(html: string): FormInfo[] {
     const action = actionMatch ? actionMatch[1] : "";
     const method = methodMatch ? methodMatch[1].toUpperCase() : "GET";
 
-    const inputRegex = /<(?:input|textarea|select)[^>]*(?:name|id)\s*=\s*["']([^"']*)["'][^>]*>/gi;
-    const fields: string[] = [];
+    const inputRegex = /<(?:input|textarea|select)([^>]*)>/gi;
+    const fields: FormFieldInfo[] = [];
+    const seenNames = new Set<string>();
     let inputMatch;
     while ((inputMatch = inputRegex.exec(formHtml)) !== null) {
-      fields.push(inputMatch[1]);
+      const attrs = inputMatch[0];
+      const nameMatch = attrs.match(/name\s*=\s*["']([^"']*)["']/i);
+      if (!nameMatch) continue;
+      const name = nameMatch[1];
+      if (seenNames.has(name)) continue; // deduplicate repeated fields
+      seenNames.add(name);
+
+      const typeMatch = attrs.match(/type\s*=\s*["']([^"']*)["']/i);
+      const type = typeMatch ? typeMatch[1].toLowerCase() : "text";
+      const label = extractFieldLabel(attrs, formHtml, name);
+      const field: FormFieldInfo = { name, type, label, semantic: false };
+      field.semantic = isFieldSemantic(field);
+      fields.push(field);
     }
 
     const hasSubmit = /<(?:button|input)[^>]*type\s*=\s*["']submit["']/i.test(formHtml)
@@ -125,7 +200,11 @@ function extractForms(html: string): FormInfo[] {
 
     const isMailto = action.startsWith("mailto:");
 
-    return { action, method, fields, hasSubmit, hasCaptcha, isMailto };
+    const userFields = fields.filter(f => f.type !== "hidden" && !HIDDEN_FIELD_PATTERNS.test(f.name));
+    const semanticFieldCount = userFields.filter(f => f.semantic).length;
+    const hiddenFieldCount = fields.filter(f => f.type === "hidden" || HIDDEN_FIELD_PATTERNS.test(f.name)).length;
+
+    return { action, method, fields, hasSubmit, hasCaptcha, isMailto, semanticFieldCount, hiddenFieldCount };
   });
 }
 
@@ -186,6 +265,143 @@ function extractJsonLd(html: string): unknown[] {
     }
   }
   return results;
+}
+
+// --- Business comprehension helpers ---
+
+/** Extract longer text (up to 8000 chars) from all crawled pages combined */
+function extractFullText(pages: Map<string, string>): string {
+  const chunks: string[] = [];
+  for (const html of pages.values()) {
+    const text = html
+      .replace(/<script[\s\S]*?<\/script>/gi, "")
+      .replace(/<style[\s\S]*?<\/style>/gi, "")
+      .replace(/<nav[\s\S]*?<\/nav>/gi, "")
+      .replace(/<footer[\s\S]*?<\/footer>/gi, "")
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (text.length > 20) chunks.push(text);
+  }
+  return chunks.join(" ").slice(0, 8000);
+}
+
+/** Extract all headings (h1-h4) from all pages */
+function extractAllHeadings(pages: Map<string, string>): string[] {
+  const headings: string[] = [];
+  for (const html of pages.values()) {
+    const matches = html.match(/<h[1-4][^>]*>([\s\S]*?)<\/h[1-4]>/gi) || [];
+    for (const m of matches) {
+      const text = m
+        .replace(/<[^>]+>/g, "")
+        .replace(/&nbsp;/gi, " ")
+        .replace(/&amp;/gi, "&")
+        .replace(/&[a-z]+;/gi, "")
+        .replace(/\s+/g, " ")
+        .trim();
+      if (text.length > 2 && text.length < 200) headings.push(text);
+    }
+  }
+  return [...new Set(headings)];
+}
+
+/** Keyword-based service detection */
+const SERVICE_PATTERNS: { category: string; keywords: RegExp }[] = [
+  { category: "video production", keywords: /v[ií]deo|audiovisual|producci[oó]n|filmaci[oó]n|grabaci[oó]n|rodaje|filmmaker|filmmaking|videograph/i },
+  { category: "web design", keywords: /dise[ñn]o web|web design|desarrollo web|web development|p[aá]gina[s]? web|sitio[s]? web|website/i },
+  { category: "marketing digital", keywords: /marketing digital|digital marketing|social media|redes sociales|community manager|content marketing/i },
+  { category: "SEO", keywords: /\bseo\b|posicionamiento|search engine|optimizaci[oó]n/i },
+  { category: "branding", keywords: /branding|identidad (corporativa|visual|de marca)|marca personal|brand identity|logo(tipo)?/i },
+  { category: "ecommerce", keywords: /ecommerce|e-commerce|tienda online|online store|woocommerce|shopify|prestashop/i },
+  { category: "publicidad", keywords: /publicidad|advertising|ads|campa[ñn]as?|google ads|meta ads|paid media|ppc|sem\b/i },
+  { category: "fotografía", keywords: /fotograf[ií]a|photography|foto|sesion(es)? fotogr[aá]fic/i },
+  { category: "consultoría", keywords: /consultor[ií]a|consulting|asesor[ií]a|advisory/i },
+  { category: "formación", keywords: /formaci[oó]n|training|curso[s]?|taller(es)?|workshop|masterclass|bootcamp/i },
+  { category: "desarrollo software", keywords: /desarrollo (de )?software|software development|aplicaci[oó]n|app development|saas/i },
+  { category: "diseño gráfico", keywords: /dise[ñn]o gr[aá]fico|graphic design|ilustraci[oó]n|illustration|motion (graphics|design)/i },
+  { category: "relaciones públicas", keywords: /relaciones p[uú]blicas|public relations|comunicaci[oó]n corporativa|prensa|press/i },
+  { category: "eventos", keywords: /eventos?|events?|organizaci[oó]n de eventos|event planning/i },
+];
+
+/** Location detection */
+const LOCATION_PATTERNS: { city: string; pattern: RegExp }[] = [
+  { city: "Madrid", pattern: /\bmadrid\b/i },
+  { city: "Barcelona", pattern: /\bbarcelona\b/i },
+  { city: "Valencia", pattern: /\bvalencia\b/i },
+  { city: "Sevilla", pattern: /\bsevilla\b/i },
+  { city: "Bilbao", pattern: /\bbilbao\b/i },
+  { city: "Málaga", pattern: /\bm[aá]laga\b/i },
+  { city: "Zaragoza", pattern: /\bzaragoza\b/i },
+  { city: "Alicante", pattern: /\balicante\b/i },
+  { city: "Murcia", pattern: /\bmurcia\b/i },
+  { city: "A Coruña", pattern: /\b(a )?coru[ñn]a\b/i },
+  { city: "Vigo", pattern: /\bvigo\b/i },
+  { city: "Palma", pattern: /\bpalma\b/i },
+  { city: "Las Palmas", pattern: /\blas palmas\b/i },
+  { city: "San Sebastián", pattern: /\bsan sebasti[aá]n\b|\bdonostia\b/i },
+];
+
+/** Target audience detection */
+const AUDIENCE_PATTERNS: { audience: string; keywords: RegExp }[] = [
+  { audience: "empresas / B2B", keywords: /\b(empresas?|corporativ[oa]s?|b2b|negocios?|pymes?|clientes corporativos)\b/i },
+  { audience: "startups", keywords: /\b(startups?|emprendedores?|emprendimiento)\b/i },
+  { audience: "particulares / B2C", keywords: /\b(particulares?|b2c|consumidores?|clientes? finales?)\b/i },
+  { audience: "agencias", keywords: /\b(agencias?|freelance[rs]?)\b/i },
+  { audience: "ecommerce", keywords: /\b(ecommerce|tiendas? online|e-commerce)\b/i },
+];
+
+/** Price extraction */
+function extractPrices(text: string): string[] {
+  const priceRegex = /(?:€|EUR)\s?[\d.,]+|[\d.,]+\s?(?:€|EUR)|[\d.,]+\s?euros?/gi;
+  const matches = text.match(priceRegex) || [];
+  return [...new Set(matches)].slice(0, 5);
+}
+
+function analyzeBusinessComprehension(pages: Map<string, string>): BusinessComprehension {
+  const fullText = extractFullText(pages);
+  const headings = extractAllHeadings(pages);
+
+  const services: string[] = [];
+  for (const sp of SERVICE_PATTERNS) {
+    if (sp.keywords.test(fullText) || headings.some(h => sp.keywords.test(h))) {
+      services.push(sp.category);
+    }
+  }
+
+  const locations: string[] = [];
+  for (const lp of LOCATION_PATTERNS) {
+    if (lp.pattern.test(fullText)) {
+      locations.push(lp.city);
+    }
+  }
+
+  const audiences: string[] = [];
+  for (const ap of AUDIENCE_PATTERNS) {
+    if (ap.keywords.test(fullText)) {
+      audiences.push(ap.audience);
+    }
+  }
+
+  const prices = extractPrices(fullText);
+
+  // Build a descriptive summary
+  const parts: string[] = [];
+  if (services.length > 0) parts.push(`ofrece ${services.join(", ")}`);
+  if (locations.length > 0) parts.push(`con sede en ${locations.join(", ")}`);
+  if (audiences.length > 0) parts.push(`dirigido a ${audiences.join(", ")}`);
+  if (prices.length > 0) parts.push(`precios desde ${prices[0]}`);
+
+  const description = parts.length > 0
+    ? parts.join("; ") + "."
+    : "No se pudo determinar a qué se dedica el negocio a partir del contenido visible.";
+
+  // Pick headings most likely to describe the business (filter out generic nav/CTA headings)
+  const genericPatterns = /^(home|inicio|menu|contacto|contact|blog|news|login|sign|cookie|privac|legal|more|read|close|open)/i;
+  const headingSample = headings
+    .filter(h => !genericPatterns.test(h) && h.length > 5)
+    .slice(0, 8);
+
+  return { services, locations, audiences, prices, description, headingSample };
 }
 
 // --- Steps ---
@@ -347,6 +563,84 @@ async function stepNavigation(
   };
 }
 
+function stepComprehension(pages: Map<string, string>): { result: AgentStepResult; comprehension: BusinessComprehension } {
+  const start = Date.now();
+  const comp = analyzeBusinessComprehension(pages);
+
+  const substeps: AgentSubstep[] = [];
+
+  // Services
+  substeps.push({
+    label: "Services detected",
+    labelKey: "substep.servicesDetected",
+    status: comp.services.length > 0 ? "pass" : "fail",
+    detail: comp.services.length > 0 ? comp.services.join(", ") : "Could not identify services",
+    detailKey: comp.services.length > 0 ? "substep.servicesDetectedList" : "substep.servicesNone",
+    params: { list: comp.services.join(", "), count: comp.services.length },
+  });
+
+  // Location
+  substeps.push({
+    label: "Location",
+    labelKey: "substep.location",
+    status: comp.locations.length > 0 ? "pass" : "partial",
+    detail: comp.locations.length > 0 ? comp.locations.join(", ") : "Not identified",
+    detailKey: comp.locations.length > 0 ? "substep.locationFound" : "substep.locationNone",
+    params: { cities: comp.locations.join(", ") },
+  });
+
+  // Audiences
+  substeps.push({
+    label: "Target audience",
+    labelKey: "substep.audience",
+    status: comp.audiences.length > 0 ? "pass" : "partial",
+    detail: comp.audiences.length > 0 ? comp.audiences.join(", ") : "Not identified",
+    detailKey: comp.audiences.length > 0 ? "substep.audienceFound" : "substep.audienceNone",
+    params: { list: comp.audiences.join(", ") },
+  });
+
+  // Pricing
+  substeps.push({
+    label: "Pricing",
+    labelKey: "substep.pricing",
+    status: comp.prices.length > 0 ? "pass" : "partial",
+    detail: comp.prices.length > 0 ? comp.prices.join(", ") : "Not visible on the site",
+    detailKey: comp.prices.length > 0 ? "substep.pricingFound" : "substep.pricingNone",
+    params: { prices: comp.prices.join(", ") },
+  });
+
+  // Key headings sample
+  if (comp.headingSample.length > 0) {
+    substeps.push({
+      label: "Key headings",
+      labelKey: "substep.keyHeadings",
+      status: "pass",
+      detail: comp.headingSample.slice(0, 4).map(h => `"${h}"`).join(", "),
+      detailKey: "substep.keyHeadingsList",
+      params: { list: comp.headingSample.slice(0, 4).map(h => `"${h}"`).join(", ") },
+    });
+  }
+
+  const understood = comp.services.length > 0;
+  const status: AgentStepStatus = comp.services.length >= 2 ? "pass" : comp.services.length === 1 ? "partial" : "fail";
+
+  return {
+    comprehension: comp,
+    result: {
+      step: "comprehension",
+      action: "Analyzing content to understand what this business does",
+      status,
+      details: understood
+        ? `The agent understood: ${comp.description}`
+        : "The agent could not determine what this business does from the visible content.",
+      detailKey: understood ? "comprehension.pass" : "comprehension.fail",
+      recommendationKey: status !== "pass" ? "rec.comprehension.fail" : undefined,
+      durationMs: Date.now() - start,
+      substeps,
+    },
+  };
+}
+
 function stepContactDiscovery(pages: Map<string, string>): AgentStepResult {
   const start = Date.now();
   const allMethods: { type: string; value: string }[] = [];
@@ -463,41 +757,62 @@ function stepAgentReadyForms(pages: Map<string, string>): AgentStepResult {
     const form = allForms[i];
     const issues: string[] = [];
 
+    // Mechanical checks
     if (form.hasCaptcha) issues.push("CAPTCHA blocks automated submission");
     if (!form.action && !form.isMailto) issues.push("No action attribute (may be JS-only)");
     if (form.fields.length === 0) issues.push("No visible fields in HTML");
     if (!form.hasSubmit) issues.push("No submit button found");
 
-    const formStatus: AgentStepStatus = issues.length === 0 ? "pass" : issues.length === 1 ? "partial" : "fail";
+    // Semantic check: can an agent understand what each field is for?
+    const userFields = form.fields.filter(f => f.type !== "hidden" && !HIDDEN_FIELD_PATTERNS.test(f.name));
+    const opaqueFields = userFields.filter(f => !f.semantic);
+    if (userFields.length > 0 && opaqueFields.length > 0) {
+      const opaqueNames = opaqueFields.map(f => f.name).slice(0, 3).join(", ");
+      const suffix = opaqueFields.length > 3 ? ` (+${opaqueFields.length - 3} more)` : "";
+      issues.push(`${opaqueFields.length} of ${userFields.length} fields have no understandable label: ${opaqueNames}${suffix}`);
+    }
+    if (userFields.length === 0 && form.fields.length > 0) {
+      issues.push("All fields are hidden/tracking — no user-facing inputs");
+    }
+
+    // A form is agent-ready only if: no mechanical issues AND all user-facing fields are semantic
+    const mechanicalOk = !form.hasCaptcha && (!!form.action || form.isMailto) && form.fields.length > 0 && form.hasSubmit;
+    const semanticOk = userFields.length > 0 && opaqueFields.length === 0;
+    const formStatus: AgentStepStatus = mechanicalOk && semanticOk ? "pass" : mechanicalOk && opaqueFields.length < userFields.length ? "partial" : "fail";
     if (formStatus === "pass") agentReadyCount++;
 
-    // Build translated detail key for most relevant issue
+    // Readable field list for display
+    const readableFields = userFields.filter(f => f.semantic).map(f => f.label !== f.name ? f.label : f.name);
+
     let formDetailKey: string | undefined;
-    if (issues.length === 0) formDetailKey = "substep.formAgentReady";
+    if (formStatus === "pass") formDetailKey = "substep.formAgentReady";
     else if (form.hasCaptcha) formDetailKey = "substep.formCaptcha";
     else if (!form.hasSubmit) formDetailKey = "substep.formNoSubmit";
     else if (!form.action && !form.isMailto) formDetailKey = "substep.formNoAction";
-    else if (form.fields.length === 0) formDetailKey = "substep.formNoFields";
+    else if (userFields.length === 0) formDetailKey = "substep.formNoFields";
+    else if (opaqueFields.length > 0) formDetailKey = "substep.formOpaqueFields";
 
     substeps.push({
-      label: `Form ${i + 1} (${form.fields.length} fields)`,
+      label: `Form ${i + 1} (${userFields.length} fields)`,
       status: formStatus,
-      detail: issues.length > 0 ? issues.join("; ") : `Agent-ready — fields: ${form.fields.join(", ")}`,
+      detail: issues.length > 0
+        ? issues.join("; ")
+        : `Agent-ready — fields: ${readableFields.join(", ")}`,
       detailKey: formDetailKey,
-      params: { fields: form.fields.join(", ") },
+      params: { fields: readableFields.join(", "), opaque: opaqueFields.length, total: userFields.length },
     });
   }
 
   const status: AgentStepStatus = agentReadyCount > 0 ? "pass" : substeps.some((s) => s.status === "partial") ? "partial" : "fail";
-  const formDetailKey = agentReadyCount > 0 ? "formOp.pass" : "formOp.partial";
+  const formDetailKey = agentReadyCount > 0 ? "formOp.pass" : allForms.length > 0 ? "formOp.partial" : "formOp.fail";
 
   return {
     step: "agent_ready_forms",
-    action: `Checking ${allForms.length} form(s) — are they adapted for AI agents?`,
+    action: `Checking ${allForms.length} form(s) — can an AI agent understand and use them?`,
     status,
     details: agentReadyCount > 0
-      ? `${agentReadyCount} of ${allForms.length} form(s) are adapted for AI agents.`
-      : `Found ${allForms.length} form(s) but none are adapted for AI agents — the agent cannot submit any request.`,
+      ? `${agentReadyCount} of ${allForms.length} form(s) are fully understandable and usable by AI agents.`
+      : `Found ${allForms.length} form(s) but none are understandable by AI agents — field labels are missing or opaque.`,
     detailKey: formDetailKey,
     recommendationKey: status !== "pass" ? `rec.formOp.${status}` : undefined,
     params: { operable: agentReadyCount, total: allForms.length },
@@ -583,6 +898,7 @@ function stepVerdict(steps: AgentStepResult[], task: string): AgentStepResult {
   const weights: Record<string, number> = {
     discovery: 1,
     navigation: 1,
+    comprehension: 2,
     contact: 2,
     agent_ready_forms: 3,
     structured_data: 1,
@@ -677,22 +993,27 @@ export async function* runAgentTest(
   steps.push(navResult);
   yield navResult;
 
-  // Step 3: Contact Discovery
+  // Step 3: Business Comprehension
+  const { result: compResult, comprehension } = stepComprehension(pages);
+  steps.push(compResult);
+  yield compResult;
+
+  // Step 4: Contact Discovery
   const contactResult = stepContactDiscovery(pages);
   steps.push(contactResult);
   yield contactResult;
 
-  // Step 4: Agent-Ready Forms
+  // Step 5: Agent-Ready Forms
   const formResult = stepAgentReadyForms(pages);
   steps.push(formResult);
   yield formResult;
 
-  // Step 5: Structured Data
+  // Step 6: Structured Data
   const structuredResult = stepStructuredData(pages);
   steps.push(structuredResult);
   yield structuredResult;
 
-  // Step 6: Verdict
+  // Step 7: Verdict
   const verdict = stepVerdict(steps, task);
   steps.push(verdict);
   yield verdict;
@@ -701,6 +1022,7 @@ export async function* runAgentTest(
     url, task, steps,
     verdict: verdict.status,
     verdictSummary: verdict.details,
+    comprehension,
     totalDurationMs: Date.now() - totalStart,
     testedAt: new Date().toISOString(),
   };

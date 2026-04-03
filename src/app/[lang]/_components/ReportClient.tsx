@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { ReportData, CheckResult, AgentStepResult, AgentTestResult } from "@/lib/types";
+import type { ReportData, CheckResult, AgentStepResult, AgentTestResult, CompetitorData } from "@/lib/types";
 import type { Dictionary } from "@/lib/i18n/es";
 import { trackEvent } from "@/lib/tracker";
 
@@ -131,6 +131,7 @@ function CheckCard({
 const STEP_DETAIL_PREFIX: Record<string, string> = {
   discovery: "discovery",
   navigation: "navigation",
+  comprehension: "comprehension",
   contact: "contact",
   form_operability: "formOp",
   structured_data: "structuredData",
@@ -372,6 +373,41 @@ function AgenticTestSection({
               </div>
             </div>
 
+            {/* Comprehension narrative block */}
+            {agentTest.comprehension && agentTest.comprehension.services.length > 0 && (
+              <div className="rounded-lg px-5 py-4 mb-4 bg-accent/5 border border-accent/15">
+                <p className="text-sm font-medium text-accent mb-2">
+                  {isEs
+                    ? `El agente entendió que ${companyName}...`
+                    : `The agent understood that ${companyName}...`}
+                </p>
+                <p className="text-sm text-zinc-300">{agentTest.comprehension.description}</p>
+                {agentTest.comprehension.headingSample.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {agentTest.comprehension.headingSample.slice(0, 4).map((h, i) => (
+                      <span key={i} className="text-xs bg-white/5 border border-white/10 rounded px-2 py-1 text-zinc-400">
+                        &ldquo;{h}&rdquo;
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            {agentTest.comprehension && agentTest.comprehension.services.length === 0 && (
+              <div className="rounded-lg px-5 py-4 mb-4 bg-danger/5 border border-danger/15">
+                <p className="text-sm font-medium text-danger mb-1">
+                  {isEs
+                    ? `El agente no pudo entender a qué se dedica ${companyName}`
+                    : `The agent could not understand what ${companyName} does`}
+                </p>
+                <p className="text-xs text-zinc-400">
+                  {isEs
+                    ? "El contenido visible no contiene información suficiente sobre los servicios, sector o público objetivo."
+                    : "The visible content does not contain enough information about services, industry, or target audience."}
+                </p>
+              </div>
+            )}
+
             {/* Step rows (accordion) */}
             <div className="divide-y divide-surface-light">
               {testSteps.map((step) => (
@@ -385,21 +421,6 @@ function AgenticTestSection({
               ))}
             </div>
 
-            {/* CTA */}
-            <div className="text-center mt-8">
-              <a
-                href={`/reports/${slug}-agent-test.html`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackEvent("cta_click", slug, { cta: "watch_agent_test" })}
-                className="inline-block px-8 py-3 rounded-lg bg-accent text-black font-semibold hover:bg-accent/90 transition-colors text-lg"
-              >
-                {at.watchSimulation} &rarr;
-              </a>
-              <p className="text-xs text-zinc-500 mt-3">
-                {at.simulationNote}
-              </p>
-            </div>
           </div>
         </div>
       </section>
@@ -485,6 +506,149 @@ function AgenticTestSection({
               </p>
             </div>
           )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Competitor Comparison Section ───────────────────────── */
+
+const STATUS_RANK: Record<string, number> = { pass: 2, partial: 1, fail: 0 };
+
+function ComparisonSectionFull({
+  companyName,
+  targetTest,
+  competitor,
+  dict,
+  isEs,
+}: {
+  companyName: string;
+  targetTest: AgentTestResult;
+  competitor: CompetitorData;
+  dict: Dictionary;
+  isEs: boolean;
+}) {
+  const at = dict.agentTest;
+  const targetSteps = targetTest.steps.filter(s => s.step !== "verdict");
+  const competitorSteps = competitor.agentTest.steps.filter(s => s.step !== "verdict");
+
+  // Build step-by-step comparison
+  const rows = targetSteps.map(tStep => {
+    const cStep = competitorSteps.find(c => c.step === tStep.step);
+    const tRank = STATUS_RANK[tStep.status] ?? 0;
+    const cRank = cStep ? (STATUS_RANK[cStep.status] ?? 0) : 0;
+    const winner: "target" | "competitor" | "tie" =
+      tRank > cRank ? "target" : cRank > tRank ? "competitor" : "tie";
+    return { step: tStep.step, target: tStep, competitor: cStep, winner };
+  });
+
+  const total = rows.length;
+  const targetWins = rows.filter(r => r.winner === "target").length;
+  const competitorWins = rows.filter(r => r.winner === "competitor").length;
+  const ties = rows.filter(r => r.winner === "tie").length;
+
+  return (
+    <section className="px-6 pb-12">
+      <div className="max-w-3xl mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <div className="flex-1 h-px bg-surface-light" />
+          <span className="text-xs text-zinc-500 uppercase tracking-widest">
+            {at["comparison.targetLabel"]} vs {at["comparison.competitorLabel"]}
+          </span>
+          <div className="flex-1 h-px bg-surface-light" />
+        </div>
+
+        <div className="bg-surface rounded-xl border border-surface-light p-8">
+          {/* Title + narrative intro */}
+          <div className="text-center mb-6">
+            <h2 className="text-xl font-semibold">
+              {t(at["comparison.title"], { target: companyName, competitor: competitor.companyName })}
+            </h2>
+            <p className="text-sm text-zinc-400 mt-2">
+              {at["comparison.subtitle"]}
+            </p>
+          </div>
+
+          {/* Narrative connection from comprehension */}
+          {targetTest.comprehension && targetTest.comprehension.services.length > 0 && (
+            <div className="rounded-lg px-5 py-4 mb-6 bg-white/[0.02] border border-surface-light text-sm text-zinc-400">
+              <p>
+                {isEs
+                  ? <>Dado que {companyName} se dedica a <span className="text-zinc-200">{targetTest.comprehension.services.join(", ")}</span>, el agente identifica a <span className="text-zinc-200">{competitor.companyName}</span> como competidor directo en el mismo sector.</>
+                  : <>Since {companyName} offers <span className="text-zinc-200">{targetTest.comprehension.services.join(", ")}</span>, the agent identifies <span className="text-zinc-200">{competitor.companyName}</span> as a direct competitor in the same sector.</>
+                }
+              </p>
+            </div>
+          )}
+
+          {/* Summary bar */}
+          <div className="grid grid-cols-3 gap-4 text-center pt-4 pb-4 border-t border-b border-surface-light mb-6">
+            <div>
+              <p className="text-2xl font-bold text-success">{targetWins}</p>
+              <p className="text-xs text-zinc-500 mt-1">{companyName}</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-zinc-500">{ties}</p>
+              <p className="text-xs text-zinc-500 mt-1">
+                {at["comparison.verdictEqual"]?.replace("Ambas webs tienen un rendimiento similar.", "Empate") || "Tie"}
+              </p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-danger">{competitorWins}</p>
+              <p className="text-xs text-zinc-500 mt-1">{competitor.companyName}</p>
+            </div>
+          </div>
+
+          {/* Step-by-step comparison rows */}
+          <div className="space-y-3">
+            {rows.map(row => {
+              const stepName = at[`step.${row.step}`] || row.step;
+              return (
+                <div key={row.step} className="rounded-lg border border-surface-light overflow-hidden">
+                  {/* Step header */}
+                  <div className="px-4 py-2 bg-white/[0.02] border-b border-surface-light">
+                    <span className="text-sm font-medium text-zinc-300">{stepName}</span>
+                  </div>
+                  {/* Two columns */}
+                  <div className="grid grid-cols-2 divide-x divide-surface-light">
+                    {/* Target */}
+                    <div className={`px-4 py-3 ${row.winner === "target" ? "bg-success/5" : ""}`}>
+                      <div className="flex items-center gap-2">
+                        <StatusIcon status={row.target.status} />
+                        <span className="text-xs text-zinc-500 truncate">{companyName}</span>
+                      </div>
+                    </div>
+                    {/* Competitor */}
+                    <div className={`px-4 py-3 ${row.winner === "competitor" ? "bg-danger/5" : ""}`}>
+                      <div className="flex items-center gap-2">
+                        <StatusIcon status={row.competitor?.status ?? "fail"} />
+                        <span className="text-xs text-zinc-500 truncate">{competitor.companyName}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Warning box — only if competitor wins any */}
+          {competitorWins > 0 && (
+            <div className="mt-6 rounded-lg px-5 py-4 bg-danger/5 border border-danger/20">
+              <p className="font-semibold text-danger text-sm">{at["comparison.warningTitle"]}</p>
+              <p className="text-sm text-zinc-400 mt-1">{at["comparison.warningBody"]}</p>
+            </div>
+          )}
+
+          {/* Summary sentence */}
+          <div className="mt-6 text-center text-sm text-zinc-400">
+            {targetWins > competitorWins
+              ? t(at["comparison.summaryWinning"], { target: companyName, count: targetWins, total })
+              : competitorWins > targetWins
+                ? t(at["comparison.summaryLosing"], { competitor: competitor.companyName, count: competitorWins, total })
+                : t(at["comparison.summaryTied"], { count: ties, total })
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -671,6 +835,17 @@ export default function ReportClient({
         agentTest={report.agentTest}
         dict={dict}
       />
+
+      {/* ── Competitor Comparison ────────────────────────── */}
+      {report.competitor && report.agentTest && (
+        <ComparisonSectionFull
+          companyName={companyName}
+          targetTest={report.agentTest}
+          competitor={report.competitor}
+          dict={dict}
+          isEs={isEs}
+        />
+      )}
 
       {/* Final CTA — "Hablamos" */}
       <section className="px-6 pb-20">

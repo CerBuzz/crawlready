@@ -1,6 +1,6 @@
 {
   "slug": "15vatios",
-  "companyName": "15Vatios",
+  "companyName": "15vatios",
   "scanResult": {
     "url": "https://15vatios.com",
     "totalScore": 49,
@@ -72,28 +72,28 @@
         "score": 8,
         "maxScore": 15,
         "status": "partial",
-        "details": "Moderate response time: 1022ms. AI agents prefer sub-400ms.",
+        "details": "Moderate response time: 1028ms. AI agents prefer sub-400ms.",
         "detailKey": "response.moderate",
         "params": {
-          "ms": 1022
+          "ms": 1028
         },
         "recommendation": "Optimize server response time to under 400ms. Use caching, CDN, and minimize server-side processing.",
         "recommendationKey": "response.recSlow"
       }
     ],
-    "scannedAt": "2026-04-01T16:47:31.615Z"
+    "scannedAt": "2026-04-03T07:56:04.533Z"
   },
   "agentTest": {
     "url": "https://15vatios.com",
-    "task": "Find this digital agency, understand their services, and request a quote for a corporate video production",
+    "task": "Find this business, understand their services, and request a quote",
     "steps": [
       {
         "step": "discovery",
-        "action": "Fetching https://15vatios.com (1220ms)",
+        "action": "Fetching https://15vatios.com (841ms)",
         "status": "pass",
         "details": "Homepage loaded. \"15Vatios\". 2000 chars of readable content.",
         "detailKey": "discovery.pass",
-        "durationMs": 1221,
+        "durationMs": 842,
         "substeps": [
           {
             "label": "Page title",
@@ -101,7 +101,9 @@
             "status": "pass",
             "detail": "15Vatios",
             "detailKey": "substep.titleFound",
-            "params": { "title": "15Vatios" }
+            "params": {
+              "title": "15Vatios"
+            }
           },
           {
             "label": "Headings",
@@ -109,7 +111,10 @@
             "status": "pass",
             "detail": "10 found: \"Home\"",
             "detailKey": "substep.headingsFound",
-            "params": { "count": 10, "first": "Home" }
+            "params": {
+              "count": 10,
+              "first": "Home"
+            }
           },
           {
             "label": "Readable content",
@@ -117,7 +122,9 @@
             "status": "pass",
             "detail": "2000 chars of extractable text",
             "detailKey": "substep.contentPass",
-            "params": { "chars": 2000 }
+            "params": {
+              "chars": 2000
+            }
           }
         ]
       },
@@ -128,8 +135,11 @@
         "details": "Navigated to 1 relevant pages out of 2 total links.",
         "detailKey": "navigation.partial",
         "recommendationKey": "rec.navigation.partial",
-        "params": { "loaded": 1, "total": 2 },
-        "durationMs": 961,
+        "params": {
+          "loaded": 1,
+          "total": 2
+        },
+        "durationMs": 986,
         "substeps": [
           {
             "label": "Links found",
@@ -137,14 +147,86 @@
             "status": "pass",
             "detail": "2 internal links",
             "detailKey": "substep.linksCount",
-            "params": { "count": 2 }
+            "params": {
+              "count": 2
+            }
           },
           {
             "label": "/",
             "status": "pass",
-            "detail": "(960ms)",
+            "detail": "(986ms)",
             "detailKey": "substep.pageLoaded",
-            "params": { "text": "/", "ms": 960 }
+            "params": {
+              "text": "/",
+              "ms": 986
+            }
+          },
+          {
+            "label": "/",
+            "status": "fail",
+            "detail": "Could not load",
+            "detailKey": "substep.pageLoadFailed"
+          }
+        ]
+      },
+      {
+        "step": "comprehension",
+        "action": "Analyzing content to understand what this business does",
+        "status": "pass",
+        "details": "The agent understood: ofrece video production, web design, marketing digital, SEO, publicidad, consultoría; con sede en Madrid.",
+        "detailKey": "comprehension.pass",
+        "durationMs": 1,
+        "substeps": [
+          {
+            "label": "Services detected",
+            "labelKey": "substep.servicesDetected",
+            "status": "pass",
+            "detail": "video production, web design, marketing digital, SEO, publicidad, consultoría",
+            "detailKey": "substep.servicesDetectedList",
+            "params": {
+              "list": "video production, web design, marketing digital, SEO, publicidad, consultoría",
+              "count": 6
+            }
+          },
+          {
+            "label": "Location",
+            "labelKey": "substep.location",
+            "status": "pass",
+            "detail": "Madrid",
+            "detailKey": "substep.locationFound",
+            "params": {
+              "cities": "Madrid"
+            }
+          },
+          {
+            "label": "Target audience",
+            "labelKey": "substep.audience",
+            "status": "partial",
+            "detail": "Not identified",
+            "detailKey": "substep.audienceNone",
+            "params": {
+              "list": ""
+            }
+          },
+          {
+            "label": "Pricing",
+            "labelKey": "substep.pricing",
+            "status": "partial",
+            "detail": "Not visible on the site",
+            "detailKey": "substep.pricingNone",
+            "params": {
+              "prices": ""
+            }
+          },
+          {
+            "label": "Key headings",
+            "labelKey": "substep.keyHeadings",
+            "status": "pass",
+            "detail": "\"What is simple is... easier to understand and remember easier to correct and improve easier to communicate\", \"SERVICES\", \"Audiovisual\", \"Business Intelligence\"",
+            "detailKey": "substep.keyHeadingsList",
+            "params": {
+              "list": "\"What is simple is... easier to understand and remember easier to correct and improve easier to communicate\", \"SERVICES\", \"Audiovisual\", \"Business Intelligence\""
+            }
           }
         ]
       },
@@ -154,8 +236,11 @@
         "status": "pass",
         "details": "Found 2 direct contact channel(s): 1 email, WhatsApp.",
         "detailKey": "contact.pass",
-        "params": { "count": 2, "channels": "1 email, WhatsApp" },
-        "durationMs": 3,
+        "params": {
+          "count": 2,
+          "channels": "1 email, WhatsApp"
+        },
+        "durationMs": 2,
         "substeps": [
           {
             "label": "Email addresses",
@@ -183,7 +268,9 @@
             "status": "fail",
             "detail": "No forms found in HTML",
             "detailKey": "substep.formsNone",
-            "params": { "count": 0 }
+            "params": {
+              "count": 0
+            }
           },
           {
             "label": "Chat widgets",
@@ -224,13 +311,432 @@
         "step": "verdict",
         "action": "Synthesizing results",
         "status": "partial",
-        "details": "The AI agent COULD NOT fully complete the task \"Find this digital agency, understand their services, and request a quote for a corporate video production\". Some channels exist but have barriers that prevent AI agents from completing the action. Failures: agent_ready_forms, structured_data.",
+        "details": "The AI agent COULD NOT fully complete the task \"Find this business, understand their services, and request a quote\". Some channels exist but have barriers that prevent AI agents from completing the action. Failures: agent_ready_forms, structured_data.",
         "durationMs": 0
       }
     ],
     "verdict": "partial",
-    "verdictSummary": "The AI agent COULD NOT fully complete the task \"Find this digital agency, understand their services, and request a quote for a corporate video production\". Some channels exist but have barriers that prevent AI agents from completing the action. Failures: agent_ready_forms, structured_data.",
-    "totalDurationMs": 2186,
-    "testedAt": "2026-04-01T16:47:45.601Z"
+    "verdictSummary": "The AI agent COULD NOT fully complete the task \"Find this business, understand their services, and request a quote\". Some channels exist but have barriers that prevent AI agents from completing the action. Failures: agent_ready_forms, structured_data.",
+    "comprehension": {
+      "services": [
+        "video production",
+        "web design",
+        "marketing digital",
+        "SEO",
+        "publicidad",
+        "consultoría"
+      ],
+      "locations": [
+        "Madrid"
+      ],
+      "audiences": [],
+      "prices": [],
+      "description": "ofrece video production, web design, marketing digital, SEO, publicidad, consultoría; con sede en Madrid.",
+      "headingSample": [
+        "What is simple is... easier to understand and remember easier to correct and improve easier to communicate",
+        "SERVICES",
+        "Audiovisual",
+        "Business Intelligence",
+        "Digital",
+        "Strategy & Consulting",
+        "CLIENTS",
+        "+34 649 67 25 20 hola@15vatios.com"
+      ]
+    },
+    "totalDurationMs": 1832,
+    "testedAt": "2026-04-03T07:56:06.367Z"
+  },
+  "competitor": {
+    "url": "https://cazadorfilms.com",
+    "companyName": "Cazadorfilms",
+    "agentTest": {
+      "url": "https://cazadorfilms.com",
+      "task": "Find this business, understand their services, and request a quote",
+      "steps": [
+        {
+          "step": "discovery",
+          "action": "Fetching https://cazadorfilms.com (312ms)",
+          "status": "pass",
+          "details": "Homepage loaded. \"Agencia de Comunicación y Video Marketing en Madrid\". 2000 chars of readable content.",
+          "detailKey": "discovery.pass",
+          "durationMs": 313,
+          "substeps": [
+            {
+              "label": "Page title",
+              "labelKey": "substep.pageTitle",
+              "status": "pass",
+              "detail": "Agencia de Comunicación y Video Marketing en Madrid",
+              "detailKey": "substep.titleFound",
+              "params": {
+                "title": "Agencia de Comunicación y Video Marketing en Madrid"
+              }
+            },
+            {
+              "label": "Headings",
+              "labelKey": "substep.headings",
+              "status": "pass",
+              "detail": "7 found: \"PRODUCTORA AUDIOVISUAL\"",
+              "detailKey": "substep.headingsFound",
+              "params": {
+                "count": 7,
+                "first": "PRODUCTORA AUDIOVISUAL"
+              }
+            },
+            {
+              "label": "Readable content",
+              "labelKey": "substep.readableContent",
+              "status": "pass",
+              "detail": "2000 chars of extractable text",
+              "detailKey": "substep.contentPass",
+              "params": {
+                "chars": 2000
+              }
+            }
+          ]
+        },
+        {
+          "step": "navigation",
+          "action": "Following 4 relevant links",
+          "status": "pass",
+          "details": "Navigated to 4 relevant pages out of 16 total links.",
+          "detailKey": "navigation.pass",
+          "params": {
+            "loaded": 4,
+            "total": 16
+          },
+          "durationMs": 190,
+          "substeps": [
+            {
+              "label": "Links found",
+              "labelKey": "substep.linksFound",
+              "status": "pass",
+              "detail": "16 internal links",
+              "detailKey": "substep.linksCount",
+              "params": {
+                "count": 16
+              }
+            },
+            {
+              "label": "/formulario-contacto/",
+              "status": "pass",
+              "detail": "\"Contacto\" (57ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "Contacto",
+                "ms": 57
+              }
+            },
+            {
+              "label": "/",
+              "status": "pass",
+              "detail": "(185ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "/",
+                "ms": 185
+              }
+            },
+            {
+              "label": "/videos-corporativos/",
+              "status": "pass",
+              "detail": "\"Videos Corporativos\" (189ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "Videos Corporativos",
+                "ms": 189
+              }
+            },
+            {
+              "label": "/publicidad/",
+              "status": "pass",
+              "detail": "\"Publicidad\" (188ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "Publicidad",
+                "ms": 188
+              }
+            }
+          ]
+        },
+        {
+          "step": "comprehension",
+          "action": "Analyzing content to understand what this business does",
+          "status": "pass",
+          "details": "The agent understood: ofrece video production, web design, marketing digital, SEO, publicidad, consultoría; con sede en Madrid; dirigido a empresas / B2B, particulares / B2C, agencias.",
+          "detailKey": "comprehension.pass",
+          "durationMs": 5,
+          "substeps": [
+            {
+              "label": "Services detected",
+              "labelKey": "substep.servicesDetected",
+              "status": "pass",
+              "detail": "video production, web design, marketing digital, SEO, publicidad, consultoría",
+              "detailKey": "substep.servicesDetectedList",
+              "params": {
+                "list": "video production, web design, marketing digital, SEO, publicidad, consultoría",
+                "count": 6
+              }
+            },
+            {
+              "label": "Location",
+              "labelKey": "substep.location",
+              "status": "pass",
+              "detail": "Madrid",
+              "detailKey": "substep.locationFound",
+              "params": {
+                "cities": "Madrid"
+              }
+            },
+            {
+              "label": "Target audience",
+              "labelKey": "substep.audience",
+              "status": "pass",
+              "detail": "empresas / B2B, particulares / B2C, agencias",
+              "detailKey": "substep.audienceFound",
+              "params": {
+                "list": "empresas / B2B, particulares / B2C, agencias"
+              }
+            },
+            {
+              "label": "Pricing",
+              "labelKey": "substep.pricing",
+              "status": "partial",
+              "detail": "Not visible on the site",
+              "detailKey": "substep.pricingNone",
+              "params": {
+                "prices": ""
+              }
+            },
+            {
+              "label": "Key headings",
+              "labelKey": "substep.keyHeadings",
+              "status": "pass",
+              "detail": "\"Incrementa las Ventas con tu Contenido Digital.\", \"PRODUCTORA AUDIOVISUAL\", \"Anuncios\", \"Videos Corporativos\"",
+              "detailKey": "substep.keyHeadingsList",
+              "params": {
+                "list": "\"Incrementa las Ventas con tu Contenido Digital.\", \"PRODUCTORA AUDIOVISUAL\", \"Anuncios\", \"Videos Corporativos\""
+              }
+            }
+          ]
+        },
+        {
+          "step": "contact",
+          "action": "Scanning for direct contact methods across all pages",
+          "status": "partial",
+          "details": "Found 1 direct contact channel(s): WhatsApp.",
+          "detailKey": "contact.partial",
+          "recommendationKey": "rec.contact.partial",
+          "params": {
+            "count": 1,
+            "channels": "WhatsApp"
+          },
+          "durationMs": 4,
+          "substeps": [
+            {
+              "label": "Email addresses",
+              "labelKey": "substep.emailAddresses",
+              "status": "fail",
+              "detail": "None found in HTML",
+              "detailKey": "substep.emailNone"
+            },
+            {
+              "label": "Phone numbers",
+              "labelKey": "substep.phoneNumbers",
+              "status": "partial",
+              "detail": "None found",
+              "detailKey": "substep.phoneNone"
+            },
+            {
+              "label": "WhatsApp",
+              "labelKey": "substep.whatsapp",
+              "status": "pass",
+              "detail": "WhatsApp link detected",
+              "detailKey": "substep.whatsappFound"
+            },
+            {
+              "label": "Contact forms",
+              "labelKey": "substep.contactForms",
+              "status": "pass",
+              "detail": "5 form(s) found",
+              "detailKey": "substep.formsFound",
+              "params": {
+                "count": 5
+              }
+            },
+            {
+              "label": "Chat widgets",
+              "labelKey": "substep.chatWidgets",
+              "status": "pass",
+              "detail": "Crisp"
+            }
+          ]
+        },
+        {
+          "step": "agent_ready_forms",
+          "action": "Checking 5 form(s) — can an AI agent understand and use them?",
+          "status": "pass",
+          "details": "5 of 5 form(s) are fully understandable and usable by AI agents.",
+          "detailKey": "formOp.pass",
+          "params": {
+            "operable": 5,
+            "total": 5
+          },
+          "durationMs": 1,
+          "substeps": [
+            {
+              "label": "Form 1 (5 fields)",
+              "status": "pass",
+              "detail": "Agent-ready — fields: NOMBRE, APELLIDO, E-mail, Móvil, Mejorar mi Presencia Digital, He leído y acepto la política de privacidad",
+              "detailKey": "substep.formAgentReady",
+              "params": {
+                "fields": "NOMBRE, APELLIDO, E-mail, Móvil, Mejorar mi Presencia Digital, He leído y acepto la política de privacidad",
+                "opaque": 0,
+                "total": 5
+              }
+            },
+            {
+              "label": "Form 2 (6 fields)",
+              "status": "pass",
+              "detail": "Agent-ready — fields: Video Corporativo, Nombre, Apellido, Estoy interesado en..., E-mail, Móvil, He leído y acepto la política de privacidad",
+              "detailKey": "substep.formAgentReady",
+              "params": {
+                "fields": "Video Corporativo, Nombre, Apellido, Estoy interesado en..., E-mail, Móvil, He leído y acepto la política de privacidad",
+                "opaque": 0,
+                "total": 6
+              }
+            },
+            {
+              "label": "Form 3 (5 fields)",
+              "status": "pass",
+              "detail": "Agent-ready — fields: NOMBRE, APELLIDO, E-mail, Móvil, Mejorar mi Presencia Digital, He leído y acepto la política de privacidad",
+              "detailKey": "substep.formAgentReady",
+              "params": {
+                "fields": "NOMBRE, APELLIDO, E-mail, Móvil, Mejorar mi Presencia Digital, He leído y acepto la política de privacidad",
+                "opaque": 0,
+                "total": 5
+              }
+            },
+            {
+              "label": "Form 4 (5 fields)",
+              "status": "pass",
+              "detail": "Agent-ready — fields: NOMBRE, APELLIDO, E-mail, Móvil, Mejorar mi Presencia Digital, He leído y acepto la política de privacidad",
+              "detailKey": "substep.formAgentReady",
+              "params": {
+                "fields": "NOMBRE, APELLIDO, E-mail, Móvil, Mejorar mi Presencia Digital, He leído y acepto la política de privacidad",
+                "opaque": 0,
+                "total": 5
+              }
+            },
+            {
+              "label": "Form 5 (5 fields)",
+              "status": "pass",
+              "detail": "Agent-ready — fields: NOMBRE, APELLIDO, E-mail, Móvil, Mejorar mi Presencia Digital, He leído y acepto la política de privacidad",
+              "detailKey": "substep.formAgentReady",
+              "params": {
+                "fields": "NOMBRE, APELLIDO, E-mail, Móvil, Mejorar mi Presencia Digital, He leído y acepto la política de privacidad",
+                "opaque": 0,
+                "total": 5
+              }
+            }
+          ]
+        },
+        {
+          "step": "structured_data",
+          "action": "Analyzing 7 JSON-LD block(s)",
+          "status": "fail",
+          "details": "Found 7 JSON-LD block(s) with types: unknown types. 0/4 key fields present.",
+          "detailKey": "structuredData.fail",
+          "recommendationKey": "rec.structuredData.fail",
+          "params": {
+            "count": 7,
+            "types": "unknown types",
+            "richness": 0
+          },
+          "durationMs": 0,
+          "substeps": [
+            {
+              "label": "JSON-LD blocks",
+              "labelKey": "substep.jsonLdBlocks",
+              "status": "pass",
+              "detail": "7 found: unknown types",
+              "detailKey": "substep.jsonLdFound",
+              "params": {
+                "count": 7,
+                "types": "unknown types"
+              }
+            },
+            {
+              "label": "Business name",
+              "labelKey": "substep.businessName",
+              "status": "fail",
+              "detail": "Missing",
+              "detailKey": "substep.fieldMissing"
+            },
+            {
+              "label": "Services/offers",
+              "labelKey": "substep.servicesOffers",
+              "status": "fail",
+              "detail": "Missing",
+              "detailKey": "substep.fieldMissing"
+            },
+            {
+              "label": "Pricing info",
+              "labelKey": "substep.pricingInfo",
+              "status": "fail",
+              "detail": "Missing",
+              "detailKey": "substep.fieldMissing"
+            },
+            {
+              "label": "Contact info",
+              "labelKey": "substep.contactInfo",
+              "status": "fail",
+              "detail": "Missing",
+              "detailKey": "substep.fieldMissing"
+            }
+          ]
+        },
+        {
+          "step": "verdict",
+          "action": "Synthesizing results",
+          "status": "pass",
+          "details": "The AI agent found viable channels to complete the task \"Find this business, understand their services, and request a quote\". Failures: structured_data.",
+          "durationMs": 0
+        }
+      ],
+      "verdict": "pass",
+      "verdictSummary": "The AI agent found viable channels to complete the task \"Find this business, understand their services, and request a quote\". Failures: structured_data.",
+      "comprehension": {
+        "services": [
+          "video production",
+          "web design",
+          "marketing digital",
+          "SEO",
+          "publicidad",
+          "consultoría"
+        ],
+        "locations": [
+          "Madrid"
+        ],
+        "audiences": [
+          "empresas / B2B",
+          "particulares / B2C",
+          "agencias"
+        ],
+        "prices": [],
+        "description": "ofrece video production, web design, marketing digital, SEO, publicidad, consultoría; con sede en Madrid; dirigido a empresas / B2B, particulares / B2C, agencias.",
+        "headingSample": [
+          "Incrementa las Ventas con tu Contenido Digital.",
+          "PRODUCTORA AUDIOVISUAL",
+          "Anuncios",
+          "Videos Corporativos",
+          "Youtube Content",
+          "+ SERVICIOS AUDIOVISUALES EN MADRID",
+          "FICCIÓN & CONTENIDO",
+          "Apacheta"
+        ]
+      },
+      "totalDurationMs": 514,
+      "testedAt": "2026-04-03T07:56:06.881Z"
+    }
   }
 }
