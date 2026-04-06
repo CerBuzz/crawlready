@@ -1,0 +1,1542 @@
+{
+  "slug": "ecommaster",
+  "companyName": "Ecommaster",
+  "scanResult": {
+    "url": "https://ecommaster.es",
+    "totalScore": 85,
+    "maxPossibleScore": 100,
+    "grade": "A",
+    "checks": [
+      {
+        "name": "llms.txt",
+        "score": 0,
+        "maxScore": 15,
+        "status": "fail",
+        "details": "No llms.txt file found.",
+        "detailKey": "llmsTxt.fail",
+        "recommendation": "Create a /llms.txt file that describes your site structure, key pages, and content for AI agents. See llmstxt.org for the specification.",
+        "recommendationKey": "llmsTxt.recFail"
+      },
+      {
+        "name": "robots.txt (AI Crawlers)",
+        "score": 15,
+        "maxScore": 15,
+        "status": "pass",
+        "details": "robots.txt allows AI crawlers to access your site.",
+        "detailKey": "robots.pass"
+      },
+      {
+        "name": "Structured Data",
+        "score": 20,
+        "maxScore": 20,
+        "status": "pass",
+        "details": "2 JSON-LD block(s) found. Schema types: Organization, WebSite, Article. RDFa markup detected.",
+        "detailKey": "structured.found",
+        "params": {
+          "findings": "2 JSON-LD block(s) found. Schema types: Organization, WebSite, Article. RDFa markup detected"
+        }
+      },
+      {
+        "name": "Meta Tags & Open Graph",
+        "score": 15,
+        "maxScore": 15,
+        "status": "pass",
+        "details": "Title tag present. Meta description present. Partial Open Graph (3/4). Canonical URL set.",
+        "detailKey": "meta.found",
+        "params": {
+          "findings": "Title tag present. Meta description present. Partial Open Graph (3/4). Canonical URL set"
+        },
+        "recommendation": "Add: missing OG tags: og:image. These help AI agents understand and cite your content.",
+        "recommendationKey": "meta.recMissing"
+      },
+      {
+        "name": "Sitemap",
+        "score": 10,
+        "maxScore": 10,
+        "status": "pass",
+        "details": "Sitemap index found with 5 sitemap(s).",
+        "detailKey": "sitemap.index",
+        "params": {
+          "count": 5
+        }
+      },
+      {
+        "name": "HTTPS",
+        "score": 10,
+        "maxScore": 10,
+        "status": "pass",
+        "details": "Site is served over HTTPS.",
+        "detailKey": "https.pass"
+      },
+      {
+        "name": "Response Time",
+        "score": 15,
+        "maxScore": 15,
+        "status": "pass",
+        "details": "Excellent response time: 40ms.",
+        "detailKey": "response.excellent",
+        "params": {
+          "ms": 40
+        }
+      }
+    ],
+    "scannedAt": "2026-04-06T15:29:25.579Z"
+  },
+  "agentTest": {
+    "url": "https://ecommaster.es",
+    "task": "Find this business, understand their services, and request a quote",
+    "steps": [
+      {
+        "step": "discovery",
+        "action": "Fetching https://ecommaster.es (33ms)",
+        "status": "pass",
+        "details": "Homepage loaded. \"▷ Ecommaster: Escuela de Comercio electrónico\". 2000 chars of readable content.",
+        "detailKey": "discovery.pass",
+        "durationMs": 36,
+        "substeps": [
+          {
+            "label": "Page title",
+            "labelKey": "substep.pageTitle",
+            "status": "pass",
+            "detail": "▷ Ecommaster: Escuela de Comercio electrónico",
+            "detailKey": "substep.titleFound",
+            "params": {
+              "title": "▷ Ecommaster: Escuela de Comercio electrónico"
+            }
+          },
+          {
+            "label": "Headings",
+            "labelKey": "substep.headings",
+            "status": "pass",
+            "detail": "4 found: \"Escuela de Ecomerce, Marketplaces y Marketing Digital\"",
+            "detailKey": "substep.headingsFound",
+            "params": {
+              "count": 4,
+              "first": "Escuela de Ecomerce, Marketplaces y Marketing Digital"
+            }
+          },
+          {
+            "label": "Readable content",
+            "labelKey": "substep.readableContent",
+            "status": "pass",
+            "detail": "2000 chars of extractable text",
+            "detailKey": "substep.contentPass",
+            "params": {
+              "chars": 2000
+            }
+          }
+        ]
+      },
+      {
+        "step": "navigation",
+        "action": "Following 4 relevant links",
+        "status": "pass",
+        "details": "Navigated to 4 relevant pages out of 67 total links.",
+        "detailKey": "navigation.pass",
+        "params": {
+          "loaded": 4,
+          "total": 67
+        },
+        "durationMs": 75,
+        "substeps": [
+          {
+            "label": "Links found",
+            "labelKey": "substep.linksFound",
+            "status": "pass",
+            "detail": "67 internal links",
+            "detailKey": "substep.linksCount",
+            "params": {
+              "count": 67
+            }
+          },
+          {
+            "label": "/contacta-con-nosotros/",
+            "status": "pass",
+            "detail": "\"Contacto\" (24ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "Contacto",
+              "ms": 24
+            }
+          },
+          {
+            "label": "/curso-facebook-ads-avanzado/",
+            "status": "pass",
+            "detail": "\"Curso de Meta Ads (Facebook e Instagram Ads)\" (30ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "Curso de Meta Ads (Facebook e Instagram Ads)",
+              "ms": 30
+            }
+          },
+          {
+            "label": "/curso-prestashop-avanzado/",
+            "status": "pass",
+            "detail": "\"Curso de Prestashop\" (45ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "Curso de Prestashop",
+              "ms": 45
+            }
+          },
+          {
+            "label": "/curso-prestashop-bonificable-fundae/",
+            "status": "pass",
+            "detail": "\"Curso de Prestashop Bonificado\" (72ms)",
+            "detailKey": "substep.pageLoaded",
+            "params": {
+              "text": "Curso de Prestashop Bonificado",
+              "ms": 72
+            }
+          }
+        ]
+      },
+      {
+        "step": "comprehension",
+        "action": "Analyzing content to understand what this business does",
+        "status": "pass",
+        "details": "The agent understood: ofrece video production, marketing digital, SEO, branding, ecommerce, publicidad, formación, relaciones públicas, eventos; con sede en Madrid, Alicante; dirigido a empresas / B2B, ecommerce; precios desde 30€.",
+        "detailKey": "comprehension.pass",
+        "durationMs": 19,
+        "substeps": [
+          {
+            "label": "Services detected",
+            "labelKey": "substep.servicesDetected",
+            "status": "pass",
+            "detail": "video production, marketing digital, SEO, branding, ecommerce, publicidad, formación, relaciones públicas, eventos",
+            "detailKey": "substep.servicesDetectedList",
+            "params": {
+              "list": "video production, marketing digital, SEO, branding, ecommerce, publicidad, formación, relaciones públicas, eventos",
+              "count": 9
+            }
+          },
+          {
+            "label": "Location",
+            "labelKey": "substep.location",
+            "status": "pass",
+            "detail": "Madrid, Alicante",
+            "detailKey": "substep.locationFound",
+            "params": {
+              "cities": "Madrid, Alicante"
+            }
+          },
+          {
+            "label": "Target audience",
+            "labelKey": "substep.audience",
+            "status": "pass",
+            "detail": "empresas / B2B, ecommerce",
+            "detailKey": "substep.audienceFound",
+            "params": {
+              "list": "empresas / B2B, ecommerce"
+            }
+          },
+          {
+            "label": "Pricing",
+            "labelKey": "substep.pricing",
+            "status": "pass",
+            "detail": "30€",
+            "detailKey": "substep.pricingFound",
+            "params": {
+              "prices": "30€"
+            }
+          },
+          {
+            "label": "Key headings",
+            "labelKey": "substep.keyHeadings",
+            "status": "pass",
+            "detail": "\"Escuela de Ecomerce, Marketplaces y Marketing Digital\", \"Aprende de los mejores Expertos en Comercio Electrónico, con más de 20 años de experiencia vendiendo online con nuestras tiendas online y en marketplaces como Amazon\", \"Cursos y másters especializados en comercio eletrónico\", \"Cursos Marketing Digital\"",
+            "detailKey": "substep.keyHeadingsList",
+            "params": {
+              "list": "\"Escuela de Ecomerce, Marketplaces y Marketing Digital\", \"Aprende de los mejores Expertos en Comercio Electrónico, con más de 20 años de experiencia vendiendo online con nuestras tiendas online y en marketplaces como Amazon\", \"Cursos y másters especializados en comercio eletrónico\", \"Cursos Marketing Digital\""
+            }
+          }
+        ]
+      },
+      {
+        "step": "contact",
+        "action": "Scanning for direct contact methods across all pages",
+        "status": "pass",
+        "details": "Found 4 direct contact channel(s): 1 email, 2 phone, WhatsApp.",
+        "detailKey": "contact.pass",
+        "params": {
+          "count": 4,
+          "channels": "1 email, 2 phone, WhatsApp"
+        },
+        "durationMs": 22,
+        "substeps": [
+          {
+            "label": "Email addresses",
+            "labelKey": "substep.emailAddresses",
+            "status": "pass",
+            "detail": "info@ecommaster.es"
+          },
+          {
+            "label": "Phone numbers",
+            "labelKey": "substep.phoneNumbers",
+            "status": "pass",
+            "detail": "966651891, (+34)%20966651891"
+          },
+          {
+            "label": "WhatsApp",
+            "labelKey": "substep.whatsapp",
+            "status": "pass",
+            "detail": "WhatsApp link detected",
+            "detailKey": "substep.whatsappFound"
+          },
+          {
+            "label": "Contact forms",
+            "labelKey": "substep.contactForms",
+            "status": "pass",
+            "detail": "65 form(s) found",
+            "detailKey": "substep.formsFound",
+            "params": {
+              "count": 65
+            }
+          },
+          {
+            "label": "Chat widgets",
+            "labelKey": "substep.chatWidgets",
+            "status": "pass",
+            "detail": "Crisp"
+          }
+        ]
+      },
+      {
+        "step": "agent_ready_forms",
+        "action": "Checking 65 form(s) — can an AI agent understand and use them?",
+        "status": "fail",
+        "details": "Found 65 form(s) but none are understandable by AI agents — field labels are missing or opaque.",
+        "detailKey": "formOp.partial",
+        "recommendationKey": "rec.formOp.fail",
+        "params": {
+          "operable": 0,
+          "total": 65
+        },
+        "durationMs": 4,
+        "substeps": [
+          {
+            "label": "Form 1 (6 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 6 fields have no understandable label: acceptance-327, acceptance-289",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Nombre*, Email*, Teléfono*, Mensaje*",
+              "opaque": 2,
+              "total": 6
+            }
+          },
+          {
+            "label": "Form 2 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 3 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 4 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 5 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 6 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 7 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 8 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 9 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 10 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 11 (6 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 6 fields have no understandable label: acceptance-327, acceptance-289",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Nombre*, Email*, Teléfono, Tu mensaje",
+              "opaque": 2,
+              "total": 6
+            }
+          },
+          {
+            "label": "Form 12 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 13 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 14 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 15 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 16 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 17 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 18 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 19 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 20 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 21 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-289",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Email, Teléfono",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 22 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-289",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Email, Teléfono",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 23 (6 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 6 fields have no understandable label: acceptance-327, acceptance-289",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Nombre*, Email*, Teléfono*, Mensaje*",
+              "opaque": 2,
+              "total": 6
+            }
+          },
+          {
+            "label": "Form 24 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 25 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 26 (5 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 5 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Nombre*, Email*, Teléfono*, Tu mensaje",
+              "opaque": 1,
+              "total": 5
+            }
+          },
+          {
+            "label": "Form 27 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 28 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 29 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 30 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 31 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 32 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 33 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 34 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 35 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 36 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-289",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Email, Teléfono",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 37 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-289",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Email, Teléfono",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 38 (6 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 6 fields have no understandable label: acceptance-327, acceptance-289",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Nombre*, Email*, Teléfono*, Mensaje*",
+              "opaque": 2,
+              "total": 6
+            }
+          },
+          {
+            "label": "Form 39 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 40 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 41 (5 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 5 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Nombre*, Email*, Teléfono*, Tu mensaje",
+              "opaque": 1,
+              "total": 5
+            }
+          },
+          {
+            "label": "Form 42 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 43 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 44 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 45 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 46 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 47 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 48 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 49 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 50 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 51 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-289",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Email, Teléfono",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 52 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-289",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Email, Teléfono",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 53 (6 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 6 fields have no understandable label: acceptance-327, acceptance-289",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Nombre*, Email*, Teléfono*, Mensaje*",
+              "opaque": 2,
+              "total": 6
+            }
+          },
+          {
+            "label": "Form 54 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 55 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 56 (5 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 5 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Nombre*, Email*, Teléfono*, Tu mensaje",
+              "opaque": 1,
+              "total": 5
+            }
+          },
+          {
+            "label": "Form 57 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 58 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 59 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 60 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 61 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 62 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 63 (1 fields)",
+            "status": "fail",
+            "detail": "No submit button found",
+            "detailKey": "substep.formNoSubmit",
+            "params": {
+              "fields": "radio",
+              "opaque": 0,
+              "total": 1
+            }
+          },
+          {
+            "label": "Form 64 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 2 of 3 fields have no understandable label: menu-383, acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú número de teléfono",
+              "opaque": 2,
+              "total": 3
+            }
+          },
+          {
+            "label": "Form 65 (3 fields)",
+            "status": "fail",
+            "detail": "CAPTCHA blocks automated submission; 1 of 3 fields have no understandable label: acceptance-118",
+            "detailKey": "substep.formCaptcha",
+            "params": {
+              "fields": "Tú email, Tu mensaje",
+              "opaque": 1,
+              "total": 3
+            }
+          }
+        ]
+      },
+      {
+        "step": "structured_data",
+        "action": "Analyzing 15 JSON-LD block(s)",
+        "status": "partial",
+        "details": "Found 15 JSON-LD block(s) with types: EducationalOrganization, BreadcrumbList, FAQPage. 2/4 key fields present.",
+        "detailKey": "structuredData.partial",
+        "recommendationKey": "rec.structuredData.partial",
+        "params": {
+          "count": 15,
+          "types": "EducationalOrganization, BreadcrumbList, FAQPage",
+          "richness": 2
+        },
+        "durationMs": 2,
+        "substeps": [
+          {
+            "label": "JSON-LD blocks",
+            "labelKey": "substep.jsonLdBlocks",
+            "status": "pass",
+            "detail": "15 found: EducationalOrganization, BreadcrumbList, FAQPage",
+            "detailKey": "substep.jsonLdFound",
+            "params": {
+              "count": 15,
+              "types": "EducationalOrganization, BreadcrumbList, FAQPage"
+            }
+          },
+          {
+            "label": "Business name",
+            "labelKey": "substep.businessName",
+            "status": "pass",
+            "detail": "Found",
+            "detailKey": "substep.fieldFound"
+          },
+          {
+            "label": "Services/offers",
+            "labelKey": "substep.servicesOffers",
+            "status": "fail",
+            "detail": "Missing",
+            "detailKey": "substep.fieldMissing"
+          },
+          {
+            "label": "Pricing info",
+            "labelKey": "substep.pricingInfo",
+            "status": "fail",
+            "detail": "Missing",
+            "detailKey": "substep.fieldMissing"
+          },
+          {
+            "label": "Contact info",
+            "labelKey": "substep.contactInfo",
+            "status": "pass",
+            "detail": "Found",
+            "detailKey": "substep.fieldFound"
+          }
+        ]
+      },
+      {
+        "step": "verdict",
+        "action": "Synthesizing results",
+        "status": "partial",
+        "details": "The AI agent COULD NOT fully complete the task \"Find this business, understand their services, and request a quote\". Some channels exist but have barriers that prevent AI agents from completing the action. Failures: agent_ready_forms.",
+        "durationMs": 0
+      }
+    ],
+    "verdict": "partial",
+    "verdictSummary": "The AI agent COULD NOT fully complete the task \"Find this business, understand their services, and request a quote\". Some channels exist but have barriers that prevent AI agents from completing the action. Failures: agent_ready_forms.",
+    "comprehension": {
+      "services": [
+        "video production",
+        "marketing digital",
+        "SEO",
+        "branding",
+        "ecommerce",
+        "publicidad",
+        "formación",
+        "relaciones públicas",
+        "eventos"
+      ],
+      "locations": [
+        "Madrid",
+        "Alicante"
+      ],
+      "audiences": [
+        "empresas / B2B",
+        "ecommerce"
+      ],
+      "prices": [
+        "30€"
+      ],
+      "description": "ofrece video production, marketing digital, SEO, branding, ecommerce, publicidad, formación, relaciones públicas, eventos; con sede en Madrid, Alicante; dirigido a empresas / B2B, ecommerce; precios desde 30€.",
+      "headingSample": [
+        "Escuela de Ecomerce, Marketplaces y Marketing Digital",
+        "Aprende de los mejores Expertos en Comercio Electrónico, con más de 20 años de experiencia vendiendo online con nuestras tiendas online y en marketplaces como Amazon",
+        "Cursos y másters especializados en comercio eletrónico",
+        "Cursos Marketing Digital",
+        "Cursos Ecommerce Manager",
+        "Máster Ecommerce",
+        "Máster Comercio Electrónico",
+        "Máster Marketing Digital UX/IU"
+      ]
+    },
+    "totalDurationMs": 158,
+    "testedAt": "2026-04-06T15:29:25.739Z"
+  },
+  "competitor": {
+    "url": "https://aulacm.com",
+    "companyName": "Aulacm",
+    "agentTest": {
+      "url": "https://aulacm.com",
+      "task": "Find this business, understand their services, and request a quote",
+      "steps": [
+        {
+          "step": "discovery",
+          "action": "Fetching https://aulacm.com (502ms)",
+          "status": "pass",
+          "details": "Homepage loaded. \"Aula CM | Escuela de Comunicación y Marketing Digital\". 2000 chars of readable content.",
+          "detailKey": "discovery.pass",
+          "durationMs": 504,
+          "substeps": [
+            {
+              "label": "Page title",
+              "labelKey": "substep.pageTitle",
+              "status": "pass",
+              "detail": "Aula CM | Escuela de Comunicación y Marketing Digital",
+              "detailKey": "substep.titleFound",
+              "params": {
+                "title": "Aula CM | Escuela de Comunicación y Marketing Digital"
+              }
+            },
+            {
+              "label": "Headings",
+              "labelKey": "substep.headings",
+              "status": "pass",
+              "detail": "10 found: \"Escuela de\nComunicación y Marketing Digital\"",
+              "detailKey": "substep.headingsFound",
+              "params": {
+                "count": 10,
+                "first": "Escuela de\nComunicación y Marketing Digital"
+              }
+            },
+            {
+              "label": "Readable content",
+              "labelKey": "substep.readableContent",
+              "status": "pass",
+              "detail": "2000 chars of extractable text",
+              "detailKey": "substep.contentPass",
+              "params": {
+                "chars": 2000
+              }
+            }
+          ]
+        },
+        {
+          "step": "navigation",
+          "action": "Following 4 relevant links",
+          "status": "pass",
+          "details": "Navigated to 4 relevant pages out of 66 total links.",
+          "detailKey": "navigation.pass",
+          "params": {
+            "loaded": 4,
+            "total": 66
+          },
+          "durationMs": 331,
+          "substeps": [
+            {
+              "label": "Links found",
+              "labelKey": "substep.linksFound",
+              "status": "pass",
+              "detail": "66 internal links",
+              "detailKey": "substep.linksCount",
+              "params": {
+                "count": 66
+              }
+            },
+            {
+              "label": "/contact/",
+              "status": "pass",
+              "detail": "\"Contacto\" (144ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "Contacto",
+                "ms": 144
+              }
+            },
+            {
+              "label": "/curso-social-ads-facebook-instagram/",
+              "status": "pass",
+              "detail": "\"Curso de Social Ads | 27 horas\" (329ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "Curso de Social Ads | 27 horas",
+                "ms": 329
+              }
+            },
+            {
+              "label": "/curso-social-ads-facebook-instagram-online/",
+              "status": "pass",
+              "detail": "\"Curso de Social Ads Online | 27 horas\" (324ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "Curso de Social Ads Online | 27 horas",
+                "ms": 324
+              }
+            },
+            {
+              "label": "/eventos-marketing-digital-madrid/",
+              "status": "pass",
+              "detail": "\"Nuestros Eventos |  La Trastienda y Teatro Goya\" (281ms)",
+              "detailKey": "substep.pageLoaded",
+              "params": {
+                "text": "Nuestros Eventos |  La Trastienda y Teatro Goya",
+                "ms": 281
+              }
+            }
+          ]
+        },
+        {
+          "step": "comprehension",
+          "action": "Analyzing content to understand what this business does",
+          "status": "pass",
+          "details": "The agent understood: ofrece video production, web design, marketing digital, SEO, branding, ecommerce, publicidad, formación, desarrollo software, diseño gráfico, relaciones públicas, eventos; con sede en Madrid; dirigido a empresas / B2B, startups, agencias, ecommerce; precios desde 920€.",
+          "detailKey": "comprehension.pass",
+          "durationMs": 12,
+          "substeps": [
+            {
+              "label": "Services detected",
+              "labelKey": "substep.servicesDetected",
+              "status": "pass",
+              "detail": "video production, web design, marketing digital, SEO, branding, ecommerce, publicidad, formación, desarrollo software, diseño gráfico, relaciones públicas, eventos",
+              "detailKey": "substep.servicesDetectedList",
+              "params": {
+                "list": "video production, web design, marketing digital, SEO, branding, ecommerce, publicidad, formación, desarrollo software, diseño gráfico, relaciones públicas, eventos",
+                "count": 12
+              }
+            },
+            {
+              "label": "Location",
+              "labelKey": "substep.location",
+              "status": "pass",
+              "detail": "Madrid",
+              "detailKey": "substep.locationFound",
+              "params": {
+                "cities": "Madrid"
+              }
+            },
+            {
+              "label": "Target audience",
+              "labelKey": "substep.audience",
+              "status": "pass",
+              "detail": "empresas / B2B, startups, agencias, ecommerce",
+              "detailKey": "substep.audienceFound",
+              "params": {
+                "list": "empresas / B2B, startups, agencias, ecommerce"
+              }
+            },
+            {
+              "label": "Pricing",
+              "labelKey": "substep.pricing",
+              "status": "pass",
+              "detail": "920€, 880€, 480€, 450€, 550€",
+              "detailKey": "substep.pricingFound",
+              "params": {
+                "prices": "920€, 880€, 480€, 450€, 550€"
+              }
+            },
+            {
+              "label": "Key headings",
+              "labelKey": "substep.keyHeadings",
+              "status": "pass",
+              "detail": "\"Escuela de Comunicación y Marketing Digital\", \"En Aula CM aprendemos y compartimos experiencias en equipo\", \"Nuestros Cursos de Marketing Digital\", \"Máster de Marketing Digital + IA\"",
+              "detailKey": "substep.keyHeadingsList",
+              "params": {
+                "list": "\"Escuela de Comunicación y Marketing Digital\", \"En Aula CM aprendemos y compartimos experiencias en equipo\", \"Nuestros Cursos de Marketing Digital\", \"Máster de Marketing Digital + IA\""
+              }
+            }
+          ]
+        },
+        {
+          "step": "contact",
+          "action": "Scanning for direct contact methods across all pages",
+          "status": "partial",
+          "details": "Found 1 direct contact channel(s): 1 phone.",
+          "detailKey": "contact.partial",
+          "recommendationKey": "rec.contact.partial",
+          "params": {
+            "count": 1,
+            "channels": "1 phone"
+          },
+          "durationMs": 21,
+          "substeps": [
+            {
+              "label": "Email addresses",
+              "labelKey": "substep.emailAddresses",
+              "status": "fail",
+              "detail": "None found in HTML",
+              "detailKey": "substep.emailNone"
+            },
+            {
+              "label": "Phone numbers",
+              "labelKey": "substep.phoneNumbers",
+              "status": "pass",
+              "detail": "912204060"
+            },
+            {
+              "label": "WhatsApp",
+              "labelKey": "substep.whatsapp",
+              "status": "partial",
+              "detail": "Not detected",
+              "detailKey": "substep.whatsappNone"
+            },
+            {
+              "label": "Contact forms",
+              "labelKey": "substep.contactForms",
+              "status": "pass",
+              "detail": "5 form(s) found",
+              "detailKey": "substep.formsFound",
+              "params": {
+                "count": 5
+              }
+            },
+            {
+              "label": "Chat widgets",
+              "labelKey": "substep.chatWidgets",
+              "status": "pass",
+              "detail": "Crisp"
+            }
+          ]
+        },
+        {
+          "step": "agent_ready_forms",
+          "action": "Checking 5 form(s) — can an AI agent understand and use them?",
+          "status": "pass",
+          "details": "5 of 5 form(s) are fully understandable and usable by AI agents.",
+          "detailKey": "formOp.pass",
+          "params": {
+            "operable": 5,
+            "total": 5
+          },
+          "durationMs": 2,
+          "substeps": [
+            {
+              "label": "Form 1 (4 fields)",
+              "status": "pass",
+              "detail": "Agent-ready — fields: ✏️ Tu nombre *, ✉️ Tu email *, ✏️ Mensaje, politica",
+              "detailKey": "substep.formAgentReady",
+              "params": {
+                "fields": "✏️ Tu nombre *, ✉️ Tu email *, ✏️ Mensaje, politica",
+                "opaque": 0,
+                "total": 4
+              }
+            },
+            {
+              "label": "Form 2 (4 fields)",
+              "status": "pass",
+              "detail": "Agent-ready — fields: ✏️ Tu nombre *, ✉️ Tu email *, ✏️ Mensaje, politica",
+              "detailKey": "substep.formAgentReady",
+              "params": {
+                "fields": "✏️ Tu nombre *, ✉️ Tu email *, ✏️ Mensaje, politica",
+                "opaque": 0,
+                "total": 4
+              }
+            },
+            {
+              "label": "Form 3 (4 fields)",
+              "status": "pass",
+              "detail": "Agent-ready — fields: ✏️ Tu nombre *, ✉️ Tu email *, ✏️ Mensaje, politica",
+              "detailKey": "substep.formAgentReady",
+              "params": {
+                "fields": "✏️ Tu nombre *, ✉️ Tu email *, ✏️ Mensaje, politica",
+                "opaque": 0,
+                "total": 4
+              }
+            },
+            {
+              "label": "Form 4 (4 fields)",
+              "status": "pass",
+              "detail": "Agent-ready — fields: ✏️ Tu nombre *, ✉️ Tu email *, ✏️ Mensaje, politica",
+              "detailKey": "substep.formAgentReady",
+              "params": {
+                "fields": "✏️ Tu nombre *, ✉️ Tu email *, ✏️ Mensaje, politica",
+                "opaque": 0,
+                "total": 4
+              }
+            },
+            {
+              "label": "Form 5 (4 fields)",
+              "status": "pass",
+              "detail": "Agent-ready — fields: ✏️ Tu nombre *, ✉️ Tu email *, ✏️ Mensaje, politica",
+              "detailKey": "substep.formAgentReady",
+              "params": {
+                "fields": "✏️ Tu nombre *, ✉️ Tu email *, ✏️ Mensaje, politica",
+                "opaque": 0,
+                "total": 4
+              }
+            }
+          ]
+        },
+        {
+          "step": "structured_data",
+          "action": "Analyzing 6 JSON-LD block(s)",
+          "status": "fail",
+          "details": "Found 6 JSON-LD block(s) with types: unknown types. 0/4 key fields present.",
+          "detailKey": "structuredData.fail",
+          "recommendationKey": "rec.structuredData.fail",
+          "params": {
+            "count": 6,
+            "types": "unknown types",
+            "richness": 0
+          },
+          "durationMs": 2,
+          "substeps": [
+            {
+              "label": "JSON-LD blocks",
+              "labelKey": "substep.jsonLdBlocks",
+              "status": "pass",
+              "detail": "6 found: unknown types",
+              "detailKey": "substep.jsonLdFound",
+              "params": {
+                "count": 6,
+                "types": "unknown types"
+              }
+            },
+            {
+              "label": "Business name",
+              "labelKey": "substep.businessName",
+              "status": "fail",
+              "detail": "Missing",
+              "detailKey": "substep.fieldMissing"
+            },
+            {
+              "label": "Services/offers",
+              "labelKey": "substep.servicesOffers",
+              "status": "fail",
+              "detail": "Missing",
+              "detailKey": "substep.fieldMissing"
+            },
+            {
+              "label": "Pricing info",
+              "labelKey": "substep.pricingInfo",
+              "status": "fail",
+              "detail": "Missing",
+              "detailKey": "substep.fieldMissing"
+            },
+            {
+              "label": "Contact info",
+              "labelKey": "substep.contactInfo",
+              "status": "fail",
+              "detail": "Missing",
+              "detailKey": "substep.fieldMissing"
+            }
+          ]
+        },
+        {
+          "step": "verdict",
+          "action": "Synthesizing results",
+          "status": "pass",
+          "details": "The AI agent found viable channels to complete the task \"Find this business, understand their services, and request a quote\". Failures: structured_data.",
+          "durationMs": 0
+        }
+      ],
+      "verdict": "pass",
+      "verdictSummary": "The AI agent found viable channels to complete the task \"Find this business, understand their services, and request a quote\". Failures: structured_data.",
+      "comprehension": {
+        "services": [
+          "video production",
+          "web design",
+          "marketing digital",
+          "SEO",
+          "branding",
+          "ecommerce",
+          "publicidad",
+          "formación",
+          "desarrollo software",
+          "diseño gráfico",
+          "relaciones públicas",
+          "eventos"
+        ],
+        "locations": [
+          "Madrid"
+        ],
+        "audiences": [
+          "empresas / B2B",
+          "startups",
+          "agencias",
+          "ecommerce"
+        ],
+        "prices": [
+          "920€",
+          "880€",
+          "480€",
+          "450€",
+          "550€"
+        ],
+        "description": "ofrece video production, web design, marketing digital, SEO, branding, ecommerce, publicidad, formación, desarrollo software, diseño gráfico, relaciones públicas, eventos; con sede en Madrid; dirigido a empresas / B2B, startups, agencias, ecommerce; precios desde 920€.",
+        "headingSample": [
+          "Escuela de Comunicación y Marketing Digital",
+          "En Aula CM aprendemos y compartimos experiencias en equipo",
+          "Nuestros Cursos de Marketing Digital",
+          "Máster de Marketing Digital + IA",
+          "VER MÁSTER PRESENCIAL",
+          "VER MÁSTER ONLINE",
+          "Más Cursos de Aula CM",
+          "Cursos para Empresas"
+        ]
+      },
+      "totalDurationMs": 872,
+      "testedAt": "2026-04-06T15:29:26.611Z"
+    }
+  }
+}
